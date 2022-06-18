@@ -1,26 +1,19 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 int main(void)
 {
     int cnt;
-    long double num;
-    long double sum;
+    char *num;
+    int sum;
     
     scanf("%d", &cnt);
-    scanf("%Lf", &num);
+    num = (char *)malloc(sizeof(char) * (cnt + 1));
+    scanf("%s", num);
     sum = 0;
     for (int i = 0; i < cnt; ++i)
     {
-        if (num < 10)
-        {
-            sum += num;
-        }
-        else 
-        {
-            sum += (int)num % 10;
-            sum = (long double)sum;
-        }
-        num = num / 10;
+        sum += num[i] - '0';
     }
-    printf("%Lf", sum);
+    printf("%d", sum);
 }
