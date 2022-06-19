@@ -4,14 +4,21 @@
 int main(void)
 {
     int cnt;
-    int *nums;
+    int input;
+    int nums[10000] = {0,};
     int temp;
 
     scanf("%d", &cnt);
-    nums = (int *)malloc(sizeof(int) * cnt);
     for (int i = 0; i < cnt; ++i)
     {
-        scanf("%d", &nums[i]);
+        scanf("%d", &input);
+        for (int j = 0; j <= cnt; ++j) 
+        {
+            if (input == nums[i])
+                break;
+            if (j == cnt)
+                nums[i] = input;
+        }
     }
 
     for (int i = 0; i < cnt - 1; ++i)
