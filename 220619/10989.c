@@ -1,41 +1,26 @@
 #include <stdio.h>
-#include <stdlib.h>
 
 int main(void)
 {
     int cnt;
     int input;
-    int nums[10000] = {0,};
-    int temp;
+    int nums[10001] = {0,};
 
     scanf("%d", &cnt);
     for (int i = 0; i < cnt; ++i)
-    {
+    {   
         scanf("%d", &input);
-        for (int j = 0; j <= cnt; ++j) 
-        {
-            if (input == nums[i])
-                break;
-            if (j == cnt)
-                nums[i] = input;
-        }
-    }
-
-    for (int i = 0; i < cnt - 1; ++i)
-    {
-        for (int j = i + 1; j < cnt; ++j)
-        {
-            if (nums[i] > nums[j])
-            {
-                temp = nums[i];
-                nums[i] = nums[j];
-                nums[j] = temp;
-            }
-        }
-    }  
+        nums[input]++;
+    } 
     
-    for (int i = 0; i < cnt; ++i)
+    for (int i = 0; i < 10001; ++i)
     {
-        printf("%d\n", nums[i]);
+        if (nums[i] == 0)
+            continue;
+
+        for (int j = 0; j < nums[i]; ++j)
+        {
+            printf("%d\n", i);
+        }
     }  
 }
