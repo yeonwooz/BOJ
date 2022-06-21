@@ -5,20 +5,20 @@
 
 int main(void)
 {
-    long a;
-    long b;
-    long c;
-    long x;   
+    int a;
+    int b;
+    int c;
+    int x;   
 
     scanf("%d %d %d", &a, &b, &c);
-    if ((int)c - (int)b <=0)
+    if (c - b <=0)
     {
         printf("%d", -1);
         return (0);
     }
     else
     {
-        x = (int)a / ((int)c - (int)b);
+        x = a / (c - b);
         printf("%d", x + 1);
     }
 }
