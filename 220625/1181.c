@@ -11,6 +11,21 @@ int len(char *str)
     return (i);
 }
 
+int is_in(int *arr, char *str)
+{
+    for (int i = 0; i < 51; i += len(str))
+    {
+        for (int j = 0; j < len(str); ++j)
+        {
+            if (arr[i + j] != str[j])
+                continue;
+            if (j == len(str) - 1)
+                return (1);
+        }
+    }
+    return (0);
+}
+
 int main(void)
 {
     int cnt;
@@ -30,6 +45,9 @@ int main(void)
     for (int i = 0; i < cnt; ++i)
     {
         scanf("%s", word);
+
+        if (is_in(arr[len(word)], word))
+            continue;
         int k = 0;
         while (arr[len(word)][k])
             ++k;
@@ -47,6 +65,5 @@ int main(void)
             printf("%c", arr[i][k]);
             ++k;
         }
-
     }
 }
