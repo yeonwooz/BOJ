@@ -13,13 +13,10 @@ int len(char *str)
 int main(void)
 {
     int cnt;
-    int str[51] = {0, };
+    char word[51] = {0,};
+    int arr[20001][1020000] = {0,}; // segmentation fault
 
     scanf("%d", &cnt);
-    for (int i = 0; i < cnt; ++i)
-    {
-        scanf("%s", str);
-    }
-    printf("%s", str);
+    
 
 }
