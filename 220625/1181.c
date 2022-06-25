@@ -15,14 +15,31 @@ int main(void)
 {
     int cnt;
     char word[51] = {0,};
-    //int arr[20001][1020000] = {0,}; // segmentation fault
     int **arr;
-    arr = (int **)malloc(sizeof(int *) * 20001);
-    for (int i = 0; i < 20002; ++i)
+    
+    arr = (int **)malloc(sizeof(int *) * 51);
+    for (int i = 0; i < 51; ++i)
     {
-       arr[i] = (int *)malloc(sizeof(int) * 1020000); 
+      arr[i] = (int *)malloc(sizeof(int) * 1020000); 
+      for (int j = 0; j < 1020000; ++j)
+      {
+        arr[i][j] = 0;
+      }
     }
     scanf("%d", &cnt);
-    
+    for (int i = 0; i < cnt; ++i)
+    {
+        scanf("%s", word);
+        int k = 0;
+        while (arr[len(word)][k])
+            ++k;
+        for (int j = 0; j < len(word); ++j)
+        {
+            arr[len(word)][k] = word[j];
+            ++k;
+        }
+        arr[len(word)][k] = '\0';
+    }
+    printf("%c", arr[3][0]);
 
 }
