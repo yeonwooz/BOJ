@@ -38,8 +38,15 @@ int main(void)
             arr[len(word)][k] = word[j];
             ++k;
         }
-        arr[len(word)][k] = '\0';
     }
-    printf("%c", arr[3][0]);
+    for (int i = 0; i < 51; ++i)
+    {
+        int k = 0;
+        while (arr[i][k] != 0)
+        {
+            printf("%c", arr[i][k]);
+            ++k;
+        }
 
+    }
 }
