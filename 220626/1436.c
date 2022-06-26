@@ -15,8 +15,8 @@ int tri_six(int num)
         if (cnt == 3)
             return (1);
     }
-    if (num == 6)
-        ++cnt;    
+    if (num == 6 && cnt == 2)
+        return (1);
     if (cnt < 3)
         return (0);
 }
