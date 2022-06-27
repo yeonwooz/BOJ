@@ -5,7 +5,7 @@ int tri_six(int num)
     int cnt;
     
     cnt = 0;
-    while (num >= 10)
+    while (num > 0)
     {
         if (num % 10 == 6)
             ++cnt;
@@ -15,8 +15,6 @@ int tri_six(int num)
         if (cnt == 3)
             return (1);
     }
-    if (num == 6 && cnt == 2)
-        return (1);
     if (cnt < 3)
         return (0);
 }
