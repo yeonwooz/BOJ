@@ -1,11 +1,11 @@
 #include <stdio.h>
 
-int main(void)
+int main()
 {
-    int a;
-    int b;
+    double a;
+    double b;
 
-    scanf("%d %d", &a, &b);
-    printf("%.9lf", (double)a / (double)b);
-    return (0);
+    scanf("%lf %lf", &a, &b);
+    printf("%.9lf", a / b);
+    return(0);
 }
