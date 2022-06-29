@@ -22,12 +22,12 @@ int main(void)
     H = 0;
     for (int i = 0; i < L; ++i)
     {
-        temp = str[i];
+        temp = str[i] % M;
         for (int j = 0; j < i; ++j)
         {
-            temp *= R;
+            temp *= R % M;
         }
-        H += temp;
+        H += temp % M;
     }
-    printf("%d", H % M);
+    printf("%d", H);
 }
