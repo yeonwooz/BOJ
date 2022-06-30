@@ -3,7 +3,7 @@
 int main(void)
 {
     int T, R, idx;
-    char S[21];
+    char S[21] = "";
 
     scanf("%d", &T);
     for (int i = 0; i < T; ++i)
