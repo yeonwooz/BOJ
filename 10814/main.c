@@ -33,12 +33,12 @@ int main(void)
 
 int compare(const void *a, const void *b)
 {
-    int age1 = *(int *)a;
-    int age2 = *(int *)b;
+    Member *memberA =  (Member *)a;
+    Member *memberB =  (Member *)b;
 
-    if (age1 < age2)
+    if (memberA -> age < memberB -> age)
         return (-1);
-    if (age1 > age2)
+    if (memberA -> age > memberB -> age)
         return (1);    
     return (0);
 }
