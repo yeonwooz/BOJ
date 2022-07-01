@@ -31,18 +31,18 @@ int main(void)
 
 int compare(const void *a, const void *b)
 {
-    Dot *dotA = (Dot *)a;
-    Dot *dotB = (Dot *)b;
+    Dot dotA = *(Dot *)a;
+    Dot dotB = *(Dot *)b;
 
-    if (dotA -> x < dotB -> x)
+    if (dotA.x < dotB.x)
         return (-1);
-    else if (dotA -> x > dotB -> x)
+    else if (dotA.x > dotB.x)
         return (1);  
     else 
     {
-        if (dotA -> y < dotB -> y)
+        if (dotA.y < dotB.y)
             return (-1);  
-        else if (dotA -> y > dotB -> y)     
+        else if (dotA.y > dotB.y)     
             return (1); 
     }  
     return (0);
