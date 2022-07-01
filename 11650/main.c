@@ -21,13 +21,29 @@ int main(void)
         dots[i].x = x;
         dots[i].y = y;
     }
+    qsort(dots, N, sizeof(dots[0]), compare);
+    for (int i = 0; i < N; ++i)
+    {
+        printf("%d %d\n", dots[i].x, dots[i].y);
+    }
     return (0);
 }
 
 int compare(const void *a, const void *b)
 {
-    int num1 = *(int *)a;
-    int num2 = *(int *)b;
+    Dot *dotA = (Dot *)a;
+    Dot *dotB = (Dot *)b;
 
-    if 
+    if (dotA -> x < dotB -> x)
+        return (-1);
+    else if (dotA -> x > dotB -> x)
+        return (1);  
+    else 
+    {
+        if (dotA -> y < dotB -> y)
+            return (-1);  
+        else if (dotA -> y > dotB -> y)     
+            return (1); 
+    }  
+    return (0);
 }
