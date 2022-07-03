@@ -2,32 +2,26 @@
 
 int main(void)
 {
-    int input;
-    int temp;
     int sides[3] = {0, };
-    
+
     while (1)
     {
         for (int i = 0; i < 3; ++i)
         {
-            scanf("%d", &input);
+            scanf("%d", &sides[i]);
             if (i == 0)
-                sides[i] = input;
+                continue;
             else 
             {
-                if (sides[i - 1] > input) 
+                if (sides[i - 1] > sides[i]) 
                 {
-                    temp = sides[i - 1];
-                    sides[i - 1] = input;
+                    int temp = sides[i - 1];
+                    sides[i - 1] = sides[i];
                     sides[i] = temp;
                 } 
-                else if (sides[i - 1] < input) 
-                {
-                    sides[i] = input;
-                }
             }
         }
-        if (sides[0] == 0 && sides[1] == 0 && sides[2])
+        if (sides[0] == 0 && sides[1] == 0 && sides[2] == 0)
             return (0);
         if (sides[0] * sides[0] + sides[1] * sides[1] == sides[2] * sides[2])
             printf("right\n");
