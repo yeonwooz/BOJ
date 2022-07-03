@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int get_cnt(char arr[51][51], char from_w[51][51], char from_b[51][51], int last_col, int last_row);
+int get_cnt(char arr[51][51], int last_col, int last_row);
 
 int main(void)
 {
@@ -23,17 +23,26 @@ int main(void)
                 min = swap_cnt;
         }
     }
+    printf("%d", swap_cnt);
+    return (0);
 }
 
-int get_cnt(char arr[51][51], char from_w[51][51], char from_b[51][51], int last_col, int last_row)
+int get_cnt(char arr[51][51], int last_col, int last_row)
 {
-    int swap_cnt = 0;
+    int swap_cnt_1 = 0, swap_cnt_2 = 0;
+
     for (int i = last_col - 7; i <= last_col; ++i)
     {
         for (int j = last_row - 7; j <= last_row; ++j)
         {
-            // from_w, from_b 각각 전체탐색?
+            if ((i % 2 == j % 2 && arr[i][j] == 'B') || (i % 2 != j % 2 && arr[i][j] == 'W'))
+                ++swap_cnt_1;
+            else if ((i % 2 == j % 2 && arr[i][j] == 'W') || (i % 2 != j % 2 && arr[i][j] == 'B'))
+                ++swap_cnt_2;
         }
     }
-    return (swap_cnt);
+    if (swap_cnt_1 < swap_cnt_2)
+        return (swap_cnt_1);
+    else
+        return (swap_cnt_2);
 }
