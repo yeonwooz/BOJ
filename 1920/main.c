@@ -8,17 +8,22 @@ int main(void)
     scanf("%d", &N);
     for (int i = 0; i < N; ++i)
     {
-        scanf("%d", &target);
-        arr[target] = 1;
+        scanf("%d", &arr[i]);
     }
     scanf("%d", &M);
     for (int i = 0; i < M; ++i)
     {
         scanf("%d", &num);
-        if (arr[num] == 1)
-            printf("1");
-        else
-            printf("0");
+        for (int j = 0; j < N; ++j)
+        {
+            if (arr[j] == num)
+            {
+                printf("1");
+                break;
+            }
+            if (j == N - 1)
+                printf("0");
+        }
         if (i < M - 1)
             printf("\n");
     }
