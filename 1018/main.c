@@ -14,16 +14,16 @@ int main(void)
         scanf("%s", arr[i]);
     }
 
-    for (int i = N - 1; i < N; ++i)
+    for (int i = 7; i < N; ++i)
     {
-        for (int j = M - 1; j < M; ++j)
+        for (int j = 7; j < M; ++j)
         {
-            swap_cnt = get_cnt(arr, N - 1, M - 1);
+            swap_cnt = get_cnt(arr, i, j);
             if (swap_cnt < min)
                 min = swap_cnt;
         }
     }
-    printf("%d", swap_cnt);
+    printf("%d", min);
     return (0);
 }
 
