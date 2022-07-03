@@ -2,22 +2,22 @@
 
 int main(void)
 {
-    short dots[4] = {0,};
+    short dot[4] = {0,};
     short min;
 
     min = 1000;
     for (int i = 0; i < 4; ++i)
     {
-        scanf("%hd", &dots[i]);
+        scanf("%hd", &dot[i]);
 
-        if (dots[0] && dots[0] < min)
-            min = dots[0];
-        if (dots[1] && dots[1] < min)
-            min = dots[1];
-        if (dots[2] && dots[2] - dots[0] < min)
-            min = dots[2] - dots[0];
-        if (dots[3] && dots[3] - dots[1] < min)
-            min = dots[3] - dots[1];
+        if (dot[0] && dot[0] < min)
+            min = dot[0];
+        if (dot[1] && dot[1] < min)
+            min = dot[1];
+        if (dot[2] && dot[2] - dot[0] < min)
+            min = dot[2] - dot[0];
+        if (dot[3] && dot[3] - dot[1] < min)
+            min = dot[3] - dot[1];
     }
     printf("%hd", min);
 }
