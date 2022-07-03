@@ -4,7 +4,7 @@ int main(void)
 {
     int input;
     int temp;
-    int sides[3] = {-1, };
+    int sides[3] = {0, };
     
     while (1)
     {
