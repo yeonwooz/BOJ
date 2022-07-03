@@ -3,24 +3,47 @@
 
 int main(void)
 {
-    long long N, M, target, num;
-    long long *arr;
+    int N, M, target, num;
+    int *arr;
 
-    scanf("%lld", &N);
-    arr = (long long *)malloc(sizeof(long) * 2147483648 * 3);
+    arr = (int *)malloc(sizeof(int) * 2147483649);
+    // for (int i = 0; i <= 2147483648; ++i)
+    // {
+    //     arr[i] = 0;
+    // }
+    scanf("%d", &N);
     for (int i = 0; i < N; ++i)
     {
-        scanf("%lld", &target);
-        if (target >= 0)
-            arr[target] = 1;
+        scanf("%d", &target);
+        if (target == -2147483648)
+        {
+            if (arr[0] == 0)
+                arr[0] = 2;
+            else 
+                arr[0] = 3;
+        }
+        else if (target >= 0)
+        {
+            if (arr[target] == 0)
+                arr[target] = 1;
+            else if (arr[target] == 1 || arr[target] == 2)
+                arr[target] = 3;
+        }
         else 
-            arr[target * -1 + 2147483648 * 2] = 1;
+        {
+            if (arr[target * -1] == 0)
+                arr[target * -1] = 2;
+            else if (arr[target * -1] == 1 || arr[target * -1] == 2)
+                arr[target * -1] = 3;
+        }
     }
-    scanf("%lld", &M);
+    scanf("%d", &M);
     for (int i = 0; i < M; ++i)
     {
-        scanf("%lld", &num);
-        if (num >= 0 && arr[num] == 1 || num < 0 && arr[num * -1 + 2147483648 * 2] == 1)
+        scanf("%d", &num);
+        if (num == -2147483648 && (arr[0] == 2 || arr[0] == 3))
+            printf("1");
+        else if (num >= 0 && (arr[num] == 1 || arr[num] == 3) || num < 0 && (arr[num * -1] == 2 ||arr[num * -1] == 3))
             printf("1");
         else
             printf("0");
