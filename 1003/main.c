@@ -1,31 +1,8 @@
 #include <stdio.h>
 
-int fibo(int n, int *cnts)
-{
-    if (n == 0)
-    {
-        ++cnts[0];
-        return 0;
-    }
-    else if (n == 1)
-    {
-        ++cnts[1];
-        return 1;
-    }
-    else
-    {
-        int cnt_1[2] = {0,};
-        int cnt_2[2] = {0,};
-        int result = fibo(n - 1, cnt_1) + fibo(n - 2, cnt_2);   
-        cnts[0] = cnt_1[0] + cnt_2[0];
-        cnts[1] = cnt_1[1] + cnt_2[1];
-        return result;
-    }
-}
-
 int main(void)
 {
-    int T, N;
+    int T, N, one_cnt, zero_cnt, new_one_cnt, new_zero_cnt;
     int cnts[2] = {0, };
     scanf("%d", &T);
     for (int i = 0; i < T; ++i)
@@ -35,10 +12,22 @@ int main(void)
             printf("1 0");
         else if (N == 1)
             printf("0 1");
+        else if (N == 2)
+            printf("1 1");
         else
         {
-            fibo(N, cnts);
-            printf("%d %d", cnts[0], cnts[1]);
+            zero_cnt = 1;
+            one_cnt = 1;
+            int j = 3;
+            while (j <= N)
+            {
+                new_zero_cnt = one_cnt;
+                new_one_cnt = one_cnt + zero_cnt;
+                zero_cnt = new_zero_cnt;
+                one_cnt = new_one_cnt;
+                ++j;
+            }
+            printf("%d %d", zero_cnt, one_cnt);
         }
         if (i < T - 1)
             printf("\n");
