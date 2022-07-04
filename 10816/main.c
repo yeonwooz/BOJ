@@ -2,7 +2,8 @@
 #include <stdlib.h>
 
 int compare(const void *a, const void *b);
-int binSearch(int *arr, int len, int target);
+int lower_bound(int *arr, int len, int target);
+int upper_bound(int *arr, int len, int target);
 
 int main(void)
 {
@@ -23,19 +24,9 @@ int main(void)
     for (int i = 0; i < M; ++i)
     {
         scanf("%d", &num);
-        int index = binSearch(arr, N, num);
-        if (index == -1)
-            printf("0");
-        else 
-        {
-            int cnt = 0;
-            while (arr[index] == num)
-            {
-                ++index;
-                ++cnt;
-            }
-            printf("%d", cnt);
-        }
+        int lower = lower_bound(arr, N, num);
+        int upper = upper_bound(arr, N, num);
+        printf("%d", upper - lower);
         if (i < M - 1)
             printf(" ");
     }
@@ -54,7 +45,7 @@ int compare(const void *a, const void *b)
     return (0);
 }
 
-int binSearch(int *arr, int len, int target)
+int lower_bound(int *arr, int len, int target)
 {
     int start = 0;
     int end = len - 1;
@@ -63,9 +54,29 @@ int binSearch(int *arr, int len, int target)
     while (end > start)
     {
         mid = (start + end) / 2;
-        if (arr[mid] >= target)
+        if (target <= arr[mid])
             end = mid;
-        else start = mid + 1;
+        else 
+            start = mid + 1;
     }
-    return end;
+    return (end);
+}
+
+int upper_bound(int *arr, int len, int target)
+{
+    int start = 0;
+    int end = len - 1;
+    int mid;
+
+    while (end > start)
+    {
+        mid = (start + end) / 2;
+        if (target < arr[mid])
+            end = mid;
+        else
+            start = mid + 1;
+    }
+    if (end == len - 1 && arr[end] == target)
+        return (end + 1);
+    return (end);
 }
