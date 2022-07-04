@@ -11,15 +11,12 @@ int main(void)
             scanf("%d", &sides[i]);
             if (i == 0)
                 continue;
-            else 
+            if (sides[i - 1] > sides[i]) 
             {
-                if (sides[i - 1] > sides[i]) 
-                {
-                    int temp = sides[i - 1];
-                    sides[i - 1] = sides[i];
-                    sides[i] = temp;
-                } 
-            }
+                int temp = sides[i - 1];
+                sides[i - 1] = sides[i];
+                sides[i] = temp;
+            } 
         }
         if (sides[0] == 0 && sides[1] == 0 && sides[2] == 0)
             return (0);
