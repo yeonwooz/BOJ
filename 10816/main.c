@@ -8,6 +8,7 @@ int main(void)
 {
     // 숫자 범위가 크므로 인덱스 저장하는 것은 비효율적이다
     // qsort 후에 이분탐색으로 찾고, 그 오른쪽으로 같은 수 몇개 있는지 탐색하기 
+    // 이분탐색 lower bound : 하한선 찾기
     int N, M, num;
     int *arr; 
 
@@ -57,20 +58,14 @@ int binSearch(int *arr, int len, int target)
 {
     int start = 0;
     int end = len - 1;
-    int mid = (start + end) / 2;
-    while (end - start >= 0)
+    int mid;
+
+    while (end > start)
     {
-        if (arr[mid] == target)
-        {
-            while (arr[mid] == target)
-                --mid;
-            return mid + 1;
-        }
-        else if (arr[mid] < target)
-            start = mid + 1;
-        else if (arr[mid] > target)
-            end = mid - 1;
         mid = (start + end) / 2;
+        if (arr[mid] >= target)
+            end = mid;
+        else start = mid + 1;
     }
-    return (-1);
+    return end;
 }
