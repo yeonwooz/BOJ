@@ -4,43 +4,35 @@
 
 int main(void)
 {
-    int K, N, max = INT_MIN, cnt = 0;
-    int *cables;
+    long long K, N, min = 1, max = INT_MIN, length = 0;
+    long long *cables;
 
-    scanf("%d %d", &K, &N);
-    cables = (int *)malloc(sizeof(int) * K);
+    scanf("%lld %lld", &K, &N);
+    cables = (long long *)malloc(sizeof(long long) * K);
     for (int i = 0; i < K; ++i)
     {
-        scanf("%d", &cables[i]);
+        scanf("%lld", &cables[i]);
         if (cables[i] > max)
             max = cables[i];
     }
 
-    int index = 0;
-    int divisor = 1;
-    while (cnt < N - 1)
+    while (min <= max)
     {
-        max = cables[index] / divisor;
-        cnt = 0;
+        long long mid = (min + max) / 2;
+        long long cnt = 0;
         for (int i = 0; i < K; ++i)
         {
-            cnt += cables[i] / max;
+            cnt += cables[i] / mid;
         }
-        ++index;
-        if (index >= K)
-            index = 0;
-        if (index == 0)
-            ++divisor;  
-    }
-    while (cnt < N)
-    {
-        max -= 1;
-        cnt = 0;
-        for (int i = 0; i < K; ++i)
+        if (cnt >= N)
         {
-            cnt += cables[i] / max;
+            min = mid + 1;
+            if (length < mid)
+                length = mid;
         }
+        else 
+            max = mid - 1;
     }
-    printf("%d", max);
+    printf("%lld", length);
     return (0);
 }
