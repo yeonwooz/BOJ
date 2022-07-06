@@ -3,7 +3,7 @@
 
 void push(int *stack, int num);
 int pop(int *stack); // 성공시 pop된 정수 리턴,  실패시 -1 리턴
-int size(int *stack); // stack size 리턴
+int size(); // stack size 리턴
 int empty(int *stack); // 스택이 비어있으면 1, 아니면 0을 출력
 int top(int *stack); // 스택이 비어있으면 -1 리턴, 스택의 가장 위에 있는 정수를 출력
 
@@ -21,7 +21,7 @@ int main(void)
         if (strcmp(str, "top") == 0)
             printf("%d\n", top(stack));
         else if (strcmp(str, "size") == 0)
-            printf("%d\n", size(stack));
+            printf("%d\n", size());
         else if (strcmp(str, "empty") == 0)
             printf("%d\n", empty(stack));
         else if (strcmp(str, "pop") == 0)
@@ -49,7 +49,7 @@ int pop(int *stack)
     return (top_val);
 }
 
-int size(int *stack)
+int size()
 {
     return top_idx + 1;
 }
