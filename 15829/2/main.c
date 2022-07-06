@@ -4,7 +4,7 @@
 int main(void)
 {
     /*
-    모듈러 연산의 분배법칙 (덧셈, 뺄셈, 곱셈애 대하여 성립)
+    모듈러 연산의 분배법칙 (덧셈, 뺄셈, 곱셈에 대하여 성립)
     (a + b) mod c = (a mod c + b mod c) mod c
     (a - b) mod c = (a mod c - b mod c) mod c
     (a * b) mod c = (a mod c * b mod c) mod c
