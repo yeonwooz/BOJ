@@ -6,34 +6,31 @@ function init() {
   const inputs = fs.readFileSync(filePath).toString().trim().split("\n");
   const n = inputs[0];
   inputs.shift();
-  solve(n, inputs);
+  const numbers = inputs.map((i) => parseInt(i));
+  solve(n, numbers);
 }
 
 function solve(n, seq) {
-  let i = 0;
-  let num = 1;
+  let answer = "";
   const stack = [];
-  const result = [];
-  while (1) {
-    const len = stack.length;
-    if (len === 0 || stack[len - 1] < parseInt(seq[i])) {
+  let num = 1;
+
+  for (let i = 0; i < n; ++i) {
+    const target = seq.shift();
+    while (num <= target) {
       stack.push(num++);
-      result.push("+");
-    } else if (stack[len - 1] === parseInt(seq[i])) {
-      stack.pop();
-      result.push("-");
-      ++i;
-    } else {
+      answer += "+ ";
+    }
+    const popped = stack.pop();
+    if (popped != target) {
       console.log("NO");
       return;
     }
-    if (result.length == n * 2) break;
+    answer += "- ";
   }
 
-  for (let i = 0; i < result.length; ++i) {
-    console.log(result[i]);
-  }
+  answer = answer.split(" ").join("\n");
+  console.log(answer);
 }
-// console.time("func");
+
 init();
-// console.timeEnd("func");
