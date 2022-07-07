@@ -1,39 +1,31 @@
 #include <stdio.h>
-#include <math.h>
-
-int is_prime(double num);
 
 int main(void)
 {
-    double M, N;
-    double num;
-    scanf("%lf %lf", &M, &N);
-    num = M;
+    int M, N, num;
+    scanf("%d %d", &M, &N);
+    if (M == 1)
+        num = 2;
+    else    
+        num = M;
+
     while (num <= N)
     {
-        if (is_prime(num))
+        int i = 2;
+        int is_prime = 1;
+        while (i * i <= num)
         {
-            printf("%.0lf\n", num);
+            if (num % i == 0)
+            {
+                is_prime = 0;
+                break;
+            }
+            ++i;
         }
+        if (is_prime)
+            printf("%d\n", num);
         ++num;
     }
-    return (0);
-}
 
-int is_prime(double num)
-{
-    if (num == 1)
-        return (0);
-    if (num == 2)
-        return (1);
-    int i = 2;
-    while (i <= sqrt(num))
-    {
-        if ((int)num % i == 0)
-        {
-            return (0);   
-        }
-        ++i;
-    }
-    return (1); 
+    return (0);
 }
