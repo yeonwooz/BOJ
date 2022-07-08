@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #define MIN(a, b) (a < b ? a : b)
 #define MAX(a, b) (a > b ? a : b)
 
 void solve(int N);
 int compare(const void* a, const void *b);
-int upper_bound(int *arr, int len, int target);
 
 int main(void)
 {
@@ -19,51 +19,65 @@ int main(void)
 void solve(int N)
 {
     int sum = 0, min = 4000, max = -4000;
-    int mean, median;
+    float mean;
+    int median, mode;
     int *nums;
-    int *modes;
+    int cnts[8001] = {0,};
     
     nums = (int *)malloc(sizeof(int) * N);
-    modes = (int *)malloc(sizeof(int) * N);
     for (int i = 0; i < N; ++i)
     {
         scanf("%d", &nums[i]); 
-        modes[i] = 4001;
+        cnts[nums[i] + 4000]++;
         sum += nums[i];
         min = MIN(nums[i], min);
         max = MAX(nums[i], max);
     }
-    if (sum >= 0)
-        mean = (float)sum / (float)N + 0.5;
-    else
-        mean = (float)sum / (float)N - 0.5;
+    mean = round((float)sum / (float)N);
+    if (mean == -0)
+        mean = 0;
     qsort(nums, N, sizeof(int), compare);
     median = nums[N / 2];
     
-    int mode_idx = -1;
-    int max_cnt = 1;
-    int i = 0;
-    while (i < N)
+    int max_cnt = 0;
+    int first_min_mode_val = -4001;
+    int second_min_mode_val = -4001;
+
+    for (int i = 0; i <= max + 4000; ++i)
     {
-        int upper_max = upper_bound(nums, N, nums[i]);
-        if (max_cnt < upper_max - i)
+        if (max_cnt < cnts[i])
         {
-            max_cnt = upper_max - i;
-            modes[0] = nums[i];
+            max_cnt = cnts[i];
+            first_min_mode_val = i - 4000;
+            second_min_mode_val = -4001;
         }
-        else if (max_cnt == upper_max - i)
+        else if (max_cnt == cnts[i])
         {
-            modes[++mode_idx] = nums[i];
-        } 
-        ++i;
+            if (second_min_mode_val == -4001)
+            {
+                second_min_mode_val = i - 4000;
+            }
+            else 
+            {
+                if (i - 4000 < first_min_mode_val && first_min_mode_val < second_min_mode_val)
+                {
+                    first_min_mode_val = i - 4000;
+                    second_min_mode_val = first_min_mode_val;
+                }
+                else if (first_min_mode_val > i - 4000 && i - 4000 < second_min_mode_val)
+                {
+                    second_min_mode_val = i - 4000;
+                }
+            }
+        }
     }
-    qsort(modes, N, sizeof(int), compare);
-    printf("%d\n", mean);
+    
+    printf("%.f\n", mean);
     printf("%d\n", median);
-    if (mode_idx > 0)
-        printf("%d\n", modes[1]);
+    if (second_min_mode_val == -4001)
+        printf("%d\n", first_min_mode_val);
     else 
-        printf("%d\n", modes[0]);
+        printf("%d\n", second_min_mode_val);
     printf("%d", max - min);
 }
 
@@ -76,28 +90,4 @@ int compare(const void* a, const void *b)
     else if (num1 > num2)
         return (1);
     return (0);
-}
-
-int upper_bound(int *arr, int len, int target)
-{
-    int mid, start, end;
-    start = 0; end = len - 1;
-    
-    while (end > start)
-    {
-        mid = (start + end) / 2;
-        if (arr[mid] > target)
-        {
-            end = mid;
-        }
-        else 
-        {
-            start = mid + 1;
-        }
-    }
-    if (end == len - 1 && arr[end] == target)
-    {
-        return end + 1;
-    }
-    return end;
 }
