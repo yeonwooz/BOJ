@@ -13,31 +13,17 @@ function getInputs() {
 }
 
 function getReult(N, nums) {
-  let sum = 0;
-  let min = 4000;
-  let max = -4000;
-  for (let i = 0; i < N; ++i) {
-    sum += nums[i];
-    if (min > nums[i]) min = nums[i];
-    if (max < nums[i]) max = nums[i];
-  }
-  nums.sort();
+  nums.sort((a, b) => a - b);
 
-  console.log(mean(N, sum));
+  console.log(mean(N, nums));
   console.log(median(N, nums));
-  console.log(mode(N, nums, max));
-  console.log(range(min, max));
+  console.log(mode(nums));
+  console.log(range(nums));
 }
 
-function mean(N, sum) {
-  let mean = sum / N;
-  if (sum >= 0) {
-    mean = Math.round(mean);
-  } else {
-    if (mean - Math.ceil(mean) <= -0.5 && mean - Math.ceil(mean) > -0.6) mean = Math.round(mean) - 1;
-    else mean = Math.round(mean);
-  }
-  if (mean == -0) mean = 0;
+function mean(N, nums) {
+  let mean = Math.round(nums.reduce((acc, num) => (acc += num), 0) / N);
+  if (mean === -0) mean = 0;
   return mean;
 }
 
@@ -45,37 +31,26 @@ function median(N, nums) {
   return nums[Math.floor(N / 2)];
 }
 
-function mode(N, nums, max) {
-  const cnts = Array(8001).fill(0);
-  for (let i = 0; i < N; ++i) {
-    cnts[nums[i] + 4000]++;
-  }
-
-  let max_cnt = 0;
-  let min1 = -4001;
-  let min2 = -4002;
-  for (let i = 0; i <= max + 4000; ++i) {
-    if (max_cnt < cnts[i]) {
-      max_cnt = cnts[i];
-      min1 = i - 4000;
-      min2 = -4001;
-    } else if (max_cnt == cnts[i]) {
-      if (min2 == -4001) {
-        min2 = i - 4000;
-      } else {
-        if (i - 4000 < min1 && min1 < min2) {
-          min1 = i - 4000;
-          min2 = min1;
-        } else if (min1 > i - 4000 && i - 4000 < min2) {
-          min2 = i - 4000;
-        }
-      }
+function mode(nums) {
+  const numCnts = new Map();
+  for (let num of nums) {
+    const cnt = numCnts.get(num);
+    if (cnt) {
+      numCnts.set(num, cnt + 1);
+    } else {
+      numCnts.set(num, 1);
     }
   }
-  if (min2 == -4001) return min1;
-  return min2;
+  const mapToArr = Array.from(numCnts);
+  mapToArr.sort((a, b) => b[1] - a[1]);
+  if (mapToArr.length == 1) return mapToArr[0][0];
+  if (mapToArr[0][1] > mapToArr[1][1]) return mapToArr[0][0];
+  const max_cnt = mapToArr[0][1];
+  const filtered = mapToArr.filter((item) => item[1] === max_cnt);
+  filtered.sort((a, b) => a[0] < b[0]);
+  return filtered[1][0];
 }
 
-function range(min, max) {
-  return max - min;
+function range(nums) {
+  return nums[nums.length - 1] - nums[0];
 }
