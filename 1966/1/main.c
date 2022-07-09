@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 int solve();
 
@@ -18,51 +19,45 @@ int main(void)
 int solve()
 {
     int N, M;
-    int queue[300] = {0,};
-
+    int *queue;
+    int answer = 0;
     scanf("%d %d", &N, &M);
+    queue = (int *)malloc(sizeof(int) * N);
     for (int i = 0; i < N; ++i)
     {
         scanf("%d", &queue[i]);
     }
     if (N == 1)
         return 1;
-
-
-    int bottom = 0;
-    int top = N - 1;
-    int printed_cnt = 0;
-
-    while (top < 300 && bottom <= top)
+    
+    // 원형큐 사용
+    int front = 0;
+    int rear = N - 1;
+    
+    while (1)
     {
-        if (bottom == top)
+        int can_print = 1;
+        for (int i = 0; i < N; ++i)
         {
-            ++printed_cnt;
-            break;
-        }
-        int i = bottom + 1;
-        while (i <= top)
-        {
-            if (queue[bottom] < queue[i])
+            if (i != (front % N) && queue[front % N] < queue[i % N])
+            {
+                can_print = 0;
                 break;
-            ++i;
+            }
         }
-        if (i == top + 1)
+        if (can_print)
         {
-            // pop out
-            ++printed_cnt;
-            if (bottom == M)
+            queue[front % N] = 0;
+            ++answer;
+            if (front % N == M)
                 break;
+            front = (front +1 ) % N;
         }
-        else 
+        else
         {
-            // go to back
-            queue[++top] = queue[bottom];
-            if (bottom == M)
-                M = top; 
+            rear = 0;
+            front = (front + 1) % N;
         }
-        queue[bottom++] = 0;   
     }
-
-    return printed_cnt;
+    return answer;
 }
