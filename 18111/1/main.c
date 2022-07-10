@@ -28,7 +28,11 @@ int main(void)
 
 void solve(int N, int M, int **ground, int B, int max_block_height, int min_block_height)
 {
-    int cur_time, min_time = 512 * 500 * 500, cur_H = min_block_height, max_H = min_block_height;
+    int cur_time;
+    int min_time = 512 * 500 * 500;
+    int cur_H = min_block_height;
+    int max_H = min_block_height;
+
     while (cur_H <= max_block_height)
     {
         cur_time = 0;
@@ -48,14 +52,14 @@ void solve(int N, int M, int **ground, int B, int max_block_height, int min_bloc
                 else if (ground[i][j] < cur_H)
                 {
                     int diff = cur_H - ground[i][j];
-                    if (B < diff)
-                        continue;;
+                    if (inventory < diff)
+                        continue;
                     inventory -= diff;
                     ++cur_time;
                 }
             }
         }
-        if (cur_time < min_time)
+        if (cur_time > 0 && cur_time < min_time)
         {
             min_time = cur_time;
             max_H = cur_H;
