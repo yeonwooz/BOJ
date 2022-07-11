@@ -1,49 +1,39 @@
 #include <stdio.h>
-#define MAX 1000000
+#define MAX_SIZE 1000001
+#define MIN(a,b) (a < b ? a : b)
 
-int solve(int N, int cnt, int min_cnt);
+int solve(int N);
+
 int main(void)
 {
     int N;
-    int min_cnt = MAX;
 
     scanf("%d", &N);
-    printf("%d", solve(N, 0, min_cnt));
+    printf("%d", solve(N));
     return (0);
 }
 
-int solve(int N, int cnt, int min_cnt)
+int solve(int N)
 {
-    if (N == 1)
+    int dp[MAX_SIZE] = {0,};
+    dp[1] = 0;
+    for (int i = 2; i <= N; ++i)
     {
-        if (cnt < min_cnt)
-            min_cnt = cnt;
-        return min_cnt;
-    }
-    if (N == 2 || N == 3)
-    {
-        if (cnt < min_cnt)
-            min_cnt = cnt;
-        return min_cnt + 1; 
-    }
-    if (N % 3 == 0)
-    {
-        min_cnt = solve(N / 3, cnt + 1, min_cnt);
-    }
-    else if (N % 3 == 1)
-    {
-        min_cnt = solve((N - 1) / 3, cnt + 2, min_cnt);
+        // 1을 빼는 연산을 한번 추가하는 점화식
+        dp[i] = dp[i - 1] + 1;
 
-    } else
-    {
-        if (N % 2 == 0)
+        // 2 나누는 연산을 한번 추가하는 점화식
+        if (i % 2 == 0)
         {
-            min_cnt = solve(N / 2, cnt + 1, min_cnt);
+            dp[i] = MIN(dp[i], dp[i / 2] + 1);
         }
-        else 
+        // 3 나누는 연산을 한번 추가하는 점화식
+        if (i % 3 == 0)
         {
-            min_cnt = solve((N - 2) / 2, cnt + 3, min_cnt);
+            dp[i] = MIN(dp[i], dp[i / 3] + 1);
         }
     }
-    return min_cnt;
+    return (dp[N]);
 }
+
+
