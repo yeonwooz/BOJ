@@ -20,17 +20,30 @@ int solve(int N, int cnt, int min_cnt)
             min_cnt = cnt;
         return min_cnt;
     }
-    if (N % 3 == 0 && N / 3 >= 1)
+    if (N == 2 || N == 3)
+    {
+        if (cnt < min_cnt)
+            min_cnt = cnt;
+        return min_cnt + 1; 
+    }
+    if (N % 3 == 0)
     {
         min_cnt = solve(N / 3, cnt + 1, min_cnt);
     }
-    if (N % 2 == 0 && N / 2 >= 1)
+    else if (N % 3 == 1)
     {
-        min_cnt = solve(N / 2, cnt + 1, min_cnt);
-    }
-    if (N - 1 >= 1)
+        min_cnt = solve((N - 1) / 3, cnt + 2, min_cnt);
+
+    } else
     {
-        min_cnt = solve(N - 1, cnt + 1, min_cnt);
+        if (N % 2 == 0)
+        {
+            min_cnt = solve(N / 2, cnt + 1, min_cnt);
+        }
+        else 
+        {
+            min_cnt = solve((N - 2) / 2, cnt + 3, min_cnt);
+        }
     }
     return min_cnt;
 }
