@@ -1,6 +1,6 @@
 #include <stdio.h>
+#include <limits.h>
 #define MIN(a,b) (a < b ? a : b)
-#define MAX_POWER 5000 * 19;
 
 int main(void)
 {
@@ -9,7 +9,7 @@ int main(void)
     int small_jumps[20] = {0,};
     int big_jumps[20] = {0,};
     int mega_jump;
-    int min_power = MAX_POWER;
+    int min_power;
 
     scanf("%d", &N);
     
@@ -22,17 +22,21 @@ int main(void)
 
     dp[1] = 0;
     dp[2] = small_jumps[1];
-    dp[3] = MIN(dp[2] + small_jumps[2], dp[1] + big_jumps[1]);
 
-    for (int mj_to = 4; mj_to <= N; ++mj_to)
+    for (int i = 3; i <= N; ++i)
+    {
+        dp[i] = MIN(dp[i-1] + small_jumps[i-1], dp[i-2] + big_jumps[i-2]);
+    }
+    min_power = dp[N];
+    for (int mj_from = 1; mj_from <= N - 1; ++mj_from)
     {
         for (int i = 4; i <= N; ++i)
         {
-            dp[i] = MIN(dp[i-1] + small_jumps[i-1], dp[i-2] + big_jumps[i-2]);
-            if (i == mj_to)
-            {
+            // mj_from 가 바뀌면서 dp테이블도 계속 업데이트되어야 한다
+            if (i == mj_from + 3)
                 dp[i] = MIN(dp[i], dp[i-3] + mega_jump);
-            }
+            else
+                dp[i] = MIN(dp[i-1] + small_jumps[i-1], dp[i-2] + big_jumps[i-2]);
         }
         min_power = MIN(dp[N], min_power);
     }
