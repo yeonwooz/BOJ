@@ -49,44 +49,32 @@ void solve()
             if (field[row][col] == 1 && !history[row][col])
             {
                 ++min_cnt;
-                DFS(field, history, row, col, N, M);
+                DFS(field, history, row, col, N, M);    // 조건에 맞을 때 인접칸 방문하면서 history 를 채울 것임 
             }
         }
     }
 
-    // printf("%d\n", DFS(field, history, N, M));
-    // for (int row = 0; row < N; ++row)
-    // {
-    //     for (int col = 0; col < M; ++col)
-    //     {
-    //         printf("%d ", field[row][col]);
-    //     }
-    //     printf("\n");
-    // }
-
-    printf("%d", min_cnt);
+    printf("%d\n", min_cnt);
     free(field);
     free(history);
 }
 
-void DFS(int **field, int **history, int x, int y, int N, int M)
+void DFS(int **field, int **history, int i, int j, int N, int M)
 {
-    history[x][y] = 1;
-    int dy[] = { 0, -1, 1, 0};
-    int dx[] = { -1, 0, 0, 1};
-    for (int i = 0; i < 4; i++) {
-        int ax = x + dx[i];
-        int ay = y + dy[i];
-        
-        // 배열의 인덱스를 넘지 않도록 
-        if (ax < 0 || ay < 0 || ax >= M || ay >= N)             
+    history[i][j] = 1;
+    
+    int di[4] = {-1, +1, 0, 0};
+    int dj[4] = {0, 0, -1, +1};
+
+    for (int idx = 0; idx < 4; ++idx)
+    {
+        int next_i = i + di[idx];
+        int next_j = j + dj[idx];
+
+        if (next_i < 0 || next_i >= N || next_j < 0 || next_j >= M)
             continue;
-        
-        // 배추가 없으면 탈출 / 방문했다면 탈출 
-        if(!field[ax][ay] || history[ax][ay]) 
+        if (!field[next_i][next_j] || history[next_i][next_j] == 1)
             continue;
- 
-        DFS(field, history, ax, ay, N, M);
+        DFS(field, history, next_i, next_j, N, M);
     }
-    return ;
 }
