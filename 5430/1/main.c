@@ -2,7 +2,6 @@
 #include <string.h>
 
 void R(int *arr, int len);
-int D(int *arr, int len, int head);
 void solve();
 
 int main(void)
@@ -45,9 +44,10 @@ void solve()
     }
     int head = 0;
     int idx = 0;
+    int r_cnt = 0;
+
     while (cmd[idx])
     {
-        int r_cnt = 0;
         int j = idx;
         while (cmd[idx] == 'R')
         {
@@ -58,18 +58,23 @@ void solve()
         if (cmd[idx] == 'D')
         {
             if (r_cnt % 2 > 0)
+            {
                 R(arr, n);
-
-            head = D(arr, n-1, head);
-            if (head == -1)
+                r_cnt = 0;
+            }
+            if (n == 0 || head == n-1)
+            {
+                printf("error\n");
                 return ;
+            }
+            ++head;
             ++idx;  
         }
   
     }
 
     printf("[");
-    for (int i = 0; i < n; ++i)
+    for (int i = head; i < n; ++i)
     {
         if (arr[i])
         {
@@ -89,15 +94,4 @@ void R(int *arr, int len)
         arr[i] = arr[len - 1 - i];
         arr[len - 1 - i] = temp;
     }
-}
-
-int D(int *arr, int tail, int head)
-{
-    if (tail == -1 || head == tail)
-    {
-        printf("error\n");
-        return (-1);
-    }
-    arr[head++] = 0;
-    return head;
 }
