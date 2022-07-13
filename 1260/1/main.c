@@ -29,7 +29,12 @@ int main(void)
     }
     int d_visited[1001] = {0, };
     DFS(arr, d_visited, V, N);
+    printf("\n");
 
+    int b_visited[1001] = {0, };
+    printf("%d ", V);
+    b_visited[V] = 1;
+    BFS(arr, b_visited, V, N);
     return (0);
 }
 
@@ -49,7 +54,28 @@ void DFS(int **arr, int *visited, int V, int N)
     }
 }
 
-// void BFS(int **arr, int **visited, int i, int j)
-// {
+void BFS(int **arr, int *visited, int V, int N)
+{
+    int queue[1001] = {0,};
+    int q_top = 0;
 
-// }
+    for (int i = 0; i <= N; ++i)
+    {
+        for (int j = 0; j <= N; ++j)
+        {
+            if (i == V && arr[i][j] == 1 && !visited[j])
+            {
+                queue[q_top++] = j;
+            }
+        }
+    }
+    for (int i = 0; i < q_top; ++i)
+    {
+        printf("%d ", queue[i]);
+        visited[queue[i]] = 1;
+    }
+    for (int i = 0; i < q_top; ++i)
+    {
+        BFS(arr, visited, queue[i], N);
+    }
+}
