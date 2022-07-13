@@ -1,13 +1,19 @@
 #include <stdio.h>
+#include <string.h>
 
+void R(int *arr, int len);
+int D(int *arr, int len, int head);
 void solve();
+
 int main(void)
 {
     int T;
 
     scanf("%d", &T);
     for (int i = 0; i < T; ++i)
+    {
         solve();
+    }
     return (0);
 }
 
@@ -37,12 +43,47 @@ void solve()
         else
             ++i;
     }
-    printf("%d %d %d %d %d %d\n", arr[0], arr[1], arr[2], arr[3],  arr[4],  arr[5]);
+    int head = 0;
+    int idx = 0;
+    while (cmd[idx])
+    {
+        int r_cnt = 0;
+        int j = idx;
+        while (cmd[idx] == 'R')
+        {
+            ++r_cnt;   
+            ++j;
+            ++idx;
+        }
+        if (cmd[idx] == 'D')
+        {
+            if (r_cnt % 2 > 0)
+                R(arr, n);
+
+            head = D(arr, n-1, head);
+            if (head == -1)
+                return ;
+            ++idx;  
+        }
+  
+    }
+
+    printf("[");
+    for (int i = 0; i < n; ++i)
+    {
+        if (arr[i])
+        {
+            printf("%d", arr[i]);
+            if (i < n-1)
+                printf(", ");
+        }
+    }
+    printf("]\n");    
 }
 
 void R(int *arr, int len)
 {
-    for (int i = 0; i < len; ++i)
+    for (int i = 0; i < len / 2; ++i)
     {
         int temp = arr[i];
         arr[i] = arr[len - 1 - i];
@@ -50,9 +91,9 @@ void R(int *arr, int len)
     }
 }
 
-int D(int *arr, int len, int head)
+int D(int *arr, int tail, int head)
 {
-    if (len == 0)
+    if (tail == -1 || head == tail)
     {
         printf("error\n");
         return (-1);
