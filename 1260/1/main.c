@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void DFS(int **arr, int *visited, int i, int N);
-void BFS(int **arr, int *visited, int i, int N);
+void DFS(int **arr, int *visited, int V, int N);
+void BFS(int **arr, int *visited, int V, int N);
 
 int main(void)
 {
@@ -32,8 +32,6 @@ int main(void)
     printf("\n");
 
     int b_visited[1001] = {0, };
-    printf("%d ", V);
-    b_visited[V] = 1;
     BFS(arr, b_visited, V, N);
     return (0);
 }
@@ -53,29 +51,25 @@ void DFS(int **arr, int *visited, int V, int N)
         }
     }
 }
-
 void BFS(int **arr, int *visited, int V, int N)
 {
     int queue[1001] = {0,};
-    int q_top = 0;
+    int front = 0, rear = 0, pop;
+    printf("%d ", V);
+    visited[V] = 1;
+    queue[rear++] = V;
 
-    for (int i = 0; i <= N; ++i)
+    while (front < rear)
     {
-        for (int j = 0; j <= N; ++j)
+        pop = queue[front++];
+        for (int j = 1; j <= N; ++j)
         {
-            if (i == V && arr[i][j] == 1 && !visited[j])
+            if (arr[pop][j] == 1 && !visited[j])
             {
-                queue[q_top++] = j;
+                printf("%d ", j);
+                queue[rear++] = j;
+                visited[j] = 1;
             }
         }
-    }
-    for (int i = 0; i < q_top; ++i)
-    {
-        printf("%d ", queue[i]);
-        visited[queue[i]] = 1;
-    }
-    for (int i = 0; i < q_top; ++i)
-    {
-        BFS(arr, visited, queue[i], N);
     }
 }
