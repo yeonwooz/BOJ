@@ -23,7 +23,7 @@ function solve(meta, vertices) {
     arr[vertex[0]][vertex[1]] = 1;
     arr[vertex[1]][vertex[0]] = 1;
   }
-
+  //   console.log(arr);
   const d_visited = new Array(N + 1).fill(0);
   const b_visited = new Array(N + 1).fill(0);
 
@@ -43,9 +43,10 @@ function DFS(arr, visited, V, N, result) {
 
   for (let j = 1; j <= N; ++j) {
     if (arr[V][j] === 1 && !visited[j]) {
-      return DFS(arr, visited, j, N, result);
+      result = DFS(arr, visited, j, N, result);
     }
   }
+
   return result;
 }
 
