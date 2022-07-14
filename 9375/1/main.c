@@ -2,15 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-typedef struct _Item
-{
-    char type[21];
-    char name[21];
-} Item;
-
 void solve(int n);
-// int lower_bound(Item *items, int len, char *type);
-int cmp(const void *a, const void *b);
 
 int main(void)
 {
@@ -28,43 +20,38 @@ int main(void)
 
 void solve(int n)
 {
-    Item items[30] = {0,};
+    int cmb = 1;
+    int idx = 0;
+    int flag = 0;
+    char name[21];
+    char *type;
+    char* clothArr[30] = {0,};
+    int numArr[30] = {0,};
 
     for (int i = 0; i < n; ++i)
     {
-        char name[21];
-        char type[21];
-        scanf("%s %s", name, type);
-        strncpy(items[i].type, type, strlen(type) + 1);
-        strncpy(items[i].name, name, strlen(name) + 1);
-    }
-    qsort(items, n, sizeof(Item), cmp);
+        type = (char*)malloc(sizeof(char) * 21); // 중요
 
-    int name_cnt = 1;
-    int cmb = 1;
-    char cur_type[21] = {0,};
-    strncpy(cur_type, items[0].type, strlen(items[0].type) + 1);
-    for (int i = 1; i < n; ++i)
-    {
-        if (strcmp(cur_type, items[i].type) != 0)
+        scanf("%s %s", name, type);
+        for (int j = 0; j < idx; ++j)
         {
-            cmb *= (name_cnt + 1);
-            name_cnt = 1;
-            strncpy(cur_type, items[i].type, strlen(items[i].type) + 1);
+            if (!strcmp(clothArr[j], type))
+            {
+                numArr[j]++;
+                flag = 1;
+                break;
+            }
         }
-        else 
+        if (!flag)
         {
-            ++name_cnt;
-            if (i == n - 1)
-                cmb *= (name_cnt + 1);
+            numArr[idx] = 1;
+            clothArr[idx++] = type;
         }
+        flag = 0;
     }
+
+    for (int k = 0; k < idx; k++) {
+        cmb *= (numArr[k] + 1);
+    }  
     printf("%d\n", cmb - 1);
 }  
-
-int cmp(const void *a, const void *b)
-{
-    Item item1 = *(Item *)a;
-    Item item2 = *(Item *)b;
-    return strcmp(item1.type, item2.type);
-}
