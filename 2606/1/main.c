@@ -37,6 +37,7 @@ int main(void)
             ++cnt;
     }
     printf("%d", cnt);
+    free(arr);
     return (0);
 }
 
