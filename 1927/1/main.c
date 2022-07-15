@@ -63,37 +63,29 @@ void solve(int N)
 
 void sort_heap(int *heap, int top)
 {
-    while (1)
-    {
-        int position = top;
+    if (top <= 0)
+        return ;
+    // 루트부터 아래까지 정렬
+    int i = 0;
+    int left = i * 2 + 1;
+    int right = i * 2 + 2;
 
-        if (position == 0)
+    while (i <= top)
+    {
+        if (i == top)
             break;
-        if (position % 2 == 0) // even node
+        int min_child_idx;
+        if (left < right)
+            min_child_idx = left;
+        else
+            min_child_idx = right;
+
+        if(heap[min_child_idx] < heap[i])
         {
-            int parent = heap[(position - 2) / 2];
-            int child = heap[position];
-            if (heap[(position - 2) / 2] > heap[position])
-            {
-                heap[(position - 2) / 2] = child;
-                heap[position] = parent;
-                position = (position - 2) / 2;
-            }
-            else
-                break; 
+            int temp = heap[i];
+            heap[i] = heap[min_child_idx];
+            heap[min_child_idx] = temp;
         }
-        else // odd node
-        {
-            int parent = heap[(position - 1) / 2];
-            int child = heap[position];
-            if (heap[(position - 1) / 2] > heap[position])
-            {
-                heap[(position - 1) / 2] = child;
-                heap[position] = parent;
-                position = (position - 1) / 2;
-            }
-            else
-                break;
-        }
+        ++i;
     }
 }
