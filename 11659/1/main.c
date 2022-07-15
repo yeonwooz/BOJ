@@ -5,27 +5,28 @@ int main(void)
 {
     int N, M;
     int *arr;
+    int *dp;
 
     scanf("%d %d", &N, &M);
-    arr = (int *)malloc(sizeof(int) * N);
-    for (int idx = 0; idx < N; ++idx)
+    arr = (int *)malloc(sizeof(int) * (N + 1));
+    dp = (int *)malloc(sizeof(int) * (N + 1));
+    arr[0] = 0;
+    dp[0] = 0;
+
+    for (int idx = 1; idx <= N; ++idx)
     {
         scanf("%d", &arr[idx]);
+        dp[idx] = dp[idx-1] + arr[idx];
     }
-
+    
+    int i, j;
     for (int idx = 0; idx < M; ++idx)
     {
-        int i, j, sum = 0;
         scanf("%d %d", &i, &j);
-        --i;  // i번째를 i번 인덱스로 변경
-        --j;
-        for (int pt = i; pt <= j; ++pt)
-        {
-            sum += arr[pt];
-        }
-        printf("%d\n", sum);
+        printf("%d\n", dp[j] - dp[i-1]);
     }
 
     free(arr);
+    free(dp);
     return (0);
 }
