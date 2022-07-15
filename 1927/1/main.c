@@ -32,10 +32,13 @@ void solve(int N)
         if (input == 0) // pop min element
         {
             if (idx == 1)  // when isEmpty
-                printf("0\n");
+                // printf("0\n");
+                {
+
+                }
             else    // when there are elements
             {
-                printf("%d\n", heap[1]);
+                // printf("%d\n", heap[1]);
                 heap[1] = heap[idx - 1];
                 heapfify(heap, idx, 1);
                 idx--;
@@ -60,24 +63,24 @@ void solve(int N)
             }
         }
 
-        // for (int j = 0; j < N; ++j)
-        // {
-        //     printf("%d ", heap[j]);
-        // }
-        // printf("\n");
+        for (int j = 0; j < N; ++j)
+        {
+            printf("%d ", heap[j]);
+        }
+        printf("\n");
     }   
 }
 
 void heapfify(int *heap, int idx, int i)
 {
     // i번째 노드부터 아래까지 정렬
-    int left = i * 2;
-    int right = i * 2 + 1;
+    int left = i * 2;   // 현재노드의 왼쪽 자식노드
+    int right = i * 2 + 1;  // 현재노드의 오른쪽 자식노드
     int min = i;
 
-    if (left < idx && heap[left] < heap[min])
+    if (left < idx && heap[left] < heap[min])   // 현재노드의 왼쪽 자식노드가 존재하고 현재노드보다 작을 때
         min = left;
-    if (right < idx && heap[right] < heap[min])
+    if (right < idx && heap[right] < heap[min]) // 현재노드의 오른쪽 자식노드가 존재하고 현재노드보다 작을 때
         min = right;
     if (min != i)
     {
