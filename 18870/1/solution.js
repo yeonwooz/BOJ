@@ -1,7 +1,7 @@
 function main() {
-  const inputs = getInputs();
-  const N = parseInt(inputs.shift());
-  const nums = inputs[0].split(" ").map((num) => parseInt(num));
+  let [N, nums] = getInputs();
+  N = parseInt(N);
+  nums = nums.split(" ").map((num) => parseInt(num));
   solve(N, nums);
 }
 
@@ -13,9 +13,8 @@ function getInputs() {
 }
 
 function solve(N, nums) {
-  let sorted = nums.slice();
+  const sorted = nums.slice().sort((a, b) => a - b);
 
-  sorted = qsort(sorted);
   const map = new Map();
   map.set(sorted[0], 0);
 
@@ -24,28 +23,11 @@ function solve(N, nums) {
       map.set(sorted[i], map.get(sorted[i - 1]));
     } else map.set(sorted[i], map.get(sorted[i - 1]) + 1);
   }
-  let answer = "";
+  const answer = [];
   for (let i = 0; i < N; ++i) {
-    answer += map.get(nums[i]);
-    if (i < N - 1) answer += " ";
+    answer.push(map.get(nums[i]));
   }
-  console.log(answer);
-}
-
-function qsort(arr) {
-  if (arr.length <= 1) return arr;
-  const pivot = arr[0];
-  const left = [];
-  const right = [];
-
-  for (let i = 1; i < arr.length; ++i) {
-    if (arr[i] <= pivot) left.push(arr[i]);
-    else right.push(arr[i]);
-  }
-
-  const lsorted = qsort(left);
-  const rsorted = qsort(right);
-  return [...lsorted, pivot, ...rsorted];
+  console.log(answer.join(" "));
 }
 
 main();
