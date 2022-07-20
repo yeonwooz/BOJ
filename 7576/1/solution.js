@@ -28,7 +28,7 @@ function solve(m, n, arr) {
       if (arr[i][j] === 1 && visited[i][j] === 0) {
         BFS(i, j);
       }
-    }
+    }0
   }
 
   function BFS(i, j) {
