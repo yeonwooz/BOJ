@@ -28,6 +28,8 @@ int main(void)
     }
     
     solve(N, M, arr1, arr2);
+    free(arr1);
+    free(arr2);
     return (0);
 }
 
