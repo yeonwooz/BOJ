@@ -22,9 +22,9 @@ function getInputs() {
   return inputs;
 }
 
-function solve(arr) {
-  let answer = 0;
-  let minus_cnt = 0;
+function solve(arr, sum) {
+  let answer = getMax(arr);
+  let signstack = [];
   let loop = arr.length;
   for (let i = 0; i < loop; ++i) {
     let pop = arr.shift();
@@ -37,7 +37,16 @@ function solve(arr) {
       answer -= pop;
     } else answer += pop;
   }
-  console.log(answer);
+
+  //   console.log(answer);
+}
+
+function getMax(arr) {
+  let sum = 0;
+  for (let i = 0; i < arr.length; ++i) {
+    if (i % 2 === 0) sum += arr[i];
+  }
+  return sum;
 }
 
 main();
