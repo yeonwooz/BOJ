@@ -12,7 +12,8 @@ function main() {
     }
   }
   arr.push(num);
-  solve(arr);
+  const answer = solve(arr);
+  console.log(answer);
 }
 
 function getInputs() {
@@ -22,29 +23,21 @@ function getInputs() {
   return inputs;
 }
 
-function solve(arr, sum) {
-  let answer = getMax(arr);
-  let signstack = [];
-  let loop = arr.length;
-  for (let i = 0; i < loop; ++i) {
-    let pop = arr.shift();
-    if (pop === "+") continue;
-    if (pop === "-") {
-      ++minus_cnt;
-      continue;
-    }
-    if (minus_cnt === 1) {
-      answer -= pop;
-    } else answer += pop;
-  }
-
-  //   console.log(answer);
-}
-
-function getMax(arr) {
+function solve(arr) {
+  let i = 0;
   let sum = 0;
-  for (let i = 0; i < arr.length; ++i) {
-    if (i % 2 === 0) sum += arr[i];
+  let sign = 1;
+  while (1) {
+    if (i === arr.length) break;
+    if (arr[i] === "+") {
+      ++i;
+      continue;
+    } else if (arr[i] === "-") {
+      sign = -1;
+    } else {
+      sum += arr[i] * sign;
+    }
+    ++i;
   }
   return sum;
 }
