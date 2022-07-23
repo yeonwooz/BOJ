@@ -20,20 +20,22 @@ void solve(int N, int M, char *S)
     int cnt = 0;
     for (int i = 0; i < strlen(S); ++i)
     {
-        if (S[i+1] == 'O' && S[i+2] == 'I')
+        int k = 0;
+        if (S[i] == 'O')
         {
-            int O = 'O';
-            while (S[i] == 'I' && S[i+1] == 'O')
-            {
-                i += 2;
-                ++O;
-                if (S[i] == 'I' && O == N)
-                {
-                    --O;
-                    ++cnt;
-                }
-            }
+            continue;
         }
+        while (S[i+1] == 'O' && S[i+2] == 'I')
+        {
+            ++k;
+            if (k == N)
+            {
+                --k;
+                ++cnt;
+            }
+            i +=2;
+        }
+        k = 0;
     }
 
     printf("%d", cnt);
