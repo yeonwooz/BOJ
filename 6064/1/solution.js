@@ -18,20 +18,16 @@ function solve(data) {
   const [M, N, x, y] = data;
   const gcd = getgcd(M, N);
   const lcm = gcd * (M / gcd) * (N / gcd);
-  let k = Math.min(x, y);
-  let term = x < y ? M : N;
 
-  while (1) {
-    if (k > lcm || (k % M === M && k % N === N)) {
-      console.log(-1);
-      break;
-    }
-    if (k % M === x && k % N === y) {
+  for (let k = x; k <= lcm; k += M) {
+    let temp = k % N === 0 ? N : k % N;
+    if (temp === y) {
       console.log(k);
-      break;
+      return;
     }
-    k += term;
   }
+  console.log(-1);
+  return;
 }
 
 function getgcd(M, N) {
