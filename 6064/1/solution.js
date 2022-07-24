@@ -16,22 +16,30 @@ function getInputs() {
 
 function solve(data) {
   const [M, N, x, y] = data;
-  let k = 1;
-  let mi = 0;
-  let ni = 0;
+  let k = Math.max(x, y);
+  const gcd = getgcd(M, N);
+  const lcm = gcd * (M / gcd) * (N / gcd);
+
   while (1) {
-    if (k - M * mi === M && k - N * ni === N) {
+    if (k > lcm || (k % M === M && k % N === N)) {
       console.log(-1);
       break;
     }
-    if (k - M * mi === x && k - N * ni === y) {
+    if (k % M === x && k % N === y) {
       console.log(k);
       break;
     }
-    ++k;
-    if ((k-1) % M === 0) ++mi;
-    if ((k-1) % N === 0) ++ni;
+    k += gcd;
   }
+}
+
+function getgcd(M, N) {
+  let gcd = Math.min(M, N);
+  while (gcd > 1) {
+    if (M % gcd === 0 && N % gcd === 0) break;
+    --gcd;
+  }
+  return gcd;
 }
 
 main();
