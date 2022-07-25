@@ -11,6 +11,17 @@ void solve(int);
 void quick_sort(DP*, int, int);
 int binsearch(DP*, int, int);
 
+int compare(const void* a, const void* b) {
+	DP dp1 = *(DP *)a;
+    DP dp2 = *(DP *)b;
+
+    if (dp1.num < dp2.num)
+        return -1;
+    else if (dp1.num > dp2.num)
+        return 1;
+    return 0;
+}
+
 int main(void)
 {
     int N;
@@ -33,14 +44,14 @@ void solve(int N)
         dp[i].num = dots[i];
     }
     
-    quick_sort(dp, 0, N - 1);
-
+    // quick_sort(dp, 0, N - 1);
+    qsort(dp, N, sizeof(DP), compare);
     dp[0].cnt = 0;
     for (int i = 1; i < N; ++i)
     {
         if (dp[i].num == dp[i-1].num)
             dp[i].cnt = dp[i-1].cnt;
-        else
+        else if (dp[i].num > dp[i-1].num)
             dp[i].cnt = dp[i-1].cnt + 1;
     }
 
