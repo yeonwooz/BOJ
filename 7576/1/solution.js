@@ -45,20 +45,37 @@ function solve(m, n, arr) {
       depth = popped.depth;
       days = depth;
 
+
       const ch_i = [0, -1, 0, +1];
       const ch_j = [-1, 0, +1, 0];
 
-      for (let idx = 0; idx < 4; ++idx) {
-        const next_i = popped.x + ch_i[idx];
-        const next_j = popped.y + ch_j[idx];
-        if (next_i < 0 || next_j < 0 || next_i >= n || next_j >= m) continue;
 
-        if (arr[next_i][next_j] != 0 || visited[next_i][next_j] === 1) continue;
+      for (let a = 0; a < n; ++a) {
+        for (let b = 0; b < m; ++b) {
+            for (let idx = 0; idx < 4; ++idx) {
+                const next_i = a + ch_i[idx];
+                const next_j = b + ch_j[idx];
+    
+                if (next_i < 0 || next_j < 0 || next_i >= n || next_j >= m) continue;
+    
+                if (arr[next_i][next_j] != 0 || visited[next_i][next_j] === 1) continue;
+    
+              if (arr[next_i][next_j] === 1 && visited[next_i][next_j] === 0) {
+                
+    
+              }
 
-        queue.push({ x: next_i, y: next_j, depth: depth + 1 });
-        visited[next_i][next_j] = 1;
-        arr[next_i][next_j] = 1;
+
+
+              }
+
+
+
+        }
       }
+
+
+
     }
   }
 
