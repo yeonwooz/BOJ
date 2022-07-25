@@ -11,17 +11,6 @@ void solve(int);
 void quick_sort(DP*, int, int);
 int binsearch(DP*, int, int);
 
-int compare(const void* a, const void* b) {
-	DP dp1 = *(DP *)a;
-    DP dp2 = *(DP *)b;
-
-    if (dp1.num < dp2.num)
-        return -1;
-    else if (dp1.num > dp2.num)
-        return 1;
-    return 0;
-}
-
 int main(void)
 {
     int N;
@@ -44,8 +33,8 @@ void solve(int N)
         dp[i].num = dots[i];
     }
     
-    // quick_sort(dp, 0, N - 1);
-    qsort(dp, N, sizeof(DP), compare);
+    quick_sort(dp, 0, N - 1);
+
     dp[0].cnt = 0;
     for (int i = 1; i < N; ++i)
     {
@@ -67,20 +56,20 @@ void quick_sort(DP *dp, int start, int end)
 {
     int left = start;
     int right = end;
-    int pivot = (start + end) / 2;
+    DP pivot = dp[(start + end) / 2];  //    int pivot = (start + end) / 2; => while문 안에서 인덱스로 접근시 틀림. WHY??
 
     while (left <= right)
     {
-        while (dp[left].num < dp[pivot].num) ++left;
-        while (dp[right].num > dp[pivot].num) --right;
+        while (dp[left].num < pivot.num) left++;
+        while (dp[right].num > pivot.num) right--;
 
         if (left <= right)
         {
-            DP temp = dp[right];
-            dp[right]= dp[left];
-            dp[left] = temp;
-            ++left;
-            --right;
+            int temp = dp[right].num;
+            dp[right].num = dp[left].num;
+            dp[left].num = temp;
+            left++;
+            right--;
         }
     }
     if (start < right) quick_sort(dp, start, right);
