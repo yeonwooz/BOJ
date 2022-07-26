@@ -11,11 +11,11 @@ typedef struct _TMT
 int M = 0, N = 0;
 int **box;
 int **visited;
+int cnt = 0;    // 익어야 하는 토마토 개수 (0의 개수)
 
 int init();
 void solve();
 void BFS();
-int all_ripe();
 
 int main(void)
 {
@@ -41,6 +41,8 @@ int init()
         {
             scanf("%d", &box[i][j]);
             visited[i][j] = 0;
+            if (box[i][j] == 0)
+                ++cnt;
         }
     }
     if (M && N)
@@ -50,7 +52,7 @@ int init()
 
 void solve() 
 {
-    if (all_ripe())
+    if (cnt == 0)
     {  
         printf("0");
         return ;
@@ -82,7 +84,7 @@ void BFS()
     
     while (top > bottom)
     {       
-        if (all_ripe())
+        if (cnt == 0)
             break;
         TMT popped = queue[bottom];
         ++bottom;
@@ -104,28 +106,16 @@ void BFS()
             ++top;
             visited[next_i][next_j] = 1;
             box[next_i][next_j] = 1;
+            --cnt;
         }
     }
 
     free(queue);
             
-    if (all_ripe())
+    if (cnt == 0)
     {  
         printf("%d", depth);
         return ;
     }
     printf("-1");
-}
-
-int all_ripe()
-{
-    for (int i = 0; i < N; ++i)
-    {
-        for (int j = 0; j < M; ++j)
-        {
-            if (box[i][j] == 0)
-                return (0);
-        }
-    }
-    return (1);
 }
