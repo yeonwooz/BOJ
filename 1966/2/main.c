@@ -25,7 +25,6 @@ void solve()
     }
 
     int front = 0;
-    int rear = N - 1;
     int cnt = 0;
 
     while (1)
@@ -51,10 +50,8 @@ void solve()
                 break;
             }
         }
-        else 
-            rear = 0;
         front = (front + 1) % N;
     }
-    
+
     free(papers);
 }
