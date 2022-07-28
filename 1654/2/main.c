@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-long long K = 0, N = 0;
-long long *lines;
-long long len = 0;
+int K = 0, N = 0;
+int *lines;
+long len = 0;
 
 int init();
 void solve();
@@ -21,17 +21,17 @@ int main(void)
 
 int init()
 {
-    scanf("%lld %lld", &K, &N);
+    scanf("%d %d", &K, &N);
     if (K && N)
     {
-        lines = (long long *)malloc(sizeof(long long) * K);
+        lines = (int *)malloc(sizeof(int) * K);
         if (!lines)
             return (0);
         for (int i = 0; i < K; ++i)
         {
-            scanf("%lld", &lines[i]);
+            scanf("%d", &lines[i]);
         }
-        qsort(lines, K, sizeof(long long), cmp);
+        qsort(lines, K, sizeof(int), cmp);
         return (1);
     }
     return (0);
@@ -39,13 +39,13 @@ int init()
 
 void solve()
 {
-    long long start = 1;
-    long long end = lines[K - 1];   // 굳이 정렬 안하고 최대값만 찾아도 됨
+    long start = 1;
+    long end = lines[K - 1];
 
     while (start <= end)
     {
-        long long mid = (start + end) / 2;    // long long 자료형 필요 
-        long long cnt = 0;
+        long mid = (start + end) / 2;    // long 자료형 필요 
+        long cnt = 0;
         for (int i = 0; i < K; ++i)
         {
             cnt += lines[i] / mid;
@@ -63,8 +63,7 @@ void solve()
                 len = mid;
         }
     }
-
-    printf("%lld", len);
+    printf("%ld", len);
 }
 
 int cmp(const void* a, const void* b)
