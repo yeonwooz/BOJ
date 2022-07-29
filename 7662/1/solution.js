@@ -1,3 +1,9 @@
+/*
+- 프로그래머스 연습문제 통과 
+https://school.programmers.co.kr/learn/courses/30/lessons/42628
+- 백준 7662 실패 
+https://www.acmicpc.net/problem/7662
+*/
 main();
 
 function main() {
