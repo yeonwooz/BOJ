@@ -184,18 +184,21 @@ function min_heapify(start, idx) {
 
 function sync_heaps() {
   for (let i = 0; i < deleted.length; ++i) {
-    for (let j = 1; j < max_heap.length; ++j) {
-      if (mxh_idx >= 1 && max_heap[j].id === deleted[i]) {
+    let cnt = 0;
+    for (let j = mxh_idx; j >= 1; --j) {
+      if (max_heap[j].id === deleted[i]) {
         max_heap.splice(j, 1);
-        --mxh_idx;
+        ++cnt;
       }
     }
-
-    for (let j = 1; j < min_heap.length; ++j) {
-      if (mnh_idx >= 1 && min_heap[j].id === deleted[i]) {
+    mxh_idx -= cnt;
+    cnt = 0;
+    for (let j = mnh_idx; j >= 1; --j) {
+      if (min_heap[j].id === deleted[i]) {
         min_heap.splice(j, 1);
-        --mnh_idx;
+        ++cnt;
       }
     }
+    mnh_idx -= cnt;
   }
 }
