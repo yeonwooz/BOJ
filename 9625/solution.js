@@ -13,16 +13,17 @@ function getInputs() {
 }
 
 function solve(N) {
-  let letter = ["A", "B"];
+  let letter = new Array(N + 1);
+  for (let i = 0; i < N + 1; ++i) {
+    letter[i] = new Array(2).fill(0);
+  }
+  letter[0] = [1, 0];
+  letter[1] = [0, 1];
+
   for (let i = 2; i <= N; ++i) {
-    letter[i] = letter[i - 1] + letter[i - 2];
+    letter[i][0] = letter[i - 1][0] + letter[i - 2][0];
+    letter[i][1] = letter[i - 1][1] + letter[i - 2][1];
   }
 
-  let str = letter[N];
-
-  for (let i = 0; i < str.length; ++i) {
-    if (str[i] === "A") cnts[0]++;
-    else cnts[1]++;
-  }
-  console.log(cnts.join(" "));
+  console.log(letter[N].join(" "));
 }
