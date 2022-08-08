@@ -19,12 +19,10 @@ function solve(inputs) {
   for (let i = 0; i < +M; ++i) {
     let len = inputs[i * 2 + 1].length;
     for (let j = 0; j < len - 1; ++j) {
-      const arr = inputs[i * 2 + 1].split(" ");
-      if (arr[j] < arr[j + 1]) {
-        answer = false;
-        break;
+        const arr = inputs[i * 2 + 1].split(" ");
+      if (+arr[j] < +arr[j + 1]) {
+        return false;
       }
-      if (!answer) break;
     }
   }
   return answer;
