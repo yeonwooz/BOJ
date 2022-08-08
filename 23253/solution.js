@@ -1,10 +1,8 @@
-const { Console } = require("console");
-
 main();
 
 function main() {
   const [N, M, dummies] = getInputs();
-  console.log(solve(N, M, dummies));
+  console.log(solve(N, M, dummies) ? "Yes" : "No");
 }
 
 function getInputs() {
@@ -28,22 +26,16 @@ function getInputs() {
 }
 
 function solve(N, M, dummies) {
-  let book = 1;
-  while (book < N + 1) {
-    let popped = false;
-    for (let i = 0; i < M; ++i) {
-      const top = dummies[i].pop();
-      if (book === top) {
-        popped = true;
+  let answer = true;
+  for (let i = 0; i < M; ++i) {
+    let len = dummies[i].length;
+    for (let j = 0; j < len - 1; ++j) {
+      if (dummies[i][j] < dummies[i][j + 1]) {
+        answer = false;
         break;
-      } else {
-        dummies[i].push(top);
       }
+      if (!answer) break;
     }
-    if (!popped) return "No";
-    ++book;
   }
-  if (book === N + 1) {
-    return "Yes";
-  }
+  return answer;
 }
