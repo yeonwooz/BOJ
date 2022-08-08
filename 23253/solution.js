@@ -17,9 +17,8 @@ function solve(inputs) {
 
   let answer = true;
   for (let i = 0; i < +M; ++i) {
-    let len = inputs[i * 2 + 1].length;
-    for (let j = 0; j < len - 1; ++j) {
-        const arr = inputs[i * 2 + 1].split(" ");
+    const arr = inputs[i * 2 + 1].split(" ");
+    for (let j = 0; j < arr.length - 1; ++j) {
       if (+arr[j] < +arr[j + 1]) {
         return false;
       }
