@@ -13,20 +13,14 @@ function getInputs() {
 }
 
 function solve(X) {
-  let bars = [64];
-  let sum = 0;
-  while (1) {
-    sum = bars.reduce((prev, cur) => prev + cur, 0);
-    if (sum <= X) break;
-    bars.sort((a, b) => a - b);
-    const frontHalf = bars.shift() / 2;
-    if (sum - frontHalf >= X) bars.unshift(frontHalf);
+  let length = 64;
+  let cnt = 0;
+  while (X > 0) {
+    if (length > X) length /= 2;
     else {
-      bars.unshift(frontHalf);
-      bars.unshift(frontHalf);
+      ++cnt;
+      X -= length;
     }
   }
-
-  // 막대 몇개로 X만들 수 있는지?
-  console.log(bars.length);
+  console.log(cnt);
 }
