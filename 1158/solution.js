@@ -14,26 +14,22 @@ function getInputs() {
 }
 
 function solve(N, K) {
-  let arr = Array(N);
+  const queue = [];
+  const answer = [];
   for (let i = 0; i < N; ++i) {
-    arr[i] = i + 1;
+    queue.push(i + 1);
   }
 
-  let front = -1;
-  let people = N;
-  let str = "";
-  while (people > 0) {
-    let cnt = K;
-    while (cnt > 0) {
-      front += 1;
-      front %= N;
-      if (arr[front] > 0) {
-        --cnt;
-      }
+  let cnt = 1;
+  while (queue.length) {
+    const shiftitem = queue.shift();
+    if (cnt % K === 0) {
+      answer.push(shiftitem);
+    } else {
+      queue.push(shiftitem);
     }
-    str += arr[front];
-    arr[front] = 0;
-    --people;
+    cnt++;
   }
-  console.log("<" + str.split("").join(", ") + ">");
+
+  console.log("<" + answer.join(", ") + ">");
 }
