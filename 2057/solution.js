@@ -16,19 +16,19 @@ function getInputs() {
 function solve(num) {
   const fac_nums = [];
   getFacNums(num, fac_nums);
-  let sum = 0;
+
   let i = fac_nums.length - 1;
 
   while (i >= 0) {
+    console.log(num);
     let n = fac_nums[i];
-    if (sum + n === num) return true;
-    if (sum + n < num) {
-      sum += n;
+    if (num === 0) return true;
+    if (num - n >= 0) {
+      num -= n;
     }
-
     --i;
   }
-  if (sum === num) return true;
+  if (num === 0) return true;
   return false;
 }
 
@@ -39,7 +39,7 @@ function getFacNums(num, fac_nums) {
   while (true) {
     let factorial = fac(n);
     if (factorial > num) break;
-    fac_nums.push(fac(n));
+    fac_nums.push(factorial);
     ++n;
   }
 }
