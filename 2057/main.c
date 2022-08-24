@@ -26,16 +26,14 @@ int main(void)
 }
 
 int solve() {
+    if (N == 0) {
+        return 0;
+    }
     getFacNums(N, facs);
-
-    // for (int i = 0; i <= idx; ++i) {
-    //     printf("num = %lld\n", facs[i]);
-    // }
 
     long long sum = 0;
     int i = idx;
     while (i >= 0) {
-        // printf("%lld\n", sum);
         long long num = facs[i];
         if (sum + num == N) return 1;
         if (sum + num < N) {
