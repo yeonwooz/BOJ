@@ -1,10 +1,17 @@
 main();
 
 function main() {
-  const [N, M, inputs] = getInputs();
-
-  let cnt = solve(N, M, inputs);
-  console.log(cnt);
+  const inputs = getInputs();
+  let idx = 0;
+  while (idx < inputs.length) {
+    let meta = inputs[idx].split(" ");
+    const N = +meta[0];
+    const M = +meta[1];
+    let arr = inputs.slice(idx + 1, idx + 1 + N + M);
+    let cnt = solve(N, M, arr);
+    console.log(cnt);
+    idx += N + M + 1;
+  }
 }
 
 function getInputs() {
@@ -13,8 +20,7 @@ function getInputs() {
     process.platform === "linux" ? "/dev/stdin" : __dirname + "/input.txt";
   let inputs = fs.readFileSync(filepath).toString().trim().split("\n");
   inputs.pop();
-  meta = inputs.shift().split(" ");
-  return [+meta[0], +meta[1], inputs.map((n) => +n)];
+  return inputs;
 }
 
 function solve(N, M, inputs) {
@@ -46,7 +52,7 @@ function binSearch(arr, left, right, target) {
     if (arr[mid] === target) {
       return true;
     }
-    if (arr[mid] < target) {
+    if (+arr[mid] < +target) {
       start = mid + 1;
     } else {
       end = mid - 1;
