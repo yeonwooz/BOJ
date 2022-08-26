@@ -54,5 +54,5 @@ void solve(void) {
             ++cnt;
         }
     }
-    printf("%d", cnt);
+    printf("%d\n", cnt);
 }
