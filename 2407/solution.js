@@ -14,39 +14,22 @@ function getInputs() {
 }
 
 function solve(n, m) {
-  let result = 0;
-  let select = Array(n).fill(0);
-  let arr = Array(n).fill(0);
-  for (let i = 0; i < n; ++i) {
-    arr[i] = i + 1;
-  }
+  return combination(n, m);
+}
 
-  combination(0, 0);
+function combination(n, m) {
+  let pascal = Array(n + 1);
 
-  function combination(head, cnt) {
-    if (cnt === m) {
-    //   print();
-      ++result;
-      return;
-    }
+  for (let i = 0; i <= n; ++i) {
+    pascal[i] = Array(i).fill(0);
 
-    for (let i = head; i < n; ++i) {
-      if (select[i]) continue;
-      select[i] = true;
-
-      combination(i, cnt + 1);
-      select[i] = false;
+    for (let j = 0; j <= i; ++j) {
+      if (j === 0 || i === j) {
+        pascal[i][j] = 1;
+      } else {
+        pascal[i][j] = BigInt(pascal[i - 1][j]) + BigInt(pascal[i - 1][j - 1]);
+      }
     }
   }
-//   function print() {
-//     let answer = "";
-//     for (let i = 0; i < n; i++) {
-//       if (select[i]) {
-//         answer += arr[i] + " ";
-//       }
-//     }
-//     console.log(answer);
-//   }
-
-    return result;
+  return pascal[n][m].toString();
 }
