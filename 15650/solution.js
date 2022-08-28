@@ -16,20 +16,14 @@ function getInputs() {
 function solve(N, M) {
   let visited = Array().fill(0);
   let chosen = [];
-  //   let nums = [];
-  //   for (let i = 0; i <= N; ++i) {
-  //     nums[i] = i;
-  //   }
-  let result = 0;
 
   DFS(0);
   function DFS(cnt) {
     if (cnt === M) {
-      console.log(chosen);
-      ++result;
+      console.log(chosen.join(" "));
     } else {
       for (let i = 1; i <= N; ++i) {
-        if (!visited[i]) {
+        if (!visited[i] && (cnt === 0 || chosen[cnt - 1] < i)) {
           chosen[cnt] = i;
           visited[i] = 1;
           DFS(cnt + 1);
@@ -38,5 +32,4 @@ function solve(N, M) {
       }
     }
   }
-  console.log(result);
 }
