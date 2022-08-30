@@ -14,13 +14,13 @@ function getInputs() {
 }
 
 function solve(N, M) {
-  //   let visited = Array(N + 1).fill(0);
+  let answer = [];
   let chosen = [];
 
   DFS(0);
   function DFS(depth) {
     if (depth === M) {
-      console.log(chosen.join(" "));
+      answer.push(chosen.join(" "));
       return;
     }
 
@@ -29,4 +29,6 @@ function solve(N, M) {
       DFS(depth + 1);
     }
   }
+
+  console.log(answer.join("\n"));
 }
