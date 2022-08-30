@@ -11,11 +11,11 @@ function getInputs() {
     process.platform === "linux" ? "/dev/stdin" : __dirname + "/input.txt";
   let [meta, inputs] = fs.readFileSync(filepath).toString().trim().split("\n");
   meta = meta.split(" ");
-  return [+meta[0], +meta[1], inputs.split(" ")];
+  return [+meta[0], +meta[1], inputs.split(" ").map((n) => +n)];
 }
 
 function solve(N, M, inputs) {
-  inputs.sort();
+  inputs.sort((a, b) => a - b);
   let visitedIdx = Array(N).fill(0);
   let answer = [];
   let chosen = [];
