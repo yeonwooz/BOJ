@@ -1,5 +1,6 @@
 /* 
-    트리 : 루트 노드부터 DFS탐색
+    트리 : 루트 노드부터 BFS 탐색
+    (DFS 시 메모리 초과)
 */
 
 main();
@@ -22,33 +23,43 @@ function getInputs() {
 }
 
 function solve(N, connections) {
-  const root = 1;
-  const visited = Array(N + 1).fill(0);
-  const parentsInfo = Array(N + 1).fill(0); // 0,1번 제외, 2번부터 N번노드까지의 부모노드 기록
+  const tree = makeTree(N, connections);
 
-  DFS(1);
-  visited[root] = 1;
-  function DFS(v) {
+  const answer = [];
+  BFS(1);
+  function BFS(v) {
+    const visited = Array(N + 1).fill(0);
     visited[v] = 1;
 
-    for (let i = 1; i < N + 1; ++i) {
-      if (!visited[i] && isConnected(connections, N, v, i)) {
-        parentsInfo[i] = v;
-        DFS(i);
+    const queue = [v];
+
+    while (queue.length) {
+      const cur = queue.shift();
+
+      for (let i = 0; i < tree[cur].length; ++i) {
+        const next = tree[cur][i];
+        if (!visited[next]) {
+          visited[next] = 1;
+          answer[next] = cur;
+          queue.push(next);
+        }
       }
     }
   }
-  parentsInfo.shift();
-  parentsInfo.shift();
-  console.log(parentsInfo.join("\n"));
+
+  console.log(answer.join("\n").trim());
 }
 
-function isConnected(connections, N, i, j) {
-  for (let idx = 0; idx < N - 1; ++idx) {
-    const node = connections[idx];
-    if ((node[0] === i && node[1] === j) || (node[0] === j && node[1] === i)) {
-      return true;
-    }
+function makeTree(N, connections) {
+  const tree = Array(N + 1);
+  for (let i = 1; i <= N; ++i) {
+    tree[i] = [];
   }
-  return false;
+
+  for (let idx = 0; idx < N - 1; ++idx) {
+    const [i, j] = connections[idx];
+    tree[i].push(j);
+    tree[j].push(i);
+  }
+  return tree;
 }
