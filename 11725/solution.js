@@ -23,8 +23,6 @@ function getInputs() {
 
 function solve(N, connections) {
   const root = 1;
-  const tree = makeTree(N, connections);
-  //   console.log(tree);
   const visited = Array(N + 1).fill(0);
   const parentsInfo = Array(N + 1).fill(0); // 0,1번 제외, 2번부터 N번노드까지의 부모노드 기록
 
@@ -34,7 +32,7 @@ function solve(N, connections) {
     visited[v] = 1;
 
     for (let i = 1; i < N + 1; ++i) {
-      if (!visited[i] && tree[v][i] === 1) {
+      if (!visited[i] && isConnected(connections, N, v, i)) {
         parentsInfo[i] = v;
         DFS(i);
       }
@@ -45,15 +43,12 @@ function solve(N, connections) {
   console.log(parentsInfo.join("\n"));
 }
 
-function makeTree(N, connections) {
-  const tree = Array(N + 1);
-  for (let i = 0; i < N + 1; ++i) {
-    tree[i] = Array(N + 1).fill(0);
-  }
+function isConnected(connections, N, i, j) {
   for (let idx = 0; idx < N - 1; ++idx) {
-    const [i, j] = connections[idx];
-    tree[i][j] = 1;
-    tree[j][i] = 1;
+    const node = connections[idx];
+    if ((node[0] === i && node[1] === j) || (node[0] === j && node[1] === i)) {
+      return true;
+    }
   }
-  return tree;
+  return false;
 }
