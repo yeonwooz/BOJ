@@ -15,20 +15,26 @@ function main() {
   }
 
   const dp = Array(N);
-
+  // arr[0][0] 부터 arr[i][j]까지의 직사각형 구간합
   for (let i = 0; i < N; ++i) {
     dp[i] = Array(N).fill(0);
     for (let j = 0; j < N; ++j) {
       if (i === 0 && j === 0) {
         dp[i][j] = arr[i][j];
       } else if (j === 0) {
-        dp[i][j] = dp[i - 1][N - 1] + arr[i][j];
-      } else {
+        dp[i][j] = dp[i - 1][j] + arr[i][j];
+      } else if (i === 0) {
         dp[i][j] = dp[i][j - 1] + arr[i][j];
+      } else {
+        dp[i][j] =
+          dp[i - 1][j - 1] +
+          (dp[i - 1][j] - dp[i - 1][j - 1]) +
+          (dp[i][j - 1] - dp[i - 1][j - 1]) +
+          arr[i][j];
       }
     }
   }
-
+  // console.log(dp);
   const answer = [];
   for (let i = 0; i < M; ++i) {
     const [x1, y1, x2, y2] = inputs.shift().split(" ");
@@ -46,13 +52,18 @@ function getInputs() {
 }
 
 function solve(arr, dp, N, x1, y1, x2, y2) {
-  let sum = dp[N - 1][N - 1];
-  for (let i = 0; i < N; ++i) {
-    for (let j = 0; j < N; ++j) {
-      if (i < x1 || i > x2 || j < y1 || j > y2) {
-        sum -= arr[i][j];
-      }
-    }
+  if (x1 === x2 && y1 === y2) return arr[x1][y1];
+  let sum = dp[x2][y2];
+  if (x1 > 0) {
+    sum -= dp[x1 - 1][y2];
   }
+
+  if (y1 > 0) {
+    sum -= dp[x2][y1 - 1];
+  }
+  if (x1 > 0 && y1 > 0) {
+    sum += dp[x1 - 1][y1 - 1];
+  }
+
   return sum;
 }
