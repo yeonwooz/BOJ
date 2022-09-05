@@ -14,19 +14,25 @@ function main() {
     );
   }
 
-  // 각 행의 합이 누적되는 DP
-  const dp = new Array(N).fill(0);
+  const dp = Array(N);
 
   for (let i = 0; i < N; ++i) {
+    dp[i] = Array(N).fill(0);
     for (let j = 0; j < N; ++j) {
-      dp[i] += arr[i][j];
+      if (i === 0 && j === 0) {
+        dp[i][j] = arr[i][j];
+      } else if (j === 0) {
+        dp[i][j] = dp[i - 1][N - 1] + arr[i][j];
+      } else {
+        dp[i][j] = dp[i][j - 1] + arr[i][j];
+      }
     }
   }
 
   const answer = [];
   for (let i = 0; i < M; ++i) {
     const [x1, y1, x2, y2] = inputs.shift().split(" ");
-    answer.push(solve(arr, N, dp, +x1 - 1, +y1 - 1, +x2 - 1, +y2 - 1));
+    answer.push(solve(arr, dp, N, +x1 - 1, +y1 - 1, +x2 - 1, +y2 - 1));
   }
   console.log(answer.join("\n"));
 }
@@ -39,29 +45,14 @@ function getInputs() {
   return inputs;
 }
 
-// 각 행의 합 구해두자
-function solve(arr, N, dp, x1, y1, x2, y2) {
-  let sum = 0;
-
-  if (x1 + 2 <= x2) {
-    for (let row = x1 + 1; row < x2; ++row) {
-      sum += dp[row];
-      for (let col = 0; col < N; ++col) {
-        if (col < y1 || col > y2) {
-          sum -= arr[row][col];
-        }
+function solve(arr, dp, N, x1, y1, x2, y2) {
+  let sum = dp[N - 1][N - 1];
+  for (let i = 0; i < N; ++i) {
+    for (let j = 0; j < N; ++j) {
+      if (i < x1 || i > x2 || j < y1 || j > y2) {
+        sum -= arr[i][j];
       }
     }
   }
-
-  for (let col = y1; col <= y2; ++col) {
-    if (x1 === x2) {
-      sum += arr[x1][col];
-    } else {
-      sum += arr[x1][col];
-      sum += arr[x2][col];
-    }
-  }
-
   return sum;
 }
