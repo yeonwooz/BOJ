@@ -37,24 +37,24 @@ function solve(N, relations) {
   function preOrder(node) {
     if (node === ".") return;
     const [left, right] = tree[node];
-    result += node;
-    preOrder(left);
-    preOrder(right);
+    result += node; // 노드 기록 후
+    preOrder(left);  // 왼쪽순회, 재귀 빠져나오고
+    preOrder(right);  // 오른쪽순회
   }
 
   function midOrder(node) {
     if (node === ".") return;
     const [left, right] = tree[node];
-    midOrder(left);
-    result += node;
-    midOrder(right);
+    midOrder(left);  // 왼쪽 순회 후 재귀 빠져나오고
+    result += node;  // 노드 기록
+    midOrder(right);  // 오른쪽 순회
   }
 
   function postOrder(node) {
     if (node === ".") return;
     const [left, right] = tree[node];
-    postOrder(left);
-    postOrder(right);
-    result += node;
+    postOrder(left);  // 왼쪽 순회 후 재귀 빠져나오고
+    postOrder(right);  // 오른쪽 순회 후 재귀 빠져나오고
+    result += node;   // 재귀 빠져나올 때 노드 기록
   }
 }
