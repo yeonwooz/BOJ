@@ -31,27 +31,24 @@ function getInputs() {
 }
 
 function solve(p, nums) {
+  let reversed = false;
   for (let i = 0; i < p.length; ++i) {
     switch (p[i]) {
       case "R":
-        R(nums);
+        reversed = !reversed;
         break;
       case "D":
-        let result = D(nums);
-        if (result === -1) return false;
+        if (nums.length === 0) return false;
+        if (reversed) {
+          nums.pop();
+        } else {
+          nums.shift();
+        }
         break;
       default:
         break;
     }
   }
+  if (reversed) nums.reverse();
   return true;
-}
-
-function R(arr) {
-  arr.reverse();
-}
-
-function D(arr) {
-  if (arr.length === 0) return -1;
-  return arr.shift();
 }
