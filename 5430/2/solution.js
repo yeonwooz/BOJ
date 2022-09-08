@@ -12,7 +12,8 @@ function main() {
       .split(",")
       .map((n) => +n)
       .filter((n) => n);
-    result += solve(p, nums) ? `[${nums.join(",")}]` : "error";
+    let changed = solve(p, nums);
+    result += changed === "error" ? "error" : `[${changed.join(",")}]`;
     result += i < T - 1 ? "\n" : "";
   }
   console.log(result);
@@ -32,23 +33,28 @@ function getInputs() {
 
 function solve(p, nums) {
   let reversed = false;
+  let left = 0;
+  let right = nums.length;
   for (let i = 0; i < p.length; ++i) {
     switch (p[i]) {
       case "R":
         reversed = !reversed;
         break;
       case "D":
-        if (nums.length === 0) return false;
+        if (left === right) return "error";
         if (reversed) {
-          nums.pop();
+          --right;
         } else {
-          nums.shift();
+          ++left;
         }
         break;
       default:
         break;
     }
   }
-  if (reversed) nums.reverse();
-  return true;
+  let answer = nums.slice(left, right);
+  if (reversed) {
+    answer.reverse();
+  }
+  return answer;
 }
