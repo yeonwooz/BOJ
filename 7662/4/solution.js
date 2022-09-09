@@ -28,7 +28,11 @@ function getInputs() {
 
 function solve(k, cmds) {
   let minHeap = [0];
+  let minHead = 1;
+  let minTail = 1;
   let maxHeap = [0];
+  let maxHead = 1;
+  let maxTail = 1;
   for (let i = 0; i < k; ++i) {
     let [cmd, num] = cmds[i].split(" ");
     num = Number(num);
@@ -36,43 +40,58 @@ function solve(k, cmds) {
     switch (cmd) {
       case "I":
         insertMaxHeap(maxHeap, num);
+        ++maxTail;
         insertMinHeap(minHeap, num);
+        ++minTail;
         break;
       case "D":
         if (num === 1) {
-          maxHeap.shift();
-          while (maxHeap.length > 0 && !minHeap.includes(maxHeap[0])) {
-            maxHeap.shift();
+          //   maxHeap.shift();
+          while (maxHead < maxTail && !minHeap.includes(maxHeap[maxHead])) {
+            // maxHeap.shift();
+            ++maxHead;
           }
-          maxHeap.unshift(0);
-          if (maxHeap.length === 1) continue;
-          let lastIdx = maxHeap.length - 1;
-          maxHeap[1] = maxHeap[lastIdx];
-          maxHeap.pop();
-          maxHeapify(maxHeap, 1, lastIdx - 1);
+          //   maxHeap.unshift(0);
+          if (maxHead === maxTail) continue;
+          //   let lastIdx = maxHeap.length - 1;
+          maxHeap[maxHead] = maxHeap[maxTail - 1];
+          //   maxHeap.pop();
+          --maxTail;
+          maxHeapify(maxHeap, maxHead, maxTail);
         } else {
-          minHeap.shift();
-          while (minHeap.length > 0 && !maxHeap.includes(minHeap[0])) {
-            minHeap.shift();
+          //   minHeap.shift();
+          while (minHead < minTail && !maxHeap.includes(minHeap[minHead])) {
+            // minHeap.shift();
+            ++minHead;
           }
-          minHeap.unshift(0);
-          if (minHeap.length === 1) continue;
-          let lastIdx = minHeap.length - 1;
-          minHeap[1] = minHeap[lastIdx];
-          minHeap.pop();
-          minHeapify(minHeap, 1, lastIdx - 1);
+          //   minHeap.unshift(0);
+          if (minHead === minTail) continue;
+          //   let lastIdx = minHeap.length - 1;
+          minHeap[minHead] = minHeap[minTail - 1];
+          //   minHeap.pop();
+          --minTail;
+          minHeapify(minHeap, minHead, minTail);
         }
         break;
       default:
         break;
     }
-    // console.log("maxHeap", maxHeap, "minHeap", minHeap);
+    // console.log(
+    //   "maxHeap",
+    //   maxHeap,
+    //   maxHead,
+    //   maxTail,
+    //   "minHeap",
+    //   minHeap,
+    //   minHead,
+    //   minTail
+    // );
   }
 
-  if (maxHeap.length === 1 || minHeap.length === 1) {
+  if (minHead === minTail || maxHead === maxTail) {
     return "EMPTY";
   } else {
-    return String(maxHeap[1]) + " " + String(minHeap[1]);
+    return String(maxHeap[maxHead]) + " " + String(minHeap[minHead]);
   }
 }
 
