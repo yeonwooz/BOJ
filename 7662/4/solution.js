@@ -4,15 +4,14 @@ function main() {
   const [T, inputs] = getInputs();
   let head = 0;
   let idx = 0;
+  let answer = [];
   while (idx < T) {
-    // const k = Number(inputs[head]);
-    solve(
-      Number(inputs[head]),
-      inputs.slice(head + 1, head + 1 + Number(inputs[head]))
-    );
-    head += Number(inputs[head]) + 1;
+    const k = Number(inputs[head]);
+    answer.push(solve(k, inputs.slice(head + 1, head + 1 + k)));
+    head += k + 1;
     ++idx;
   }
+  console.log(answer.join("\n"));
 }
 
 function getInputs() {
@@ -31,15 +30,18 @@ function solve(k, cmds) {
   let minHeap = [0];
   let maxHeap = [0];
   for (let i = 0; i < k; ++i) {
-    switch (cmds[i].split(" ")[0]) {
+    let [cmd, num] = cmds[i].split(" ");
+    num = Number(num);
+    // console.log(cmd, num, ":");
+    switch (cmd) {
       case "I":
-        insertMaxHeap(maxHeap, Number(cmds[i].split(" ")[1]));
-        insertMinHeap(minHeap, Number(cmds[i].split(" ")[1]));
+        insertMaxHeap(maxHeap, num);
+        insertMinHeap(minHeap, num);
         break;
       case "D":
-        if (Number(cmds[i].split(" ")[1]) === 1) {
+        if (num === 1) {
           maxHeap.shift();
-          while (maxHeap.length > 1 && !minHeap.includes(maxHeap[1])) {
+          while (maxHeap.length > 0 && !minHeap.includes(maxHeap[0])) {
             maxHeap.shift();
           }
           maxHeap.unshift(0);
@@ -49,12 +51,11 @@ function solve(k, cmds) {
           maxHeap.pop();
           maxHeapify(maxHeap, 1, lastIdx - 1);
         } else {
-          maxHeap.shift();
-
-          while (minHeap.length > 1 && !maxHeap.includes(minHeap[1])) {
+          minHeap.shift();
+          while (minHeap.length > 0 && !maxHeap.includes(minHeap[0])) {
             minHeap.shift();
           }
-          maxHeap.unshift(0);
+          minHeap.unshift(0);
           if (minHeap.length === 1) continue;
           let lastIdx = minHeap.length - 1;
           minHeap[1] = minHeap[lastIdx];
@@ -69,9 +70,9 @@ function solve(k, cmds) {
   }
 
   if (maxHeap.length === 1 || minHeap.length === 1) {
-    console.log("EMPTY");
+    return "EMPTY";
   } else {
-    console.log(maxHeap[1], minHeap[1]);
+    return String(maxHeap[1]) + " " + String(minHeap[1]);
   }
 }
 
