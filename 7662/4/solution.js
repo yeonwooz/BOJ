@@ -5,11 +5,12 @@ function main() {
   let head = 0;
   let idx = 0;
   while (idx < T) {
-    // const k = inputs.shift();
-    const k = Number(inputs[head]);
-    let cmds = inputs.slice(head + 1, head + 1 + k);
-    head += k + 1;
-    solve(k, cmds);
+    // const k = Number(inputs[head]);
+    solve(
+      Number(inputs[head]),
+      inputs.slice(head + 1, head + 1 + Number(inputs[head]))
+    );
+    head += Number(inputs[head]) + 1;
     ++idx;
   }
 }
@@ -30,35 +31,36 @@ function solve(k, cmds) {
   let minHeap = [0];
   let maxHeap = [0];
   for (let i = 0; i < k; ++i) {
-    let [cmd, num] = cmds[i].split(" ");
-    // console.log(cmd, num, ":");
-    num = Number(num);
-    switch (cmd) {
+    switch (cmds[i].split(" ")[0]) {
       case "I":
-        insertMaxHeap(maxHeap, num);
-        insertMinHeap(minHeap, num);
+        insertMaxHeap(maxHeap, Number(cmds[i].split(" ")[1]));
+        insertMinHeap(minHeap, Number(cmds[i].split(" ")[1]));
         break;
       case "D":
-        if (num === 1) {
+        if (Number(cmds[i].split(" ")[1]) === 1) {
+          maxHeap.shift();
           while (maxHeap.length > 1 && !minHeap.includes(maxHeap[1])) {
-            maxHeap.splice(1, 1);
+            maxHeap.shift();
           }
+          maxHeap.unshift(0);
           if (maxHeap.length === 1) continue;
           let lastIdx = maxHeap.length - 1;
           maxHeap[1] = maxHeap[lastIdx];
           maxHeap.pop();
           maxHeapify(maxHeap, 1, lastIdx - 1);
         } else {
+          maxHeap.shift();
+
           while (minHeap.length > 1 && !maxHeap.includes(minHeap[1])) {
-            minHeap.splice(1, 1);
+            minHeap.shift();
           }
+          maxHeap.unshift(0);
           if (minHeap.length === 1) continue;
           let lastIdx = minHeap.length - 1;
           minHeap[1] = minHeap[lastIdx];
           minHeap.pop();
           minHeapify(minHeap, 1, lastIdx - 1);
         }
-        // --length;
         break;
       default:
         break;
