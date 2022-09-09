@@ -1,12 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 #define MAX(a,b) (a > b ? a : b)
 #define MIN(a,b) (a < b ? a : b)
+
+typedef struct _DELETED_NODE 
+{
+    long long value;
+    int cnt;
+} DELETED_NODE;
 
 int T = 0, k = 0;
 long long int *max_heap;
 long long int *min_heap;
+DELETED_NODE *deleted;
+int deltedNodeIdx;
 
 int maxHead;
 int maxTail;
@@ -20,7 +29,7 @@ void push_max_heap(long long);
 void push_min_heap(long long);
 void max_heapify(int, int);
 void min_heapify(int, int);
-int isInHeap(long long*, long long int);
+int in_deleted(long long int num);
 
 int main(void)
 {
@@ -50,8 +59,9 @@ int assign(void)
 {
     max_heap = (long long int *)malloc(sizeof(long long int) * (k+1));
     min_heap = (long long int *)malloc(sizeof(long long int) * (k+1));
-    
-    if (!max_heap || !min_heap)
+    deleted = (DELETED_NODE *)malloc(sizeof(DELETED_NODE) * (k));
+
+    if (!max_heap || !min_heap || !deleted)
         return (0);
 
     max_heap[0] = 0;
@@ -60,6 +70,7 @@ int assign(void)
     maxTail = 1;
     minHead = 1;
     minTail = 1;
+    deltedNodeIdx = -1;
     return (1);
 }
 
@@ -80,27 +91,52 @@ void solve(void)
         {  
             push_max_heap(num);
             push_min_heap(num);
+
+            if (deltedNodeIdx >= 0) {
+                int i = 0;
+                while (i <= deltedNodeIdx) {
+                    if (deleted[i].value == num) {
+                        if (deleted[i].cnt == 1) {
+                            deleted[i].value = INT_MAX + 1;
+                            deleted[i].cnt = 0;
+                        } else if (deleted[i].cnt > 1) {
+                            deleted[i].cnt --;
+                        }
+                    }
+                    ++i;
+                }
+            }
         }
         else 
         {
             if (num == 1)
             {
-                while (maxHead < maxTail && !isInHeap(min_heap, max_heap[maxHead]))
+                while (maxHead < maxTail && in_deleted(max_heap[maxHead]))
                 {
                     ++maxHead;
                 }
                 if (maxHead == maxTail) continue;
+
+                ++deltedNodeIdx;
+                deleted[deltedNodeIdx].value = max_heap[maxHead];
+                deleted[deltedNodeIdx].cnt = 1;
+
                 max_heap[maxHead] = max_heap[maxTail - 1];
                 --maxTail;
                 max_heapify(maxHead, maxTail);  
             }
             else 
             {
-                while (minHead < minTail && !isInHeap(max_heap, min_heap[minHead]))
+                while (minHead < minTail && in_deleted(min_heap[minHead]))
                 {
                     ++minHead;
                 }
                 if (minHead == minTail) continue;
+
+                ++deltedNodeIdx;
+                deleted[deltedNodeIdx].value = min_heap[minHead];
+                deleted[deltedNodeIdx].cnt = 1;
+                
                 min_heap[minHead] = min_heap[minTail - 1];
                 --minTail;
                 min_heapify(minHead, minTail);
@@ -216,14 +252,15 @@ void max_heapify(int start, int idx)
     }
 }
 
-int isInHeap(long long* heap, long long int num) 
+int in_deleted(long long int num) 
 {
-    int i = 1;
-    while (heap[i]) {
-        if (heap[i] == num ) {
-            return 1;
+    int i = 0;
+    while (i <= deltedNodeIdx) {
+        if (deleted[i].value == num) {
+            return deleted[i].cnt;
         }
         ++i;
     }
     return 0;
 }
+
