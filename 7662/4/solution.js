@@ -4,13 +4,14 @@ function main() {
   const [T, inputs] = getInputs();
   let head = 0;
   let idx = 0;
-
+  let answer = [];
   while (idx < T) {
     const k = Number(inputs[head]);
-    solve(inputs, head + 1, head + 1 + k, [0], 1, 1, [0], 1, 1);
+    answer.push(solve(k, inputs.slice(head + 1, head + 1 + k)));
     head += k + 1;
     ++idx;
   }
+  console.log(answer.join("\n"));
 }
 
 function getInputs() {
@@ -25,67 +26,77 @@ function getInputs() {
   return [Number(T), inputs];
 }
 
-function solve(
-  str,
-  from,
-  to,
-  minHeap,
-  minHead,
-  minTail,
-  maxHeap,
-  maxHead,
-  maxTail
-) {
-  for (let i = from; i < to; ++i) {
-    let [cmd, num] = str[i].split(" ");
+function solve(k, cmds) {
+  let minHeap = [0];
+  let maxHeap = [0];
+  let deleted = new Map();
+  for (let i = 0; i < k; ++i) {
+    let [cmd, num] = cmds[i].split(" ");
     num = Number(num);
-    // console.log(cmd, num, ":");
+    // console.log(cmd, num, ":", "deleted", deleted);
     switch (cmd) {
       case "I":
         insertMaxHeap(maxHeap, num);
-        ++maxTail;
         insertMinHeap(minHeap, num);
-        ++minTail;
+        const deletedLog = deleted.get(num);
+        if (deletedLog) {
+          if (deletedLog === 1) {
+            deleted.delete(num);
+          } else if (deletedLog > 1) {
+            deleted.set(num, deletedLog - 1);
+          }
+        }
+
         break;
       case "D":
         if (num === 1) {
-          while (maxHead < maxTail && !minHeap.includes(maxHeap[maxHead])) {
-            ++maxHead;
+          maxHeap.shift();
+          while (maxHeap.length > 0 && deleted.get(maxHeap[0])) {
+            maxHeap.shift();
           }
-          if (maxHead === maxTail) continue;
-          maxHeap[maxHead] = maxHeap[maxTail - 1];
-          --maxTail;
-          maxHeapify(maxHeap, maxHead, maxTail);
+          maxHeap.unshift(0);
+          if (maxHeap.length === 1) continue;
+          let lastIdx = maxHeap.length - 1;
+
+          if (deleted.get(maxHeap[1])) {
+            deleted.set(maxHeap[1], deleted.get(maxHeap[1] + 1));
+          } else {
+            deleted.set(maxHeap[1], 1);
+          }
+
+          maxHeap[1] = maxHeap[lastIdx];
+          maxHeap.pop();
+          maxHeapify(maxHeap, 1, lastIdx - 1);
         } else {
-          while (minHead < minTail && !maxHeap.includes(minHeap[minHead])) {
-            ++minHead;
+          minHeap.shift();
+          while (minHeap.length > 0 && deleted.get(minHeap[0])) {
+            minHeap.shift();
           }
-          if (minHead === minTail) continue;
-          minHeap[minHead] = minHeap[minTail - 1];
-          --minTail;
-          minHeapify(minHeap, minHead, minTail);
+          minHeap.unshift(0);
+          if (minHeap.length === 1) continue;
+          let lastIdx = minHeap.length - 1;
+
+          if (deleted.get(minHeap[1])) {
+            deleted.set(minHeap[1], deleted.get(minHeap[1] + 1));
+          } else {
+            deleted.set(minHeap[1], 1);
+          }
+
+          minHeap[1] = minHeap[lastIdx];
+          minHeap.pop();
+          minHeapify(minHeap, 1, lastIdx - 1);
         }
         break;
       default:
         break;
     }
-    // console.log(
-    //   "maxHeap",
-    //   maxHeap,
-    //   maxHead,
-    //   maxTail,
-    //   "minHeap",
-    //   minHeap,
-    //   minHead,
-    //   minTail
-    // );
+    // console.log("maxHeap", maxHeap, "minHeap", minHeap);
   }
 
-  if (minHead === minTail || maxHead === maxTail) {
-    console.log("EMPTY");
+  if (maxHeap.length === 1 || minHeap.length === 1) {
+    return "EMPTY";
   } else {
-    // return String(maxHeap[maxHead]) + " " + String(minHeap[minHead]);
-    console.log(maxHeap[maxHead], minHeap[minHead]);
+    return String(maxHeap[1]) + " " + String(minHeap[1]);
   }
 }
 
