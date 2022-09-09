@@ -28,16 +28,23 @@ function getInputs() {
 
 function solve(k, cmds) {
   let minHeap = [0];
+  let minHead = 1;
+  let minTail = 1;
   let maxHeap = [0];
+  let maxHead = 1;
+  let maxTail = 1;
   let deleted = new Map();
+
   for (let i = 0; i < k; ++i) {
     let [cmd, num] = cmds[i].split(" ");
     num = Number(num);
-    // console.log(cmd, num, ":", "deleted", deleted);
+    // console.log(cmd, num, ":");
     switch (cmd) {
       case "I":
         insertMaxHeap(maxHeap, num);
+        ++maxTail;
         insertMinHeap(minHeap, num);
+        ++minTail;
         const deletedLog = deleted.get(num);
         if (deletedLog) {
           if (deletedLog === 1) {
@@ -46,57 +53,56 @@ function solve(k, cmds) {
             deleted.set(num, deletedLog - 1);
           }
         }
-
         break;
       case "D":
         if (num === 1) {
-          maxHeap.shift();
-          while (maxHeap.length > 0 && deleted.get(maxHeap[0])) {
-            maxHeap.shift();
+          while (maxHead < maxTail && deleted.get(maxHeap[maxHead])) {
+            ++maxHead;
           }
-          maxHeap.unshift(0);
-          if (maxHeap.length === 1) continue;
-          let lastIdx = maxHeap.length - 1;
-
-          if (deleted.get(maxHeap[1])) {
-            deleted.set(maxHeap[1], deleted.get(maxHeap[1] + 1));
+          if (maxHead === maxTail) continue;
+          if (deleted.get(maxHeap[maxHead])) {
+            deleted.set(maxHeap[maxHead], deleted.get(maxHeap[maxHead] + 1));
           } else {
-            deleted.set(maxHeap[1], 1);
+            deleted.set(maxHeap[maxHead], 1);
           }
-
-          maxHeap[1] = maxHeap[lastIdx];
-          maxHeap.pop();
-          maxHeapify(maxHeap, 1, lastIdx - 1);
+          maxHeap[maxHead] = maxHeap[maxTail - 1];
+          --maxTail;
+          maxHeapify(maxHeap, maxHead, maxTail);
         } else {
-          minHeap.shift();
-          while (minHeap.length > 0 && deleted.get(minHeap[0])) {
-            minHeap.shift();
+          while (minHead < minTail && deleted.get(minHeap[minHead])) {
+            ++minHead;
           }
-          minHeap.unshift(0);
-          if (minHeap.length === 1) continue;
-          let lastIdx = minHeap.length - 1;
-
-          if (deleted.get(minHeap[1])) {
-            deleted.set(minHeap[1], deleted.get(minHeap[1] + 1));
+          if (minHead === minTail) continue;
+          if (deleted.get(minHeap[minHead])) {
+            deleted.set(minHeap[minHead], deleted.get(minHeap[minHead] + 1));
           } else {
-            deleted.set(minHeap[1], 1);
+            deleted.set(minHeap[minHead], 1);
           }
 
-          minHeap[1] = minHeap[lastIdx];
-          minHeap.pop();
-          minHeapify(minHeap, 1, lastIdx - 1);
+          minHeap[minHead] = minHeap[minTail - 1];
+          --minTail;
+          minHeapify(minHeap, minHead, minTail);
         }
         break;
       default:
         break;
     }
-    // console.log("maxHeap", maxHeap, "minHeap", minHeap);
+    // console.log(
+    //   "maxHeap",
+    //   maxHeap,
+    //   maxHead,
+    //   maxTail,
+    //   "minHeap",
+    //   minHeap,
+    //   minHead,
+    //   minTail
+    // );
   }
 
-  if (maxHeap.length === 1 || minHeap.length === 1) {
+  if (minHead === minTail || maxHead === maxTail) {
     return "EMPTY";
   } else {
-    return String(maxHeap[1]) + " " + String(minHeap[1]);
+    return String(maxHeap[maxHead]) + " " + String(minHeap[minHead]);
   }
 }
 
