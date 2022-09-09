@@ -4,14 +4,13 @@ function main() {
   const [T, inputs] = getInputs();
   let head = 0;
   let idx = 0;
-  let answer = [];
+
   while (idx < T) {
     const k = Number(inputs[head]);
-    answer.push(solve(k, inputs.slice(head + 1, head + 1 + k)));
+    solve(inputs, head + 1, head + 1 + k, [0], 1, 1, [0], 1, 1);
     head += k + 1;
     ++idx;
   }
-  console.log(answer.join("\n"));
 }
 
 function getInputs() {
@@ -26,15 +25,19 @@ function getInputs() {
   return [Number(T), inputs];
 }
 
-function solve(k, cmds) {
-  let minHeap = [0];
-  let minHead = 1;
-  let minTail = 1;
-  let maxHeap = [0];
-  let maxHead = 1;
-  let maxTail = 1;
-  for (let i = 0; i < k; ++i) {
-    let [cmd, num] = cmds[i].split(" ");
+function solve(
+  str,
+  from,
+  to,
+  minHeap,
+  minHead,
+  minTail,
+  maxHeap,
+  maxHead,
+  maxTail
+) {
+  for (let i = from; i < to; ++i) {
+    let [cmd, num] = str[i].split(" ");
     num = Number(num);
     // console.log(cmd, num, ":");
     switch (cmd) {
@@ -79,9 +82,10 @@ function solve(k, cmds) {
   }
 
   if (minHead === minTail || maxHead === maxTail) {
-    return "EMPTY";
+    console.log("EMPTY");
   } else {
-    return String(maxHeap[maxHead]) + " " + String(minHeap[minHead]);
+    // return String(maxHeap[maxHead]) + " " + String(minHeap[minHead]);
+    console.log(maxHeap[maxHead], minHeap[minHead]);
   }
 }
 
