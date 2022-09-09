@@ -46,29 +46,19 @@ function solve(k, cmds) {
         break;
       case "D":
         if (num === 1) {
-          //   maxHeap.shift();
           while (maxHead < maxTail && !minHeap.includes(maxHeap[maxHead])) {
-            // maxHeap.shift();
             ++maxHead;
           }
-          //   maxHeap.unshift(0);
           if (maxHead === maxTail) continue;
-          //   let lastIdx = maxHeap.length - 1;
           maxHeap[maxHead] = maxHeap[maxTail - 1];
-          //   maxHeap.pop();
           --maxTail;
           maxHeapify(maxHeap, maxHead, maxTail);
         } else {
-          //   minHeap.shift();
           while (minHead < minTail && !maxHeap.includes(minHeap[minHead])) {
-            // minHeap.shift();
             ++minHead;
           }
-          //   minHeap.unshift(0);
           if (minHead === minTail) continue;
-          //   let lastIdx = minHeap.length - 1;
           minHeap[minHead] = minHeap[minTail - 1];
-          //   minHeap.pop();
           --minTail;
           minHeapify(minHeap, minHead, minTail);
         }
