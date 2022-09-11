@@ -64,6 +64,7 @@ void solve(void)
         minDp[curRow][1] = MIN(tempMin, minDp[prevRow][2]) + nums[1];
     }
 
+    if (N == 1) curRow = 0;
     int maxScore = MAX(maxDp[curRow][0], maxDp[curRow][1]);
     maxScore = MAX(maxScore, maxDp[curRow][2]);
     
