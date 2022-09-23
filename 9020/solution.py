@@ -1,3 +1,5 @@
+import math
+
 def is_prime(num: int):
     if num == 1:
         return False
@@ -11,16 +13,17 @@ def is_prime(num: int):
             divisor += 1
         return True
 
-def get_gb_parts(num: int):
+def get_gb_parts(n: int):
     list = []
-    possible_x = 2
-    while possible_x * 2 <= num:
-        if is_prime(possible_x) and is_prime(num - possible_x) > 0:
+    possible_x = math.floor(n / 2)
+    while possible_x * 2 > 0:
+        if is_prime(possible_x) and is_prime(n - possible_x) > 0:
             x = possible_x
-            y = num - x
+            y = n - x
             diff = abs(x - y)
             list.append([diff, x, y])
-        possible_x += 1
+            break
+        possible_x -= 1
     return list
 
 T = int(input())
