@@ -1,8 +1,9 @@
-N = int(input())
+import sys
+N = int(sys.stdin.readline())
 
 list = [0] * 2000001
 for i in range(N):
-    num = int(input())
+    num = int(sys.stdin.readline())
     list[num + 1000000] = 1
 
 for i in range(2000001):
