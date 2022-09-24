@@ -1,20 +1,33 @@
 import sys
+
+def quick_sort(array, start, end):
+    if start >= end: return
+    pivot = start
+    left, right = start + 1, end
+
+    while left <= right:
+        while left <= end and len(array[left]) <= len(array[pivot]):
+            left += 1
+        while right > start and len(array[right]) >= len(array[pivot]):
+            right -= 1
+        if left > right:
+            array[right], array[pivot] = array[pivot], array[right]
+        else:
+            array[right], array[left] = array[left], array[right]
+    quick_sort(array, start, right - 1)
+    quick_sort(array, right + 1, end)
+
+
 N = int(sys.stdin.readline())
-# 시간 더 빠르게
-# 중복 제거 
+
 list = []
 for i in range(N):
     word = sys.stdin.readline().rstrip()
     list.append(word)
 
-n = len(list)
-for i in range(n - 1):
-    for j in range(n - 1, i, -1):
-        if len(list[j - 1]) > len(list[j]):
-            list[j - 1], list[j] = list[j], list[j - 1]
-        elif len(list[j - 1]) == len(list[j]):
-            templist = [list[j - 1], list[j]]
-            templist.sort()
-            list[j - 1], list[j] = templist
-for word in list:
-    print(word)
+quick_sort(list, 0, len(list) - 1)
+
+for i in range(len(list)):
+    if i == 0 or list[i-1] != list[i]:
+        print(list[i])
+
