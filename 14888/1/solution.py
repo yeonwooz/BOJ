@@ -21,24 +21,23 @@ pers = permutations(ops, N - 1)
 min_result = 1000000001
 max_result = -1000000001
 for per in list(pers):
-    for i in range(len(per)):
-        result = nums[0]
-        for j in range(N - 1):
-            print(nums,    per)
-            if per[j] == '+':
-                result += nums[j+1]
-            elif per[j] == '-':
-                result -= nums[j+1]
-            elif per[j] == 'x':
-                result *= nums[j+1]
+    result = nums[0]
+    for i in range(N - 1):
+        if per[i] == '+':
+            result += nums[i+1]
+        elif per[i] == '-':
+            result -= nums[i+1]
+        elif per[i] == 'x':
+            result = result * nums[i+1]
+        else:
+            if result >= 0:
+                result = math.floor(result / nums[i+1])
             else:
-                result = math.floor(result / nums[j+1])
-        if min_result > result:
-            min_result = result
-        if max_result < result:
-            max_result = result
-
-
+                result = math.floor((-1 * result) / nums[i+1]) * -1
+    if min_result > result:
+        min_result = result
+    if max_result < result:
+        max_result = result
+       
 print(max_result)
 print(min_result)
-
