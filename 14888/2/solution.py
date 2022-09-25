@@ -16,45 +16,43 @@ ops_cnt = len(ops_arr)
 max_result = -1000000001
 min_result = 1000000001
 
-def calculate(ops):
-    result = nums[0]
-    for i in range(ops_cnt):
-        if ops[i] == '+':
-            result += nums[i+1]
-        elif ops[i] == '-':
-            result -= nums[i+1]
-        elif ops[i] == '*':
-            result *= nums[i+1]
-        elif ops[i] == '/':
-            if result >= 0:
-                result = math.floor(result / nums[i+1])
-            else:
-                result = math.floor(result * -1 / nums[i+1]) * -1
-    return result
+def calculate(op, next_num, cur_result):
+    if op == '+':
+        cur_result += next_num # nums[i+1]
+    elif op == '-':
+        cur_result -= next_num
+    elif op == '*':
+        cur_result *= next_num
+    elif op == '/':
+        if cur_result >= 0:
+            cur_result = math.floor(cur_result / next_num)
+        else:
+            cur_result = math.floor(cur_result * -1 / next_num) * -1
+    return cur_result
 
-def insert_ops(combination, depth, visited, op_idx):
+def insert_ops(combination, depth, visited, op_idx, cur_result):
     global min_result, max_result
     if depth == ops_cnt:
-        calculated = calculate(combination)
-        min_result = min(min_result, calculated)
-        max_result = max(max_result, calculated)
+        result = calculate(combination[depth-1], nums[depth], cur_result)
+        min_result = min(min_result, result)
+        max_result = max(max_result, result)
         return 
     
     for i in range(ops_cnt):
         if visited[i] == False:
             visited[i] = True
             combination.append(ops_arr[i])
-            insert_ops(combination, depth + 1, visited, i)
+            result = calculate(combination[depth-1], nums[depth], cur_result)
+            insert_ops(combination, depth + 1, visited, i, result)
             visited[i] = False
             combination.pop()
     
-
 visited = [False] * len(ops_arr)
 combination = []
 for i in range(ops_cnt):
     visited[i] = True
     combination.append(ops_arr[i])
-    insert_ops(combination, 1, visited, i)
+    insert_ops(combination, 1, visited, i, nums[0])
     visited[i] = False
     combination.pop()
 
