@@ -2,59 +2,36 @@ import math
 import sys
 N = int(sys.stdin.readline())
 nums = list(map(int, sys.stdin.readline().split()))
-ops_dict = dict()
-ops_dict['+'], ops_dict['-'], ops_dict['*'], ops_dict['/'] = list(map(int, sys.stdin.readline().split()))
-
-ops_arr = []
-for k, v in ops_dict.items():
-    for j in range(v):
-        ops_arr.append(k)
-
-ops_cnt = len(ops_arr)
-# print(ops_arr)
+ops = list(map(int, sys.stdin.readline().split()))
 
 max_result = -1000000001
 min_result = 1000000001
 
-def calculate(op, next_num, cur_result):
-    if op == '+':
-        cur_result += next_num # nums[i+1]
-    elif op == '-':
-        cur_result -= next_num
-    elif op == '*':
-        cur_result *= next_num
-    elif op == '/':
-        if cur_result >= 0:
-            cur_result = math.floor(cur_result / next_num)
-        else:
-            cur_result = math.floor(cur_result * -1 / next_num) * -1
-    return cur_result
+def dfs(cur_idx, cur_result, plus_cnt, minus_cnt, multiply_cnt, divide_cnt):
+    global max_result, min_result
+    if plus_cnt == 0 and minus_cnt == 0 and multiply_cnt == 0 and divide_cnt == 0:
+        max_result = max(max_result, cur_result)
+        min_result = min(min_result, cur_result)
+        return
+        
+    
+    if plus_cnt:
+        dfs(cur_idx + 1, cur_result + nums[cur_idx + 1], plus_cnt - 1, minus_cnt, multiply_cnt, divide_cnt)
 
-def insert_ops(combination, depth, visited, op_idx, cur_result):
-    global min_result, max_result
-    if depth == ops_cnt:
-        result = calculate(combination[depth-1], nums[depth], cur_result)
-        min_result = min(min_result, result)
-        max_result = max(max_result, result)
-        return 
-    
-    for i in range(ops_cnt):
-        if visited[i] == False:
-            visited[i] = True
-            combination.append(ops_arr[i])
-            result = calculate(combination[depth-1], nums[depth], cur_result)
-            insert_ops(combination, depth + 1, visited, i, result)
-            visited[i] = False
-            combination.pop()
-    
-visited = [False] * len(ops_arr)
-combination = []
-for i in range(ops_cnt):
-    visited[i] = True
-    combination.append(ops_arr[i])
-    insert_ops(combination, 1, visited, i, nums[0])
-    visited[i] = False
-    combination.pop()
+    if minus_cnt:
+        dfs(cur_idx + 1, cur_result - nums[cur_idx + 1], plus_cnt, minus_cnt - 1, multiply_cnt, divide_cnt)
+
+    if multiply_cnt:
+        dfs(cur_idx + 1, cur_result * nums[cur_idx + 1], plus_cnt, minus_cnt, multiply_cnt - 1, divide_cnt)
+
+    if divide_cnt:
+        if cur_result < 0:
+            result = math.floor((cur_result * -1) / nums[cur_idx + 1]) * -1
+        else:
+            result = math.floor((cur_result) / nums[cur_idx + 1])
+        dfs(cur_idx + 1, result, plus_cnt, minus_cnt, multiply_cnt, divide_cnt - 1)     
+
+dfs(0, nums[0], ops[0], ops[1], ops[2], ops[3])
 
 print(max_result)
 print(min_result)
