@@ -1,3 +1,4 @@
+import math
 import sys
 N = int(sys.stdin.readline())
 nums = list(map(int, sys.stdin.readline().split()))
@@ -12,9 +13,31 @@ for k, v in ops_dict.items():
 ops_cnt = len(ops_arr)
 # print(ops_arr)
 
+max_result = -1000000001
+min_result = 1000000001
+
+def calculate(ops):
+    result = nums[0]
+    for i in range(ops_cnt):
+        if ops[i] == '+':
+            result += nums[i+1]
+        elif ops[i] == '-':
+            result -= nums[i+1]
+        elif ops[i] == '*':
+            result *= nums[i+1]
+        elif ops[i] == '/':
+            if result >= 0:
+                result = math.floor(result / nums[i+1])
+            else:
+                result = math.floor(result * -1 / nums[i+1]) * -1
+    return result
+
 def insert_ops(combination, depth, visited, op_idx):
+    global min_result, max_result
     if depth == ops_cnt:
-        print(combination)
+        calculated = calculate(combination)
+        min_result = min(min_result, calculated)
+        max_result = max(max_result, calculated)
         return 
     
     for i in range(ops_cnt):
@@ -34,3 +57,6 @@ for i in range(ops_cnt):
     insert_ops(combination, 1, visited, i)
     visited[i] = False
     combination.pop()
+
+print(max_result)
+print(min_result)
