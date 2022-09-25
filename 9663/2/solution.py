@@ -19,26 +19,25 @@ def is_promising(col_cnt):
             return False
     return True
 
-def nQueen(N, col_cnt, used):
+def nQueen(N, col_cnt, visited):
     global cnt
     # 0열부터 시작해서 채워지기 시작했고, 채워진 열의 수 (col_cnt) 가 N개가 되면 종료
     if col_cnt == N:
         cnt += 1
         return
-    print("used", used)
     for i in range(N):
         # 모든 행에 대해서
-        if i not in used: 
+        if visited[i] == False: 
             board[col_cnt] = i
             if is_promising(col_cnt):
-                used.append(i)
-                nQueen(N, col_cnt + 1, used)
-                used.pop()
+                visited[i] = True
+                nQueen(N, col_cnt + 1, visited)
+                visited[i] = False
 
 # for i in range(N):
 #     board[0] = i
 #     nQueen(N, 1)
 
-used = []
-nQueen(N, 0, used)
+visited = [False] * N
+nQueen(N, 0, visited)
 print(cnt)
