@@ -1,62 +1,47 @@
-N = int(input())
+import sys
+N = int(sys.stdin.readline())
 
-queens = [-1] * N
+board = [-1] * N
+# 0열부터 채우고 시작할 것이라서 초기화를 0으로 해도 됨. 초기 수가 무슨 숫자든 괜찮음 
 global cnt
 cnt = 0
-# board = []
 
-# for i in range(N):
-#     board.append([-1] * N)
+def promising(j, col_cnt, i):
+    # 현재 j열의 i행에 퀸을 놓았는데, 괜찮은가?
 
-def promising(queens, v, i):
-    # v열 i행에 퀸을 놓을 수 있나?
-    # 상하좌우 대각선에 없다면 true
-    promising = False
-    if queens[v] == -1:
-        left_candidate = None
-        right_candidate = None
-        
-        if v > 0:
-            # 현재열이 1이상이어야 왼쪽에 후보가 있다
-            left_candidate = queens[v - 1]
-            
-        if v < len(queens) - 1:
-            # 현재열이 마지막인덱스보다 작아야 오른쪽에 후보가 있다
-            right_candidate = queens[v + 1]
+    # 이전 열들 (j)
+    # 만약 이전 열들의 값이 현재 값이랑 같거나
+    # 대각선 조건이거나(대각선이면 열차와 행차가 같다)
+    if (board[j] == board[col_cnt]) or (j - col_cnt == board[j] - board[col_cnt]) or (j - col_cnt == board[col_cnt] - board[j]):
+        return False
+    return True
 
-            # 이 열이 비어있고
-            # 양옆의 숫자와 2이상 차이나면 (diff 절댓값) promising = True
-        if left_candidate is None and right_candidate is not None:
-            if abs(right_candidate - i) >= 2:
-                promising = True
-        elif left_candidate is not None and right_candidate is None:
-            if abs(left_candidate - i) >= 2:
-                promising = True
-        elif ((left_candidate is not None and abs(left_candidate - i) >= 2) and (right_candidate is not None and abs(right_candidate - i) >= 2)):
-            promising = True
-
-    return promising
-
-def recur(N, queens, v):
-    # v열을 채워보자. 몇행에 퀸을 놓을까?
-    if -1 not in queens:
-        print(queens)
+def nQueen(N, col_cnt):
+    global cnt
+    # 0열부터 시작해서 채워지기 시작했고, 채워진 열의 수 (col_cnt) 가 N개가 되면 종료
+    if col_cnt == N:
+        cnt += 1
         return
     
     for i in range(N):
-        if i not in queens and promising(queens, v, i):
-            # v열의 i행에 놓을 수 있다면?
-            queens[v] = i
-            for j in range(N):
-                # 그 다음에 어떤 열을 채울지?
-                if v != j:
-                    recur(N, queens, j)
-    return
+        # 모든 행에 대해서
+        check = True
+        for j in range(col_cnt):
+            #현재까지 채운 열들을 가지고 검사할 것임.
+            board[col_cnt] = i
+            # 일단 이번 열을 i행으로 채우고,
+            # if promising(j, col_cnt, i) == False: 
+            #     check = False
+            #     break
+            if promising(j, col_cnt, i) == False:
+                check = False
+                break
+        if check == True:
+            # 검사에서 통과했다면, 이 열은 채웠고 다음 열로 이동한다
+            nQueen(N, col_cnt + 1)
 
+for i in range(N):
+    board[0] = i
+    nQueen(N, 1)
 
-queens = [-1] * N # -1이 없을 때까지 채우기
-# for i in range(N):
-#     # i열부터 채우기 시작하는 케이스
-#     recur(N, queens, i)
-#     queens = [-1] * N
-recur(N, queens, i)
+print(cnt)
