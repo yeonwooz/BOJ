@@ -1,7 +1,18 @@
 from perf import time
 from perf import memory
 
-def ss_sort(ls):
+from typing import MutableSequence
+
+# 단순 선택 정렬 : 가장 작은 원소부터 알맞은 위치로 옮긴다 
+def ss_sort(ls: MutableSequence) -> None:
+    n = len(ls)
+    for i in range(n - 1):
+        min = i
+        for j in range(i + 1, n):
+            if ls[j] < ls[min]:
+                min = j
+        ls[i], ls[min] = ls[min], ls[i]
+
     return ls
 
 if __name__ == "__main__":
