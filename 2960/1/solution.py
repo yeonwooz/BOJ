@@ -14,13 +14,13 @@ def eratos():
             # 아직 체에서 걸러지지 않은 수에 대하여(소수 후보)
             for p in range(i, N + 1, i):
                 # print('k', K, 'cnt', cnt, 'p', p)
-                # 현재 숫자 i의 배수만큼 제거(자기 자신은 제외하는 경우도 있음)
+                # 현재 숫자 i의 배수만큼 제거(자기 자신은 제외해야 하는데 문제가 이상한 것 같음)
                 if sieve[p] == True:
                     sieve[p] = False
                     cnt += 1
                     if cnt == K:
                         return p
-    # return [i for i in range(2, N + 1) if sieve[i] == True]
+                # return [i for i in range(2, N + 1) if sieve[i] == True]
     return -1
 
 if __name__ == "__main__":
