@@ -1,5 +1,5 @@
-import time
-import psutil
+from perf import time
+from perf import memory
 
 def b_sort(list):
     n = len(list)
@@ -13,17 +13,13 @@ if __name__ == "__main__":
     for i in range(len(ls)):
         ls[i] *= (len(ls) - i)
 
-    start = time.time()
+    start = time()
     sorted = b_sort(ls)
     print(ls)
-    end = time.time()
+    end = time()
 
     # 실행시간
     print(f"time: {end - start:.5f} sec")
 
     # 메모리 사용량
-    p = psutil.Process()
-    rss = p.memory_info().rss / 2 ** 20 # Bytes to MB
-    print(f"memory usage: {rss: 10.5f} MB")
-
-    # 메모리 사용량 코드 참고 : https://jybaek.tistory.com/895
+    print(f"memory usage: {memory: 10.5f} MB")
