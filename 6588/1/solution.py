@@ -6,32 +6,27 @@ def eratos(N, sieve):
             for j in range(i+i, N + 1, i):
                 if sieve[j] == True:
                     sieve[j] = False
-    answer = []
-    for idx in range(len(sieve)):
-        if sieve[idx] == True:
-            answer.append(idx)
-    return answer
+    return sieve
 
 def goldbach(N, primes):
-    for num in primes:
-        if (N - num) in primes:
-            return [num, N - num]
+    for i in range(len(primes)):
+        if primes[i] == True and primes[N - i] == True:
+            return [i, N - i]
     return []
 
-def solve(N):
-    sieve = [True] * (N + 1) # 최종적으로 True 인 것들은 소수이다
-    sieve[0] = False
-    sieve[1] = False
-    primes = eratos(N, sieve)
+def solve(N, primes):
     a, b  = goldbach(N, primes)
-
     print(f"{a+b} = {a} + {b}")
 
 if __name__ == "__main__":
+    sieve = [True] * (1000000 + 1) # 최종적으로 True 인 것들은 소수이다
+    sieve[0] = False
+    sieve[1] = False
+    primes = eratos(1000000, sieve)
     while True:
         try: 
             N = int(sys.stdin.readline())
             if N > 0:
-                solve(N)
+                solve(N, primes)
         except:
             break
