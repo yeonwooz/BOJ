@@ -14,15 +14,13 @@ def si_sort(ls: MutableSequence) -> None:
             j -= 1
         ls[j] = tmp
 
-    return ls
-
 if __name__ == "__main__":
     ls = [1] * 1000
     for i in range(len(ls)):
         ls[i] *= (len(ls) - i)
 
     start = time()
-    sorted = si_sort(ls)
+    si_sort(ls)
     print(ls)
     end = time()
 
