@@ -14,7 +14,7 @@ if __name__ == "__main__":
         ls[i] *= (len(ls) - i)
 
     start = time()
-    sorted = b_sort(ls)
+    b_sort(ls)
     print(ls)
     end = time()
 
