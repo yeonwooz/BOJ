@@ -19,7 +19,7 @@ def get_mt(N, ls):
             # print("내려감", len)
         elif ls[i-1] < ls[i]:
             # 이번에 올라갈 때
-            if i - 2 >= 0 and ls[i-2] >= ls[i-1]:
+            if i - 2 >= 0 and ls[i-2] > ls[i-1]:
                 # 그 직전에 수열이 더 있었고 내려가고 있었거나 동일했나? 
                 if max_len < len:
                     max_len = len  
@@ -35,7 +35,8 @@ def get_mt(N, ls):
 def main() :
     N = int(sys.stdin.readline())
     if N == 1:
-        return 1
+        print("1")
+        return 
     nums = list(map(int, sys.stdin.readline().split()))
     get_mt(N, nums)
 
