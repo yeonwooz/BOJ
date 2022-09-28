@@ -1,23 +1,54 @@
 import sys
 
-def converge(n, dots):
-    min_distance = 1e9
-    for i in range(n):
-        for j in range(n):
-            distance = 0
-            for idx in range(len(dots)):
-                distance += abs(dots[idx][0] - i) + abs(dots[idx][1] - j)
-            min_distance = min(min_distance, distance)
-    print(min_distance)
+from typing import MutableSequence
+
+def q_sort(ls: MutableSequence, left: int, right: int):
+    pl = left
+    pr = right
+    pivot = ls[(left + right) // 2]
+
+    while pl <= pr:
+        while ls[pl] < pivot:
+            pl += 1
+        while pivot < ls[pr]:
+            pr -= 1
+
+        if pl <= pr:
+            # 교차할 때까지 
+            ls[pl], ls[pr] = ls[pr], ls[pl]
+            pl += 1
+            pr -= 1
+    
+    if left < pr: q_sort(ls, left, pr)
+    if pl < right: q_sort(ls, pl, right)
+    return
+
+def get_min_dist(ls):
+    n = len(ls)
+    median = 0
+    if len(ls) % 2 > 0:
+        median = ls[n // 2] 
+    else:
+        l_med = ls[n // 2 - 1]
+        r_med = ls[n // 2]
+        median = (l_med + r_med) // 2
+    
+    distance = 0
+    for i in range(len(ls)):
+        distance += abs(ls[i] - median)
+    return distance
+
 
 if __name__ == "__main__":
     N, M = map(int, sys.stdin.readline().split())
     # board =[ [0 for _ in range(N)] for _ in range(N)]
-    dots = []
+    xs = []
+    ys = []
     for i in range(M):
         r, c = map(int, sys.stdin.readline().split())
-        # board[r-1][c-1] = 1
-        dots.append([r-1, c-1])
+        xs.append(r)
+        ys.append(c)
 
-    converge(N, dots)
-
+    q_sort(xs, 0, len(xs) - 1)
+    q_sort(ys, 0, len(ys) - 1)
+    print(get_min_dist(xs) + get_min_dist(ys))
