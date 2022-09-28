@@ -1,5 +1,11 @@
-from perf import time
-from perf import memory
+import sys
+import os
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+print(sys.path)
+
+from py_module.perf import time
+from py_module.perf import memory
 from typing import Sequence, MutableSequence
 
 def m_sort(a: Sequence, b: Sequence, c: MutableSequence) -> None:
