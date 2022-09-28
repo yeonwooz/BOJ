@@ -7,27 +7,34 @@ import copy
 # TODO: 개미의 순서 왜 안바뀌는지 이해하기 (서로 부딪히는 경우에 대한 고려 필요X)
 
 # L기준으로 방향을 바꾸고 나서 현 시점의 개미의 정렬을 확인
-def move(T, ants_at_T, L):
-    for time in range(1, T):
-        prev_pos = ants_at_T[time - 1]
-        ants_at_T[time] = copy.deepcopy(prev_pos)
 
-        for idx in range(len(ants_at_T[time])):
-            pos = ants_at_T[time][idx]
-            if pos[1] == L or pos[1] == 0:
-                # 양끝점 도달
-                if pos[2] == 'D':
-                    ants_at_T[time][idx][2] = 'L'
-                    ants_at_T[time][idx][1] -= 1
-                else:
-                    ants_at_T[time][idx][2] = 'D'
-                    ants_at_T[time][idx][1] += 1
+def move(N, T, ants, L):
+    answer = []
+    for init_pos, toward in ants:
+        if toward == 'D':
+            # 오른쪽으로 이동
+            next_pos = init_pos + T
+            if next_pos < L:
+                answer.append(next_pos)
             else:
-                if pos[2] == 'D':
-                    ants_at_T[time][idx][1] += 1
+                if (next_pos // L) % 2 ==  1:
+                    # 다음 위치까지 이동하는동안 L을 홀수번 지난경우
+                    answer.append(L - next_pos % L)
                 else:
-                    ants_at_T[time][idx][1] -= 1
+                    answer.append(next_pos % L)
+        else:
+            # 왼쪽으로 이동
+            next_pos = T + (L - init_pos)
+            if next_pos < L:
+                answer.append(L - next_pos)
+            else:
+                if (next_pos // L) % 2 == 1:
+                    answer.append(next_pos % L)
+                else:
+                    answer.append(L - next_pos % L)
 
+    answer.sort()
+    print(" ".join(str(s) for s in answer))
 
 if __name__ == "__main__":
     L, T = map(int, sys.stdin.readline().split())
@@ -35,19 +42,10 @@ if __name__ == "__main__":
     # L은 끝점
     # T초 후에 각 개미의 위치는?
     N = int(sys.stdin.readline().rstrip())
-    ants_at_T = [] * T # 시간대별 [개미번호, 위치, 방향]
-    for i in range(T):
-        ants_at_T.append([])
-        
-    for i in range(N):
+    ants = []
+    for _ in range(N):
         pos, toward = sys.stdin.readline().split()
-        ants_at_T[0].append([i+1, int(pos), toward])
-
-    move(T, ants_at_T, L)
-    answer = []
-    for ant in ants_at_T[T-1]:
-        answer.append(ant[1])
-    answer.sort()
-    print(" ".join(str(s) for s in answer))
-
+        ants.append([int(pos), toward])
+    print(ants)
+    move(N, T, ants, L)
 
