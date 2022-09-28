@@ -6,8 +6,6 @@ i = 1
 cnt = 0
 while i <= N:
     s = str(i)
-    for j in s:
-        if int(j) == 3 or int(j) == 6 or int(j) == 9:
-            cnt += 1 
+    cnt += s.count('3') + s.count('6') + s.count('9')
     i += 1
 print(cnt)
