@@ -48,7 +48,7 @@ def move(N, T, ants, L):
                     answer.append(next_pos % L)
                 else:
                     answer.append(L - next_pos % L)
-    # 나머지연산 하는 이유: L만큼 이동하고 더 가는 거리 구하기 위함 
+    # 나머지연산 하는 이유: L만큼 이동하고 더 가는 거리 구하기 위함 (왼쪽부터 더가는지, 오른쪽부터 더가는지 구분됨)
     answer.sort()
     print(" ".join(str(s) for s in answer))
 
