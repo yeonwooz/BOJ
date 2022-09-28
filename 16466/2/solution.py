@@ -19,25 +19,26 @@ def merge_sort(ls, left, right) -> None:
         # buf_pl은 왼쪽 배열과 비교할 버퍼 커서, buf_pr은 오른쪽 배열과 비교할 버퍼 커서
 
         while i <= center:
-            # 왼쪽 배열의 원소를 버퍼에 앞쪽부터 채워넣는다 
+            # 왼쪽 배열의 원소를 버퍼에 앞쪽부터 채워넣는다. 
             buff[buf_pr] = ls[i]
             buf_pr += 1
-            i += 1
+            i += 1  # i는 오른쪽 배열의 시작점으로 바뀐다 
         
         while i <= right and buf_pl < buf_pr:
             # 오른쪽 배열에 대해서, 이미 채워진 버퍼의 앞쪽부터 비교
             if buff[buf_pl] <= ls[i]:
-                # 버퍼의 원소가 오른쪽 배열의 원소보다 작으면
-                ls[j] = buff[buf_pl]  # 기존 리스트에 버퍼의 값을 넣는다
+                # 버퍼의 원소가 오른쪽 배열의 원소보다 같거나 작으면
+                ls[j] = buff[buf_pl]  # 왼쪽 배열에 버퍼의 원소를 채운다
                 buf_pl += 1 
             else:
-                ls[j] = ls[i]
+                # 버퍼의 원소가 오른쪽 배열의 원소보다 크면
+                ls[j] = ls[i]   # 왼쪽 배열에 오른쪽 배열의 원소를 채운다
                 i += 1
             j += 1
         
-        while buf_pl < buf_pr:
-            ls[j] = buff[buf_pl]
-            j += 1
+        while buf_pl < buf_pr:  # 버퍼의 두 커서가 교차할 때까지
+            ls[j] = buff[buf_pl]    # 왼쪽 배열에 버퍼의 원소를 넣는다 
+            j += 1                      
             buf_pl += 1
 
 if __name__ == "__main__":
