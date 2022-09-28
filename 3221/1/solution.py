@@ -39,7 +39,8 @@ def move(N, T, ants, L):
                     answer.append(next_pos % L)
         else:
             # 왼쪽으로 이동
-            next_pos = T + (L - init_pos)
+            next_pos = T + (L - init_pos) # 최초포지션을 오른쪽으로 세면 L - init_pos이고, 거기에서 T만큼 (왼쪽)으로 이동
+            
             if next_pos < L:
                 answer.append(L - next_pos)
             else:
@@ -47,7 +48,7 @@ def move(N, T, ants, L):
                     answer.append(next_pos % L)
                 else:
                     answer.append(L - next_pos % L)
-
+    # 나머지연산 하는 이유: L만큼 이동하고 더 가는 거리 구하기 위함 
     answer.sort()
     print(" ".join(str(s) for s in answer))
 
