@@ -2,6 +2,10 @@
 import sys
 import copy
 
+# TODO: 메모리초과 해결
+# TODO: q_sort 사용
+# TODO: 개미의 순서 왜 안바뀌는지 이해하기 (서로 부딪히는 경우에 대한 고려 필요X)
+
 # L기준으로 방향을 바꾸고 나서 현 시점의 개미의 정렬을 확인
 def move(T, ants_at_T, L):
     for time in range(1, T):
