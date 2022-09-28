@@ -2,11 +2,26 @@
 import sys
 import copy
 
-# TODO: 메모리초과 해결
-# TODO: q_sort 사용
 # TODO: 개미의 순서 왜 안바뀌는지 이해하기 (서로 부딪히는 경우에 대한 고려 필요X)
 
 # L기준으로 방향을 바꾸고 나서 현 시점의 개미의 정렬을 확인
+
+def q_sort(ls, left, right):
+    pl = left
+    pr = right
+    pivot = ls[(left + right) // 2]
+
+    while pl <= pr:
+        while ls[pl] < pivot: pl += 1 # 둘이 같기만 해도 멈춤
+        while ls[pr] > pivot: pr -= 1 
+        if pl <= pr:
+            # 어긋날때까지
+            ls[pl], ls[pr] = ls[pr], ls[pl]
+            pl += 1
+            pr -= 1
+        if pl < right : q_sort(ls, pl, right)
+        if left < pr : q_sort(ls, left, pr)
+
 
 def move(N, T, ants, L):
     answer = []
@@ -38,7 +53,6 @@ def move(N, T, ants, L):
 
 if __name__ == "__main__":
     L, T = map(int, sys.stdin.readline().split())
-    T += 1
     # L은 끝점
     # T초 후에 각 개미의 위치는?
     N = int(sys.stdin.readline().rstrip())
@@ -46,6 +60,6 @@ if __name__ == "__main__":
     for _ in range(N):
         pos, toward = sys.stdin.readline().split()
         ants.append([int(pos), toward])
-    print(ants)
     move(N, T, ants, L)
 
+# https://recordofwonseok.tistory.com/412
