@@ -1,15 +1,9 @@
 import sys
 
 def is_pal(word):
-    n = len(word)
-    half = n // 2
-    i = 0
-    while i < half:
-        if word[i] != word[n - 1 - i]:
-            return False
-        i += 1
-    return True
-
+    if word == word[::-1]:
+        return True
+    return False
 
 def main():
     T = int(sys.stdin.readline())
