@@ -27,6 +27,7 @@ def move(T, ants_at_T, L):
 
 if __name__ == "__main__":
     L, T = map(int, sys.stdin.readline().split())
+    T += 1
     # L은 끝점
     # T초 후에 각 개미의 위치는?
     N = int(sys.stdin.readline().rstrip())
@@ -38,8 +39,11 @@ if __name__ == "__main__":
         pos, toward = sys.stdin.readline().split()
         ants_at_T[0].append([i+1, int(pos), toward])
 
-    print(ants_at_T)
     move(T, ants_at_T, L)
-    print(ants_at_T)
+    answer = []
+    for ant in ants_at_T[T-1]:
+        answer.append(ant[1])
+    answer.sort()
+    print(" ".join(str(s) for s in answer))
 
 
