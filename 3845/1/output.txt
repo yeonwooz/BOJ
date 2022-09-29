@@ -1,0 +1,28 @@
+cur= 5.0 xs[i]= 0.0
+cur= 15.0 xs[i]= 10.0
+cur= 25.0 xs[i]= 20.0
+cur= 35.0 xs[i]= 30.0
+cur= 45.0 xs[i]= 40.0
+cur= 55.0 xs[i]= 50.0
+cur= 65.0 xs[i]= 60.0
+cur= 75.0 xs[i]= 70.0
+YES
+cur= 5.0 xs[i]= 0.0
+cur= 15.0 xs[i]= 10.0
+cur= 25.0 xs[i]= 20.0
+cur= 35.0 xs[i]= 30.0
+cur= 45.0 xs[i]= 40.0
+cur= 55.0 xs[i]= 50.0
+cur= 65.0 xs[i]= 60.0
+cur= 75.0 xs[i]= 70.0
+NO
+cur= 20.0 xs[i]= 10.0
+cur= 40.0 xs[i]= 30.0
+cur= 60.0 xs[i]= 50.0
+cur= 80.0 xs[i]= 70.0
+YES
+cur= 20.0 xs[i]= 10.0
+cur= 40.0 xs[i]= 30.0
+cur= 60.0 xs[i]= 50.0
+cur= 80.0 xs[i]= 60.0
+YES
