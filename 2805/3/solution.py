@@ -1,9 +1,5 @@
 import sys
 
-MAX_HEIGHT_FIGURE = 1000000000
-MIN_HEIGHT_FIGURE = 0
-
-total_len = 0
 H = 0
 
 def get_total_height(height, trees):
@@ -17,10 +13,10 @@ def bin_search(trees, max_h, M):
     start = 0
     end = max_h
 
-    while start < end:
+    while start <= end:
         mid_h = (start + end) // 2
         if get_total_height(mid_h, trees) < M:
-            end = mid_h
+            end = mid_h - 1
         else:
             start = mid_h + 1
             global H
