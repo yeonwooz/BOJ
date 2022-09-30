@@ -24,16 +24,15 @@ answer = 0
 idx = 0
 
 for ax, ay in coords:
-    left, right = idx, M - 1
+    left = idx
+    right = M - 1
     mid = 0
-
     while left <= right:
         mid = (left + right) // 2
-        if spots[mid] <= ax: 
-            # 현재 사대가 이 동물의 왼쪽에 있을 때,
-            if M - 1 == mid or spots[mid+1] > ax:
-            # 현재 사대가 마지막이거나, 다음사대가 이 동물의 오른쪽에 있다면, 탐색을 종료한다
-                break
+        if spots[mid] <= ax: # 현재 사대가 이 동물의 왼쪽에 있을 때
+            if mid == M - 1 or spots[mid + 1] > ax:
+                # 현재 사대가 마지막이거나, 다음사대가 이 동물의 오른쪽에 있다면, 탐색을 종료한다
+                    break
             left = mid + 1
         else:
             right = mid - 1
@@ -41,7 +40,7 @@ for ax, ay in coords:
     idx = mid # 현재지점부터 탐색시작
     if abs(ax - spots[mid]) + ay <= L:
         answer += 1
-    elif M > mid+1 and abs(ax - spots[mid+1]) + ay <= L:
+    elif M > mid + 1 and abs(ax - spots[mid + 1]) + ay <= L:
         answer += 1
 
 print(answer)
