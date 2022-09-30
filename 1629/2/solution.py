@@ -14,3 +14,4 @@ def rec(a, b, c):
         return ((half ** 2) * a) % c
 
 print(rec(A,B,C))
+#finished at 10:35
