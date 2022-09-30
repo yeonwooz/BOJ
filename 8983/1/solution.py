@@ -27,21 +27,29 @@ for ax, ay in coords:
     left = idx
     right = M - 1
     mid = 0
+    # 동물의 왼쪽에 있는 사대 위치(mid) 찾기
     while left <= right:
         mid = (left + right) // 2
-        if spots[mid] <= ax: # 현재 사대가 이 동물의 왼쪽에 있을 때
+        print('left, right, mid', left, right, mid)
+        if spots[mid] <= ax: 
+            # 현재 사대가 이 동물의 왼쪽에 있을 때 : 좌변 증가 
             if mid == M - 1 or spots[mid + 1] > ax:
-                # 현재 사대가 마지막이거나, 다음사대가 이 동물의 오른쪽에 있다면, 탐색을 종료한다
+                # 현재 사대가 마지막이거나, 다음사대가 이 동물의 오른쪽에 있다면, 탐색을 종료한다 (그 사대는 다음 동물이 탐색할 것이므로)
                     break
             left = mid + 1
         else:
+            # 현재 사대가 이 동물의 오른쪽에 있을 때 : 우변 감소
             right = mid - 1
 
-    idx = mid # 현재지점부터 탐색시작
+    idx = mid # 마지막에 탐색한 사대를 좌변으로 하여 다시 이분탐색 시작 준비
     if abs(ax - spots[mid]) + ay <= L:
+        # 현재 사대에서 사정거리 안에 동물이 있다 
         answer += 1
-    elif M > mid + 1 and abs(ax - spots[mid + 1]) + ay <= L:
+        print(ax,ay,"사격가능", answer)
+    elif mid < M - 1 and abs(ax - spots[mid + 1]) + ay <= L:
+        # 현재 사대에서는 사정거리 안에 동물이 없지만, 탐색할 사대가 아직 남아있고 다음 사대에서 사정거리 안에 동물이 있다 
         answer += 1
+        print(ax,ay,"다음번에 사격가능", answer)
 
 print(answer)
 
