@@ -2,7 +2,7 @@
 import sys
 
 def is_in_area(shooter_pos, animal_pos, l):
-    return abs(shooter - animal[0]) + animal[1] <= l
+    return abs(shooter_pos - animal_pos[0]) + animal_pos[1] <= l
 
 M, N, L = map(int, input().split())
 # M = 사대의 수       /       N = 동물의 수     /      L = 사정거리
