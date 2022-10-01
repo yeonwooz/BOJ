@@ -14,7 +14,8 @@ animals = []
 
 for _ in range(N):
     x, y = map(int, input().split())
-    animals.append((x, y))
+    if y <= L:
+        animals.append((x, y))
  
 # 앞 사대에서 잡으면 뒷 사대에서 잡을 수 없다
 # 전체 사대의 사정거리 영역 안에 있는 동물의 수가 답인 듯하다
@@ -24,21 +25,20 @@ shooters.sort()
 animals.sort()
 
 answer = 0
-idx = 0
 
-for i in range(N):
+for i in range(len(animals)):
     animal = animals[i]
 
     start_idx = 0
-    end_idx = M - 1 
+    end_idx = M - 1
 
-    if animal[1] > L:
-        continue
+    # if animal[1] > L:
+    #     continue
 
     while start_idx <= end_idx:
         mid = (start_idx + end_idx) // 2
         shooter = shooters[mid]
-        if is_in_area(shooter, animal, L):
+        if animal[0] == shooters[mid] or is_in_area(shooter, animal, L):
             answer += 1
             break
         elif animal[0] < shooters[mid]:
@@ -48,4 +48,4 @@ for i in range(N):
 
 print(answer)
 
-#finished at
+#finished at 6:00 -> 60점
