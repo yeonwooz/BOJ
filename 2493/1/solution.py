@@ -3,29 +3,21 @@ import sys
 N = int(sys.stdin.readline())
 towers = list(map(int, sys.stdin.readline().split(' ')))
 
-answer = [0] * N
+answer = []
 stack = []
 
 for i in range(N):
-    h = towers[i]
-    if i == 0:
-        stack.append(h)
-    else:
-        if stack[-1] > h:
-            stack.append(h)
-            answer[i] = i
+    while stack:
+        if stack[-1][1] > towers[i]:
+            answer.append(stack[-1][0] + 1)
+            break
         else:
-            ptr = i
-            while len(stack) >= 1 and stack[-1] <= h:   
-                ptr -= 1
-                stack.pop()
-            stack.append(h)
-            answer[i] = ptr   
-
-s = ""
-for num in answer:
-    s += str(num) + " "
-print(s.rstrip())
+            stack.pop()
+    if not stack:
+        answer.append(0)
+    stack.append([i, towers[i]])
+print(" ".join(str(s) for s in answer).strip())
 
 #finished at 7:53 -> 시간초과
 #finished at 8:00 -> 출력초과 (WHY?)
+#https://jjangsungwon.tistory.com/44
