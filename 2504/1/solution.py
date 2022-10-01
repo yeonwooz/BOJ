@@ -5,6 +5,7 @@ pairs = {
     '(':')',
     '[':']'
 }
+
 def validate(pars):
     stack = []
     top = -1
@@ -26,36 +27,34 @@ def validate(pars):
             top += 1
     return top % 2 == 0 # 하나 더 올라간 채로 끝나기 때문에
 
-def calc(pars):
-    global calculated, pairs
-
+def calc(pars, cnt):
     if len(pars) == 0:
-        return
-
+        return cnt
     if pars[0] in pairs and pairs[pars[0]] == pars[-1]:
         if pars[0] == '(':
-            calculated *= 2
+            cnt *= 2
         else:
-            calculated *= 3
+            cnt *= 3
         pars.pop(0)
         pars.pop()
-        calc(pars)
+        return calc(pars, cnt)
     else:
         for i in range(len(pars)):
             for j in range(i + 1, len(pars)):
                 sliced = pars[i:j]
                 if validate(sliced):
-                    calc(sliced)
-                    calc(pars[j:])
+                    sum = calc(sliced, cnt) + calc(pars[j:], 1)
+                    return cnt * sum
+    return cnt
 
 def solve(pars):
     is_valid = validate(pars)
     if is_valid == False:
         return 0
-    global calculated    
-    calculated = 1
-    calc(pars.split())
-    return calculated
+    # return calc(pars.split(''), 1) # 구분자가 이미 문장 내에 존재할 때만 split 활용가능
+    arr = list(pars)
+    arr.pop()
+    return calc(arr, 1)
 
 if __name__ == "__main__":
     pars = sys.stdin.readline()
