@@ -49,3 +49,6 @@ if __name__ == "__main__":
      # index
 
     print(dac(0, n-1))
+
+#fisished at 10:55
+# https://my-coding-notes.tistory.com/103
