@@ -27,24 +27,25 @@ def validate(pars):
             top += 1
     return top % 2 == 0 # 하나 더 올라간 채로 끝나기 때문에
 
-def calc(pars, cnt):
-    if len(pars) == 0:
-        return cnt
-    if pars[0] in pairs and pairs[pars[0]] == pars[-1]:
-        if pars[0] == '(':
+def calc(pars_arr, cnt):
+    if len(pars_arr) == 0:
+        # 문제 조건 상 맨 처음에 길이가 0인 경우는 없다 
+        return cnt 
+    if pars_arr[0] in pairs and pairs[pars_arr[0]] == pars_arr[-1]:
+        if pars_arr[0] == '(':
             cnt *= 2
         else:
             cnt *= 3
-        pars.pop(0)
-        pars.pop()
-        return calc(pars, cnt)
-    else:
-        for i in range(len(pars)):
-            for j in range(i + 1, len(pars)):
-                sliced = pars[i:j]
-                if validate(sliced):
-                    sum = calc(sliced, cnt) + calc(pars[j:], 1)
-                    return cnt * sum
+        pars_arr.pop(0)
+        pars_arr.pop()
+        return calc(pars_arr, cnt)
+
+    for i in range(len(pars_arr)):
+        sliced = pars_arr[:i]
+        if validate(sliced):
+            sum = calc(sliced, cnt) + calc(pars_arr[i:], cnt)
+            cnt *= sum
+            return cnt
     return cnt
 
 def solve(pars):
