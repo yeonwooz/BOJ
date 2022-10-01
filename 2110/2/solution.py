@@ -15,7 +15,7 @@ end = arr[-1] - arr[0]
 
 MAX_H = 0
 
-while start < end:
+while start <= end:
     mid = (start + end) // 2 
     # 이번 집에 두고 다음 집까지 거리를 볼때, 이 mid보다 같거나 크면 놓을 수 있다 
 
@@ -33,9 +33,8 @@ while start < end:
         start = mid + 1
     else:
         # 거리를 더 좁혀야 한다
-        end = mid
+        end = mid - 1
 
-
-    start += 1
 print(MAX_H)
-#finished at
+#finished at 4:50
+# start <= end, start < end, end = mid - 1, end = mid 가 계속 헷갈림,,
