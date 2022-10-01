@@ -5,25 +5,21 @@ towers = list(map(int, sys.stdin.readline().split(' ')))
 
 answer = [0] * N
 stack = []
-top = -1
+
 for i in range(N):
     h = towers[i]
-    if i == 0 or top == -1:
+    if i == 0:
         stack.append(h)
-        top += 1
     else:
-        if stack[top] > h:
+        if stack[-1] > h:
             stack.append(h)
-            top += 1
             answer[i] = i
         else:
             ptr = i
-            while top >= 0 and stack[top] <= h:   
+            while len(stack) >= 1 and stack[-1] <= h:   
                 ptr -= 1
                 stack.pop()
-                top -= 1
             stack.append(h)
-            top += 1
             answer[i] = ptr   
 
 s = ""
