@@ -1,5 +1,6 @@
 #started at 2:01
 import sys
+from turtle import right
 
 def heapify(start, end):
     global head, top
@@ -10,16 +11,16 @@ def heapify(start, end):
     max_pos = pos
 
     # 왼쪽자식이 있고, 부모보다 더 크면 스왑
-    if left_pos < tail and max(heap[pos], heap[left_pos]) == heap[left_pos] and max(heap[left_pos], heap[right_pos]) == heap[left_pos]:
+    if left_pos <= end and max(heap[pos], heap[left_pos]) == heap[left_pos] and max(heap[left_pos], heap[right_pos]) == heap[left_pos]:
         max_pos = left_pos
         # heap[pos], heap[left_pos] = heap[left_pos], heap[pos]
 
     # 오른쪽자식이 있고, 부모보다 더 크면 스왑
-    if right_pos < tail and max(heap[pos], heap[right_pos]) == heap[right_pos]:
+    if right_pos <= end and max(heap[pos], heap[right_pos]) == heap[right_pos] and max(heap[left_pos], heap[right_pos]) == heap[right_pos]:
         max_pos = right_pos
 
-    if max_pos != pos:
-        heap[pos], heap[max_pos] = heap[max_pos], heap[pos]
+    if max_pos != start:
+        heap[start], heap[max_pos] = heap[max_pos], heap[start]
         heapify(max_pos, end)
 
 def push(num):
@@ -28,10 +29,12 @@ def push(num):
     tail += 1
 
     pos = tail - 1
-    while pos >= 1:
-        if pos // 2 > 0 and heap[pos // 2] < heap[pos]:
+    while pos >= 2:
+        if heap[pos // 2] < heap[pos]:
             heap[pos // 2], heap[pos] = heap[pos], heap[pos // 2]
-        pos  = pos // 2
+            pos  = pos // 2
+            continue
+        break
 
 def pop_top():
     global head, tail
@@ -52,8 +55,7 @@ def pop_top():
 if __name__ == "__main__":
     N = int(sys.stdin.readline())
     heap = [0]
-    global head
-    global tail
+    global head, tail
     head = 1
     tail = 1
 
