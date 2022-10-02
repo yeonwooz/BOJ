@@ -1,9 +1,7 @@
-#started at 2:01
+#started at 10:30
 import sys
-from turtle import right
 
 def heapify(start, end):
-    global head, top
     # 트리의 위에서부터 맨 아래끝까지 탐색하면서, pos는 두배씩 늘리면서, 부모보다 자식이 크면 스왑한다
     pos = start
     left_pos = pos * 2
@@ -24,11 +22,15 @@ def heapify(start, end):
         heapify(max_pos, end)
 
 def push(num):
-    global tail
-    heap.append(num)
-    tail += 1
+    global idx
+    idx += 1
+    if idx < len(heap):
+        heap[idx] = num
+    else:
+        heap.append(num)
+    # print("heap", heap, 'idx', idx)
 
-    pos = tail - 1
+    pos = idx
     while pos >= 2:
         if heap[pos // 2] < heap[pos]:
             heap[pos // 2], heap[pos] = heap[pos], heap[pos // 2]
@@ -37,8 +39,8 @@ def push(num):
         break
 
 def pop_top():
-    global head, tail
-    if head == tail:
+    global idx
+    if idx == 0:
         print(0)
         return
 
@@ -46,27 +48,27 @@ def pop_top():
 
     # 트리의 맨 첫번째 요소를 제거하고 우선 맨 끝값을 가지고 온다.
     # 맨 끝값은 삭제하여 트리의 길이를 1 줄인다
-    heap[1] = heap[tail - 1]
-    heap[tail - 1] = 0
-    heapify(1, tail - 1)
-    tail -= 1
+    heap[1] = heap[idx]
+    heap[idx] = 0
+    heapify(1, idx)
+    idx -= 1
     
 
 if __name__ == "__main__":
     N = int(sys.stdin.readline())
     heap = [0]
-    global head, tail
-    head = 1
-    tail = 1
+
+    global idx
+    idx = 0
 
     for _ in range(N):
         num = int(sys.stdin.readline())
         if num == 0:
-            print('out from', heap)
+            # print('out from', heap)
             pop_top()
-            print('==>', heap)
+            # print('==>', heap,  'idx ', idx, )
         else:
-            print('push into', heap, num)
+            # print('push into', heap, num)
             push(num)
-            print('==>', heap)
+            # print('==>', heap,  'idx, ', idx, )
 
