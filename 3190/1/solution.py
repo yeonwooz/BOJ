@@ -1,4 +1,4 @@
-#started at 1:05
+#started at 1:35
 #상하좌우 큐를 만들자
 N = int(input())
 K = int(input())
@@ -12,22 +12,23 @@ apples.sort(key=lambda d:d['c'])
 cd = int(input())
 cmds = []
 
-vq1 = [[1,1]]
-hq1 = []
-vq2 = []
-h12 = []
 
 time = 0
 posC = 1
 posR = 1
+
+vq1 = [{'r':posR, 'c':posC}]
+hq1 = []
+vq2 = []
+h12 = []
+
 for _ in range(K):
-    X, C = map(int, input().split())
-    while time < X:
-        if apples[0]['r'] == posR and apples[0]['c'] == posC:
-            vq1.pop(0)
-        posC += 1
+    X, C = input().split()
+    X = int(X)
+    while time <= X:
+        if time == X:
+            print("it's time!", time)
+        else:
+            print(time)
         time += 1
-    if time == X:
-        if C == 'D':
-            if vq1
-        elif C =='L':
+

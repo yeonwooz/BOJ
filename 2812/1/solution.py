@@ -2,6 +2,7 @@
 N, K = map(int, input().split())
 s = list(input())
 
+
 k = K # 원본 K를 놔두고, K로 숫자제거 카운트
 stack = []
 for i in range(N):
