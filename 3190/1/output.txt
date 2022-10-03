@@ -1,36 +1,36 @@
-general_t:  0
-pos is {'r': 1, 'c': 1}
 general_t:  1
-pos is {'r': 1, 'c': 2}
+pos is {'r': 1, 'c': 1}
 general_t:  2
-pos is {'r': 1, 'c': 3}
+pos is {'r': 1, 'c': 2}
 special_t:  3
-pos is {'r': 1, 'c': 4}
+pos is {'r': 1, 'c': 3}
 general_t:  4
-pos is {'r': 1, 'c': 5}
+pos is {'r': 1, 'c': 4}
 general_t:  5
-pos is {'r': 1, 'c': 6}
+pos is {'r': 1, 'c': 5}
 general_t:  6
-pos is {'r': 1, 'c': 7}
+pos is {'r': 1, 'c': 6}
 general_t:  7
-pos is {'r': 1, 'c': 8}
+pos is {'r': 1, 'c': 7}
 general_t:  8
-pos is {'r': 1, 'c': 9}
+pos is {'r': 1, 'c': 8}
 general_t:  9
-pos is {'r': 1, 'c': 10}
+pos is {'r': 1, 'c': 9}
 general_t:  10
-pos is {'r': 1, 'c': 11}
+pos is {'r': 1, 'c': 10}
 general_t:  11
-pos is {'r': 1, 'c': 12}
+pos is {'r': 1, 'c': 11}
 general_t:  12
-pos is {'r': 1, 'c': 13}
+pos is {'r': 1, 'c': 12}
 general_t:  13
-pos is {'r': 1, 'c': 14}
+pos is {'r': 1, 'c': 13}
 general_t:  14
-pos is {'r': 1, 'c': 15}
+pos is {'r': 1, 'c': 14}
 special_t:  15
-pos is {'r': 1, 'c': 16}
+pos is {'r': 1, 'c': 15}
 general_t:  16
-pos is {'r': 1, 'c': 17}
+pos is {'r': 1, 'c': 16}
 special_t:  17
+pos is {'r': 1, 'c': 17}
+general_t:  18
 pos is {'r': 1, 'c': 18}
