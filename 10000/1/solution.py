@@ -1,11 +1,11 @@
 #started at 11:00
 #원은 교차하지 않는다. 문제 똑바로 읽기!
 #https://wonyoung2257.tistory.com/79
-
-N = int(input())
+import sys
+N = int(sys.stdin.readline())
 circles = []
 for _ in range(N):
-    x,r = map(int, input().split())
+    x,r = map(int, sys.stdin.readline().split())
     # N개의 원이 일렬로 접하면서 나열된다면 양쪽에서 각각 여는괄호 닫는괄호를 닫을 것이므로 둘다 넣어준다.
 
     circles.append((x-r, '('))  # 중심에서 반지름만큼 왼쪽에서 원을 연다
