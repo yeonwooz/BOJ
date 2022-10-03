@@ -14,21 +14,33 @@ cmds = []
 
 
 time = 0
-posC = 1
-posR = 1
 
-vq1 = [{'r':posR, 'c':posC}]
-hq1 = []
-vq2 = []
-h12 = []
+pos = {'r':1, 'c':1}
+
+prev_direction = 1
+cur_direction = 1
+q1 = [pos] # 궤적을 기억하거나 자르면서 진행
+q2 = []
+q3 = []
+q4 = []
 
 for _ in range(K):
     X, C = input().split()
     X = int(X)
     while time <= X:
         if time == X:
-            print("it's time!", time)
+            print("special_t: ", time)
         else:
-            print(time)
+            print("general_t: ", time)
+        print("pos is", pos)
         time += 1
+
+        if cur_direction == 1:
+            pos['c'] += 1
+        elif cur_direction == 2:
+            pos['r'] += 1
+        elif cur_direction == 3:
+            pos['c'] -= 1
+        elif cur_direction == 4:
+            pos['r'] -= 1
 
