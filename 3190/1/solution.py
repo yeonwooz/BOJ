@@ -1,73 +1,78 @@
-#started at 1:35
-# row_q, col_q
+#https://hongcoding.tistory.com/127
+from collections import deque
 import sys
 N = int(sys.stdin.readline())
 K = int(sys.stdin.readline())
-apples = []
-for _ in range(K):
-    r,c = map(int, sys.stdin.readline().split())
-    apples.append({'r':r, 'c':c})
 
-apples.sort(key=lambda d:d['c'])
+graph = [[0] * N for _ in range(N)] 
+# N * N 그래프 생성 
 
-change_cnt = int(sys.stdin.readline())
+dx = [0,1,0,-1]
+dy = [1,0,-1,0]
+# x축, y축 진행방향 모멘텀
 
-pos = {'r':1, 'c':1}
-row_q = [1]
-col_q = []
+for i in range(K):
+    a, b = map(int, sys.stdin.readline().split())
+    graph[a - 1][b - 1] = 2 
+    # 사과 배치
+
+l = int(sys.stdin.readline())
+
+dirDict = dict() 
+# 방향
+queue = deque()
+queue.append((0,0))
+
+for i in range(l):
+    X,C = sys.stdin.readline().split()
+    dirDict[int(X)] = C 
+    # X초에 바꿀 방향
+
+x,y = 0,0
+graph[x][y] = 1
 time = 0
-cur_direction = 1
-crashed = False
-for i in range(change_cnt):
-        X, C = sys.stdin.readline().split()
-        X = int(X)
-        while time <= X:
-            time += 1 # 시간이 1초 흘러서 움직인다
+direction = 0
 
-            if cur_direction == 1:
-                if pos['r'] + 1 > N and time < X: 
-                    # 아직 방향바꿀시간이 안됐는데 벽에 부딪힘 => 게임 끝
-                    crashed = True
-                    break
-                elif time == X and (C == 'D' or C == 'L'):
-                    # 방향을 2번째방향으로 바꾸어서, 기존에 row_q가 있으면 뺴고, 없으면 쌓기 시작
-                    cur_direction = 2
-                    if row_q:
-                        row_q.pop()
-                    else:    
-                        row_q.append(pos['r'] + 1)
-                else:
-                    # 방향바꿀 시간이 안됐고, 벽에 부딪히지 않았음. 진행가능.
-                    # col_q를 쌓는다 
-                    col_q.append(pos['c'] + 1)
+def turn(to):
+    global direction
+    if to == 'L':
+        direction = (direction - 1) % 4  
+        # !!!!! 나머지연산을 통해 방향전환 모멘텀 인덱스를 일반화할 수 있다!!
+    else: 
+        direction = (direction + 1) % 4
 
+while True:
+    time += 1
+    x += dx[direction]
+    # 이번에 하는 x축 이동
+    y += dy[direction]
+    # 이번에 하는 y축 이동
 
-            if cur_direction == 2:
-                if pos['c'] + 1 > N and time < X: 
-                    # 아직 방향바꿀시간이 안됐는데 벽에 부딪힘 => 게임 끝
-                    crashed = True
-                    break
-                elif time == X and (C == 'D' or C == 'L'):
-                    # 방향을 3번째방향으로 바꾸어서, 기존에 col_q가 있으면 뺴고, 없으면 쌓기 시작
-                    cur_direction = 3
-                    if row_q:
-                        row_q.pop()
-                    else:    
-                        row_q.append(pos['r'] + 1)
-            
-                else:
-                    # 방향바꿀 시간이 안됐고, 벽에 부딪히지 않았음. 진행가능.
-                    # row_q 쌓는다 
-                    col_q.append(pos['r'] + 1)
+    if x < 0 or x >= N or y < 0 or y >= N:
+        # 벽에 충돌 => 게임끝
+        break
 
+    if graph[x][y] == 2:
+        # 사과먹음. 길이 유지
+        graph[x][y] = 1 # 방문했다고 표시
+        queue.append((x,y))
 
+        if time in dirDict:
+            # 방향전활할 시간
+            turn(dirDict[time])
+        
+    elif graph[x][y] == 0:
+        # 사과 없음. 길이 잘림
+        graph[x][y] = 1 # 방문했다고 표시
+        queue.append((x,y))
+        tx, ty = queue.popleft() # 길이 잘림
+        graph[tx][ty] = 0
 
+        if time in dirDict:
+            # 방향전활할 시간
+            turn(dirDict[time])
 
-            # TODO 사과 먹어서 pop(0) 하는 조건 추가
-
-            # TODO 벽을 만나거나, 4 -> 
-        if crashed == True:
-            break
-
-
+    else:
+        # 이미 방문한 곳 도착 => 게임끝
+        break
 print(time)
