@@ -28,11 +28,9 @@ if not dheap:
 
 while dheap:
     cur_work = heapq.heappop(dheap)
-
-    print(f"{-prev_work[0]}일 후 마감 {prev_work[1]}점, {-cur_work[0]}일 후 마감, {cur_work[1]}점")
+    day_cnt = -cur_work[0]
 
     if -prev_work[0] != -cur_work[0]:
-        print(1111, "another dday")
         # 두과제 마감일이 다름.
         if not score_heap:
             # 추가할 점수 후보 없음
@@ -45,34 +43,16 @@ while dheap:
                 score += heapq.heappop(score_heap)
                 heapq.heappush(score_heap, prev_work[1])
     else:
-        print(2222, "same dday")
-        # 두과제 마감일이 같음.
-        if prev_work[1] > cur_work[1]:
-            # 이전 과제가 점수 더 높음
-            heapq.heappush(score_heap, cur_work[1])
-            if score_heap[0] > prev_work[1]:
-                #추가할 점수후보보다 이전 과제 점수가 낮음
+        while True:
+            work = heapq.heappop(dheap)
+            heapq.heappush(score_heap, work[1])
+            if not dheap or work[0] != day_cnt: 
                 score += heapq.heappop(score_heap)
-                heapq.heappush(score_heap, prev_work[1])
-            else:
-                score += prev_work[1]
-        else:
-            # 이번 과제가 점수 더 높음
-            heapq.heappush(score_heap, prev_work[1])
-
-            if score_heap[0] > cur_work[1]:
-                #추가할 점수후보보다 이번 과제 점수가 낮음
-                score += heapq.heappop(score_heap)
-                heapq.heappush(score_heap, cur_work[1])
-            else:
-                #추가할 점수후보보다도 이번 과제 점수가 더 높음
-                score += cur_work[1]
-
-
-            # score += cur_work[1]
-            # heapq.heappush(score_heap, prev_work[1])
-    
-    print("score", score, 'score_heap', score_heap, 'day_cnt', day_cnt)
+                day_cnt = -work[0]
+                break
+        
+    # print("score", score, 'score_heap', score_heap, 'day_cnt', day_cnt)
     prev_work = cur_work
 
 print(score)
+#finished at 10:20 -> 틀림
