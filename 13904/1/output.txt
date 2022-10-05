@@ -1,0 +1,19 @@
+6일 후 마감 5점, 4일 후 마감, 10점
+1111 another dday
+score 5 score_heap [] day_cnt 4
+4일 후 마감 10점, 4일 후 마감, 40점
+2222 same dday
+score 45 score_heap [10] day_cnt 4
+4일 후 마감 40점, 4일 후 마감, 60점
+2222 same dday
+score 105 score_heap [10, 40] day_cnt 4
+4일 후 마감 60점, 3일 후 마감, 30점
+1111 another dday
+score 165 score_heap [10, 40] day_cnt 3
+3일 후 마감 30점, 2일 후 마감, 50점
+1111 another dday
+score 195 score_heap [10, 40] day_cnt 2
+2일 후 마감 50점, 1일 후 마감, 20점
+1111 another dday
+score 245 score_heap [10, 40] day_cnt 1
+245
