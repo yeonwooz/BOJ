@@ -13,7 +13,7 @@ else:
     for i in range(N-2):
         for j in range(i+1, N-1):
             two_sum = nums[i] + nums[j]
-            if two_sum > 0 and two_sum > min_abs:
+            if nums[i] > 0 and nums[j] > 0 and two_sum > min_abs :
                 break
             start = j + 1
             end = N - 1
@@ -45,4 +45,4 @@ else:
 
     answer.sort()
     print(" ".join(str(s) for s in answer))
-    #finished at 4:14 => 시간초과
+    #finished at 4:14 => 시간초과 /  pypy로 제출시 정답
