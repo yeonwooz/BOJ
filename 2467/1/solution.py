@@ -14,14 +14,13 @@ length = len(nums)
 if length == 2:
     print(" ".join(str(s) for s in nums))
 else:
-    for i in range(len(nums) - 1):
-        start = i
-        end = len(nums) - 1
+    for i in range(length - 1):
+        start = i + 1  ## <<<여기부터 시작해야 맞음!
+        end = length - 1
 
         while start <= end:
             mid = (start + end) // 2
-            # print('>>>>>>>i', i, 'mid', mid)
-            if i == mid: break
+
             sum = nums[i] + nums[mid]
 
             if abs(sum) <= abs(nearest_sum):
@@ -46,3 +45,4 @@ else:
 
     print(" ".join(str(s) for s in answer))
 #finished at 3:19 => 틀림 
+#finished at 3:37 => 맞혔다!!
