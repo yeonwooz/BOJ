@@ -2,9 +2,15 @@
 #started at 5:29
 import sys
 
-def recur(start, end):# end 포함 안함
+def recur(start, end):# end 포함
     global dots, min_distance
     mid = (start + end) // 2
+    if start == end:
+        return 0
+
+    if start + 1 == end:
+        d = (dots[start][0] - dots[end][0]) ** 2 + (dots[start][1] - dots[end][1]) ** 2 
+        return min(min_distance, d)
 
     # 분할정복으로 두 영역 각각의 점들의 최소거리를 받아와서 둘중 최소값확인
     d1 = recur(start, mid)
@@ -22,12 +28,12 @@ def recur(start, end):# end 포함 안함
 
     #  y기준 정렬 후 min_distance 파악
     filtered.sort(key=lambda l:l[1])
-    for i in range(len(filtered)):
-        d = (filtered[mid][0] - filtered[i][0]) ** 2 + (filtered[mid][1] - filtered[i][1]) ** 2 
-        if d > min_distance: 
-            break
-
-        min_distance = min(min_distance, d)   
+    for i in range(len(filtered) - 1):
+        for j in range(i + 1, len(filtered)):
+            d = (filtered[i][0] - filtered[j][0]) ** 2 + (filtered[i][1] - filtered[j][1]) ** 2 
+            if d > min_distance: 
+                break
+            min_distance = min(min_distance, d)   
     return min_distance 
 
 n = int(sys.stdin.readline())
@@ -39,5 +45,5 @@ for i in range(n):
 
 dots.sort(key = lambda l:l[0])
 min_distance = 20000 ** 2 *2 
-min_distance = recur(0, n)
+min_distance = recur(0, n - 1)
 print(min_distance)
