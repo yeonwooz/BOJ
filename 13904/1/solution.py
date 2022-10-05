@@ -18,41 +18,23 @@ for i in range(N):
         # 작은 점수는 maxheap에 채워넣음 
     
 score_heap = []
-
+max_work = dheap[0]
+day_cnt = -max_work[0]
 score = 0
-prev_work = heapq.heappop(dheap)
-day_cnt = -prev_work[0]
 
-if not dheap:
-    score += prev_work[1]
-
-while dheap:
-    cur_work = heapq.heappop(dheap)
-    day_cnt = -cur_work[0]
-
-    if -prev_work[0] != -cur_work[0]:
-        # 두과제 마감일이 다름.
-        if not score_heap:
-            # 추가할 점수 후보 없음
-            score += prev_work[1]
+while day_cnt > 0:
+    while dheap:
+        d, w = heapq.heappop(dheap)
+        if day_cnt == -d:
+            heapq.heappush(score_heap, -w)
         else:
-            # 추가할 점수 후보 있음. 대소비교 필요
-            if score_heap[0] < prev_work[1]:
-                score += prev_work[1]
-            else:
-                score += heapq.heappop(score_heap)
-                heapq.heappush(score_heap, prev_work[1])
-    else:
-        while True:
-            work = heapq.heappop(dheap)
-            heapq.heappush(score_heap, work[1])
-            if not dheap or work[0] != day_cnt: 
-                score += heapq.heappop(score_heap)
-                day_cnt = -work[0]
-                break
-        
-    # print("score", score, 'score_heap', score_heap, 'day_cnt', day_cnt)
-    prev_work = cur_work
+            heapq.heappush(dheap, (d, w))
+            break
+    if score_heap:
+        score += -heapq.heappop(score_heap)
+    day_cnt -= 1
 
 print(score)
 #finished at 10:20 -> 틀림
+# 거꾸로 탐색하는 아이디어는 맞았으나, 구현에서 틀렸다
+#https://yiyj1030.tistory.com/233
