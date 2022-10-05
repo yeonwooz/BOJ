@@ -23,17 +23,21 @@ def recur(start, end):# end 포함
     filtered = []
     for i in range(start, end + 1):
         d = (dots[mid][0] - dots[i][0]) ** 2 + (dots[mid][1] - dots[i][1]) ** 2 
-        if d <= min_distance:
+        if d < min_distance:
             filtered.append(dots[i])
 
     #  y기준 정렬 후 min_distance 파악
     filtered = sorted(filtered, key=lambda l:l[1])
-    for i in range(len(filtered) - 1):
-        for j in range(i + 1, len(filtered)):
-            d = (filtered[i][0] - filtered[j][0]) ** 2 + (filtered[i][1] - filtered[j][1]) ** 2 
-            if d > min_distance: 
+    length = len(filtered)
+    
+    for i in range(length - 1):
+        for j in range(i + 1, length):
+            if (filtered[i][1] - filtered[j][1]) ** 2 < min_distance:
+                d = (filtered[i][0] - filtered[j][0]) ** 2 + (filtered[i][1] - filtered[j][1]) ** 2 
+                min_distance = min(min_distance, d)   
+            else:
                 break
-            min_distance = min(min_distance, d)   
+    
     return min_distance 
 
 n = int(sys.stdin.readline())
