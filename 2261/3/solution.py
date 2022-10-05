@@ -16,20 +16,19 @@ def recur(start, end):# end 포함
     d1 = recur(start, mid)
     d2 = recur(mid, end)
     min_d = min(d1, d2)
-    min_distance = min(min_distance, min_d)
+    # min_distance = min(min_distance, min_d)
 
     # mid랑 모든 점 거리 비교.
     # x기준 정렬된 것에서 후보 추림
     filtered = []
     for i in range(start, end + 1):
-        d = (dots[mid][0] - dots[i][0]) ** 2 + (dots[mid][1] - dots[i][1]) ** 2 
-        if d < min_distance:
+        if (dots[mid][0] - dots[i][0]) ** 2 < min_distance:
             filtered.append(dots[i])
 
     #  y기준 정렬 후 min_distance 파악
     filtered = sorted(filtered, key=lambda l:l[1])
     length = len(filtered)
-    
+
     for i in range(length - 1):
         for j in range(i + 1, length):
             if (filtered[i][1] - filtered[j][1]) ** 2 < min_distance:
