@@ -18,20 +18,20 @@ for i in range(N):
         # 작은 점수는 maxheap에 채워넣음 
     
 score_heap = []
-cur_work = 
+# cur_work = 
 score = 0
+
+prev_work = heapq.heappop(dheap)
+if not dheap:
+    score += prev_work[1]
+
 while dheap:
     cur_work = heapq.heappop(dheap)
-    # day = -work[0]
-    if not dheap:
-        score += cur_work[1]
-        break
 
-    next_work  = heapq.heappop(dheap)
-    print(-cur_work[0], -next_work[0])
+    print(-prev_work[0], -cur_work[0])
 
 
-    if -cur_work[0] != -next_work[0]:
+    if -prev_work[0] != -cur_work[0]:
         if not score_heap:
             score += cur_work[1]
         else:
@@ -41,11 +41,13 @@ while dheap:
                 score += heapq.heappop(score_heap)
                 heapq.heappush(score_heap, cur_work[1])
     else:
-        if cur_work[1] < next_work[1]:
-            score += next_work[1]
+        if prev_work[1] < cur_work[1]:
+            score += prev_work[1]
             heapq.heappush(score_heap, cur_work[1])
         else:
             score += cur_work[1]
-            heapq.heappush(score_heap, next_work[1])
+            heapq.heappush(score_heap, prev_work[1])
+    
+    prev_work = cur_work
 
 print(score)
