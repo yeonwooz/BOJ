@@ -1,20 +1,29 @@
-#started at 11:47
-import sys
-from collections import deque
-N = int(sys.stdin.readline())
-cmds = deque(sys.stdin.readline().strip())
-nums = deque()
-for _ in range(N):
-    nums.append(int(sys.stdin.readline()))
+N=int(input())
+expression=list(input())
+num=[int(input()) for i in range(N)]
 
-while cmds:
-    popped = cmds.pop()
-    num = ord(popped) - 64
-    if num >= 1 and num <= 26:
-        print(num)
+stk=[]
+
+for i in expression:
+    if i.isalpha():
+        stk.append(num[ord(i)-65])
     else:
-        print(popped)
+        a=stk.pop()
+        result=stk.pop()
 
+        if i=='+':
+            result+=a
 
+        elif i=='-':
+            result-=a
 
-print(N, cmds, nums)
+        elif i=='*':
+            result*=a
+
+        elif i=='/':
+            result/=a
+
+        stk.append(result)
+
+print('%.2f' %stk[-1])
+# 출처: https://youjin86.tistory.com/31 [_:티스토리]
