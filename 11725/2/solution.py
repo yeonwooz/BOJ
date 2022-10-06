@@ -2,38 +2,27 @@
 import sys
 from collections import deque
 
-def BFS(v):
+def BFS():
     global answer, N, arr
-    visited = [v]
     queue = deque()
-    queue.append(v)
+    queue.append(1)
 
     while queue:
         cur = queue.popleft()
-        visited.append(cur)
 
-        for i in range(len(arr[cur])):
-            next = arr[cur][i]
-            if next not in visited:
-                visited.append(next)
-                answer[next] = cur
-                queue.append(next)
+        for node in arr[cur]:
+            if answer[node] == 0:
+                answer[node] = cur
+                queue.append(node)
 
 N = int(sys.stdin.readline())
-arr = [[] * (N+1) for _ in range(N+1)]
+arr = [[] for _ in range(N+1)]
 answer = [0]*(N+1)
 
 for i in range(N-1):
     fr, to = map(int, sys.stdin.readline().split())
-    if arr[fr]:
-        arr[fr].append(to)
-    else:
-        arr[fr] = [to]
-
-    if arr[to]:
-        arr[to].append(fr)
-    else:
-        arr[to] = [fr]
-BFS(1)
+    arr[fr].append(to)
+    arr[to].append(fr)
+BFS()
 
 print("\n".join(str(answer[i]) for i in range(2, len(answer))))
