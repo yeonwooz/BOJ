@@ -1,52 +1,42 @@
-#started at 5:02
+from itertools import count
 import sys
 input = sys.stdin.readline
-sys.setrecursionlimit(10 ** 6)
+sys.setrecursionlimit(10** 9)
 
-def DFS(v, visited):
-    local_cnt = 0
-    # print("visited", v)
-    global A
-    in_or_out = A[v]
-    visited[v] = in_or_out  # 해당 점이 실내인지 실외인지 기록
+def DFS(ext):
+    global count
+    cnt = 0
+    for nb in graph[ext]:
+        if arr[nb] == 1:
+            cnt += 1
+        else:
+            if nb not in visited:
+                visited.add(nb)
+                cnt += DFS(nb)
+    return cnt
 
-    for dot in arr[v]:
-        if v != dot and visited[dot] == False:
-            visited[dot] = in_or_out
-            if A[dot] == 1: #실내라서 산책 종료
-                # print("fin dot", dot)
-                local_cnt += 1
-            else: 
-                local_cnt += DFS(dot, visited)
-                visited[dot] = False
-    return local_cnt
-    
-N = int(input())
-A = [0] + list(map(int, list(input().rstrip())))
+n = int(input())
+arr = list(map(int, list("0" + input().rstrip()))) #1번인덱스부터 사용
 
-arr = [[] for _ in range(N+1)]
+graph =[[] for _ in range(n+1)]
 
-for _ in range(N - 1):
+for _ in range(1, n):
     u,v = map(int, input().split())
-    # arr[u].append((v, A[v])) # 정점번호, 실내/실외(1/0) 
-    # arr[v].append((u, A[u]))
-    arr[u].append(v)
-    arr[v].append(u)
+    graph[u].append(v)
+    graph[v].append(u)
 
 cnt = 0
-iti_cnt = 0
-for start in range(1, N+1):
-    visited = [False] * (N+1)
-    if A[start] == 0: 
-        # 시작점이 실외일 때만 DFS 시작
-        tmp = DFS(start, visited)
-        cnt += tmp * (tmp - 1)
-    else:
-        # print('start', start, )
-        # 시작점이 실내라면 실내로 가는 개수만 확인해서 *2해서 cnt에 더해주기
-        for end in range(1, N+1):
-            if start != end and end in arr[start] and A[end] == 1:
-                # print('end', end)
+visited = set()  #방문한 지점들을 집합으로 관리
+
+for i in range(1, n+1):
+    if arr[i] == 1: # 실내일 때
+        for j in graph[i]: # 이 실내랑 연결된 점들에 대해
+            if arr[j] == 1: # 실내일 때
                 cnt += 1
+    else: # 실외일 때
+        if i not in visited:
+            visited.add(i)
+            tmp = DFS(i)
+            cnt += tmp * (tmp - 1)
 
 print(cnt)
