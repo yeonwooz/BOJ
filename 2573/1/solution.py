@@ -1,71 +1,60 @@
 import sys
 from collections import deque
+input = sys.stdin.readline
 
-def melt(i, j, visited):
-    queue = deque()
-    queue.append((i,j))
 
-    visited[i].append(j)
-    melting_list = []
-    while queue:
-        r,c =  queue.popleft()
-        
-        sea_cnt = 0
-        for idx in range(4):
-            next_i = r + dr[idx]
-            next_j = c + dc[idx]
-            if next_i < 0 or next_j < 0 or next_i >= N or next_j >= M:
-                continue
+def bfs(x, y):
+    q = deque([(x, y)])
+    visited[x][y] = 1
+    seaList = []
 
-            if next_j not in visited[next_i]:
-                if arr[next_i][next_j] == 0:
-                    # 주변이 바다일 때
-                    sea_cnt += 1
-                else: 
-                    # 인접한 곳으로 이동할 수 있을 때, 더 갈수 있을때까지 이동
-                    # melt(next_i, next_j, visited)
-                    queue.append((next_i, next_j))
-                    visited[next_i].append(next_j)
-
-        if sea_cnt > 0:
-            melting_list.append((i,j, sea_cnt))
-
-    ## 인근 탐색이 끝나고 나면 빙산 높이를 깎는다 
-    for u,v,cnt in melting_list:
-        arr[u][v] = max(0, arr[u][v] - cnt)
+    while q:
+        x, y = q.popleft()
+        sea = 0
+        for i in range(4):
+            nx = x + dx[i]
+            ny = y + dy[i]
+            if 0 <= nx < n and 0 <= ny < m:
+                if not graph[nx][ny]:
+                    sea += 1
+                elif graph[nx][ny] and not visited[nx][ny]:
+                    q.append((nx, ny))
+                    visited[nx][ny] = 1
+        if sea > 0:
+            seaList.append((x, y, sea))
+    for x, y, sea in seaList:
+        graph[x][y] = max(0, graph[x][y] - sea)
 
     return 1
 
 
+n, m = map(int, input().split())
+graph = [list(map(int, input().split())) for _ in range(n)]
 
-
-N,M = map(int, sys.stdin.readline().split())
-
-arr = []
 ice = []
-for i in range(N):
-    row = list(map(int, sys.stdin.readline().split()))
-    arr.append(row)
-    for j in range(M):
-        if row[j] > 0: 
-            ice.append((i,j))
+for i in range(n):
+    for j in range(m):
+        if graph[i][j]:
+            ice.append((i, j))
 
+dx = [-1, 1, 0, 0]
+dy = [0, 0, -1, 1]
 year = 0
-group_num = 1
-dr = [0, -1, 0, +1] # 시계방향으로 생각하면 편함
-dc = [-1, 0, +1, 0]
 
-while True:
-    print(arr)
-
-    # if group_num >= 2: break
-    if  year == 3: break
-
-    year += 1
-    # 1년 뒤 녹음
-    # visited = [[False] * M for _ in range(N)]
-    visited = [[] * M for _ in range(N)] 
+while ice:
+    visited = [[0] * m for _ in range(n)]
+    delList = []
+    group = 0
     for i, j in ice:
-        group_num += melt(i, j, visited)
-    
-print(year)
+        if graph[i][j] and not visited[i][j]:
+            group += bfs(i, j)
+        if graph[i][j] == 0:
+            delList.append((i, j))
+    if group > 1:
+        print(year)
+        break
+    ice = sorted(list(set(ice) - set(delList)))
+    year += 1
+
+if group < 2:
+    print(0)
