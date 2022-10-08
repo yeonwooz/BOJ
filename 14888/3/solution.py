@@ -1,57 +1,34 @@
-#started at 7:32
+#https://velog.io/@kimdukbae/BOJ-14888-%EC%97%B0%EC%82%B0%EC%9E%90-%EB%81%BC%EC%9B%8C%EB%84%A3%EA%B8%B0-Python
 import sys
 input = sys.stdin.readline
 
-def DFS(ops): 
-    # ops : 남은 연산자들의 개수
-    # answer : 현재까지 구해진 조합
-    global N
-    # if ops.count(0) >= 4: 
-    #     return
-    for i in range(4):
-        if ops[i] > 0:
-            ops[i] -= 1 # 해당 연산자 배치  
-            answer.append(i)
-            DFS(ops) 
-            answer.pop()
-            ops[i] += 1
-
 N = int(input())
-nums = list(map(int, input().split()))
-ops =  list(map(int, input().split()))
+num = list(map(int, input().split()))
+op = list(map(int, input().split()))
 
-M = N -1 # 연산자가 끼어들 자리 개수
+maxi = -1e9
+mini = 1e9
 
-result = 0
-min_result = 1000000000
-max_result = -1000000000
+def DFS(depth, total, plus, minus, multiply, divide):
+    global maxi, mini
+    if depth == N:
+        maxi = max(total, maxi)
+        mini = min(total, mini)
+        return
+    
+    if plus:
+        DFS(depth+1, total + num[depth], plus - 1, minus, multiply, divide)
+    if minus:
+        DFS(depth+1, total - num[depth], plus, minus - 1, multiply, divide)
+    if multiply:
+        DFS(depth+1, total * num[depth], plus, minus, multiply - 1, divide)
+    if divide:
+        flag = 1
+        if total < 0:
+            flag = -1
+        DFS(depth+1, int((total * flag) / num[depth]) * flag, plus, minus, multiply, divide - 1)
 
-for i in range(4):
-    if ops[i] > 0:
-        ops[i] -= 1 # 해당 연산자부터 배치  
-        answer = [i]  # i번쨰 인덱스의 연산자가 조합 첫번째 자리에 들어감
-        DFS(ops)  # answer조합이 구해지면, 
-        print("answer", answer)
-        result = nums[0]
-        for idx in range(1, len(nums)):
-            # print('nums[idx]', nums[idx])
-            if answer[idx-1] == 0:
-                result += nums[idx]
-            elif answer[idx-1] == 1:
-                result -= nums[idx]
-            elif answer[idx-1] == 2:
-                result *= nums[idx]
-            else:
-                if result > 0:
-                    result //= nums[idx]
-                else: 
-                    result *= -1
-                    result //= nums[idx+1]
-                    result *= -1
-        print(result)
-        min_result = min(min_result, result)
-        max_result = max(max_result, result)
-        answer.pop()
-        ops[i] += 1
 
-# print(str(max_result) + '\n' + str(min_result)) 
+DFS(1, num[0], op[0], op[1], op[2], op[3])
+print(maxi)
+print(mini)
