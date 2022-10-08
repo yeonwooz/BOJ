@@ -12,11 +12,11 @@ def melt_DFS(visited):
                 for idx in range(4):
                     next_i = i+dr[idx]
                     next_j = j+dc[idx]
-                    if next_j not in visited[next_i] and arr[next_i][next_j] == 0:
+                    if visited[next_i][next_j] == False and arr[next_i][next_j] == 0:
                         melt_cnt += 1
                 
                 arr[i][j] = max(0, arr[i][j] - melt_cnt)
-                visited[i].append(j)
+                visited[i][j] = True
 
 def divided():
     return
@@ -29,7 +29,7 @@ for i in range(N):
     arr.append(row)
 
 year = 0
-
+group_num = 1
 dr = [0, -1, 0, +1] # 시계방향으로 생각하면 편함
 dc = [-1, 0, +1, 0]
 
@@ -41,7 +41,7 @@ while True:
 
     year += 1
     # 1년 뒤 녹음
-    visited = [[] for _ in range(N)]
+    visited = [[False] * M for _ in range(N)]
     melt_DFS(visited)
     
 
