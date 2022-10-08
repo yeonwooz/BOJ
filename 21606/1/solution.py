@@ -1,42 +1,45 @@
-from itertools import count
+#started at 5:02
 import sys
 input = sys.stdin.readline
-sys.setrecursionlimit(10** 9)
+sys.setrecursionlimit(10 ** 6)
 
-def DFS(ext):
-    global count
-    cnt = 0
-    for nb in graph[ext]:
-        if arr[nb] == 1:
-            cnt += 1
+def DFS(v):
+    local_cnt = 0
+    global A
+
+    for dot in arr[v]:
+        if A[dot] == 1:
+            local_cnt += 1
         else:
-            if nb not in visited:
-                visited.add(nb)
-                cnt += DFS(nb)
-    return cnt
+            if dot not in visited:
+                visited.add(dot)
+                local_cnt += DFS(dot)
+    return local_cnt
+    
+N = int(input())
+A = list(map(int, list("0" + input().rstrip())))
 
-n = int(input())
-arr = list(map(int, list("0" + input().rstrip()))) #1번인덱스부터 사용
+arr = [[] for _ in range(N+1)]
 
-graph =[[] for _ in range(n+1)]
-
-for _ in range(1, n):
+for _ in range(N - 1):
     u,v = map(int, input().split())
-    graph[u].append(v)
-    graph[v].append(u)
+    # arr[u].append((v, A[v])) # 정점번호, 실내/실외(1/0) 
+    # arr[v].append((u, A[u]))
+    arr[u].append(v)
+    arr[v].append(u)
 
 cnt = 0
-visited = set()  #방문한 지점들을 집합으로 관리
+visited = set()
+iti_cnt = 0
 
-for i in range(1, n+1):
-    if arr[i] == 1: # 실내일 때
-        for j in graph[i]: # 이 실내랑 연결된 점들에 대해
-            if arr[j] == 1: # 실내일 때
-                cnt += 1
-    else: # 실외일 때
-        if i not in visited:
-            visited.add(i)
-            tmp = DFS(i)
+for start in range(1, N+1):
+    if A[start] == 0: 
+        if start not in visited:
+            visited.add(start)
+            tmp = DFS(start)
             cnt += tmp * (tmp - 1)
-
+    else:
+        for end in arr[start]:
+            if A[end] == 1:
+                cnt += 1
 print(cnt)
