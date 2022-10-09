@@ -3,42 +3,48 @@ import sys
 from collections import deque
 input = sys.stdin.readline
 
-def BFS(v, K):
+def BFS(v):
+    answer = []
     q = deque()
     q.append(v)
-    visited.append(v)
+    visited[v] = True
+    distance[v] = 0
+
     while q:
-        has_child = False
-        dot1 = q.popleft()
-        if K == 0:
-            break
+        now = q.popleft()
 
-        for dot2 in graph[dot1]:
-            if dot2 not in visited:
-                visited.append(dot2)
-                q.append(dot2)
-                has_child = True
-                if K == 1:
-                    answer.append(dot2)
-
-        if has_child:
-            K -= 1  # 현재 정점의 연결된 점들을 모두 queue에 넣었으니 K를 1 줄이고 트리의 하위 레벨로 이동
+        for i in graph[now]:
+            if not visited[i]:
+                visited[i] = True
+                q.append(i)
+                distance[i] = distance[now] + 1
+                if distance[i] == K:
+                    answer.append(i)
+    if len(answer) == 0:
+        print(-1)
+    else:
+        answer.sort()
+        for i in answer:
+            print(i, end='\n')
 
 N,M,K,X = map(int, input().split())
 graph = [[] * M for _ in range(N+1)]
-answer = []
 
-visited = []
+distance = [0] * (N+1)
+visited = [False] * (N+1)
 for _ in range(M):
     a,b = map(int, input().split()) # a -> b 단방향 
     graph[a].append(b)
 
-BFS(X, K)
+BFS(X)
 
-if len(answer) == 0:
-    print(-1)
-else:
-    answer.sort()
-    # print(">>>", answer)
-    print("\n".join(str(s) for s in answer))
-# finished at 2:59 => 틀림
+# if len(answer) == 0:
+#     print(-1)
+# else:
+#     answer.sort()
+#     # print(">>>", answer)
+#     print("\n".join(str(s) for s in answer))
+# # finished at 2:59 => 틀림
+
+
+### 다익스트라 
