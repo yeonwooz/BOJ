@@ -9,12 +9,12 @@ def dijkstra(start):
     costs[start] = 0
 
     while q:
-        v, cur_cost = heapq.heappop(q)
+        cur_cost, v = heapq.heappop(q)
 
         if costs[v] < cur_cost:
             continue
 
-        for to, cost in arr[v]:
+        for cost, to in arr[v]:
             new_cost = cur_cost + cost
             if costs[to] > new_cost:
                 heapq.heappush(q, (new_cost, to))
