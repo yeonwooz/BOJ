@@ -4,7 +4,7 @@ input = sys.stdin.readline
 from collections import deque
 
 def BFS():
-    time = 0
+    prev_time = 0
     di = [-1,+1,0,0]
     dj = [0,0,-1,+1]
 
@@ -14,17 +14,27 @@ def BFS():
         for j in range(C):
             if graph[i][j] == '*':
                 # 물 있는 칸 다음번에 인접칸까지 확장
-                mvq.append((i,j,'*', time))
+                mvq.append((i,j,'*', prev_time))
             if graph[i][j] == 'S':
                 # 고슴도치 다음번에 이동
-                mvq.append((i,j,'S', time))
+                mvq.append((i,j,'S', prev_time))
 
+    print("prev_time", prev_time)
+    print(graph)
+    print()
     while mvq:
-        print(graph)
-
         r,c,obj,time = mvq.popleft()
+
+        if time > prev_time:
+            prev_time = time
+            print("time", time)
+            print(graph)
+            print()
+
         if time > R * C:
             break
+            
+        
         for idx in range(4):
             n_i = r + di[idx]
             n_j = c + dj[idx]
@@ -41,8 +51,8 @@ def BFS():
                     continue
 
                 # 다음 칸 next_watters 에 넣기 
-                graph[n_i][n_j] = '*'
                 next_watters.append((n_i, n_j))
+                graph[n_i][n_j] = '*'
                 mvq.append((n_i, n_j, '*', time + 1))
 
             elif obj =='S':
@@ -62,7 +72,7 @@ def BFS():
                     continue
                 
                 graph[r][c] = '.'  
-                graph[n_i][n_j] = 'S'
+                graph[n_i][n_j] = 'S'  # 두마리 되는데,..
                 mvq.append((n_i, n_j, 'S', time + 1))
                     
     print("KAKTUS")
