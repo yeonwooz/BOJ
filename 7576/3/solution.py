@@ -52,10 +52,13 @@ failed = False
 for i in range(N):
     for j in range(M):
         if box[i][j] == 0:
-            print(-1)
             failed = True
             break
-            
-if not failed:
+        
+if failed:
+    print(-1)            
+else:
     print(days)
+
 #finished at 10:16 => 46 분.. 그리고 틀림ㅠ
+#10:23 다 익힐 수 없는 경우에 for문 중첩으로 인해 print(-1) 이 너무 많이 되는 문제가 있었음을 발견
