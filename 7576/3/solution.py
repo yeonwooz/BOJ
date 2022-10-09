@@ -26,8 +26,7 @@ def BFS():
         return
 
     while q:
-        r,c, new_depth = q.popleft()   
-        # print(r,c, new_depth)
+        r,c, new_depth = q.popleft()  
         if depth < new_depth:
             days = new_depth
         for idx in range(4):
@@ -48,4 +47,15 @@ for i in range(N):
 
 days = 0
 BFS()
-print(days)
+
+failed = False
+for i in range(N):
+    for j in range(M):
+        if box[i][j] == 0:
+            print(-1)
+            failed = True
+            break
+            
+if not failed:
+    print(days)
+#finished at 10:16 => 46 분.. 그리고 틀림ㅠ
