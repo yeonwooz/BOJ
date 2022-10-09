@@ -10,34 +10,36 @@ from collections import deque
 
 def dijkstra(s_i, s_j):
     q = []
-    costs[s_i][s_j] = 0 # 0,0 칸에 올때까지 0칸 교체
+    visited[s_i][s_j] = 1
     heapq.heappush(q, (0, (s_i, s_j)))  # 0이라는 비용으로 i,j포지션 을 push
 
     while q:
+        di = [-1,1,0,0]
+        dj = [0,0,-1,1]
+
         cost, (i,j) = heapq.heappop(q)
-        if costs[i][j] < cost:
-            continue
+        if i == n-1 and j == n-1:
+            print(cost)
     
-        for r in range(n):
-            for c in range(n):
-                # print(graph[r][c]) 
-                if graph[r][c] == 1:
+        for idx in range(4):
+            n_i = i + di[idx]
+            n_j = j + dj[idx]
+            
+            if 0 <= n_i < n and 0 <= n_j < n and visited[n_i][n_j] == 0:
+                visited[n_i][n_j] = 1
+                if graph[n_i][n_j] == 1:
                     # 다음 칸이 흰방
-                    costs[r][c] = costs[i][j]
+                    heapq.heappush(q, (cost, (n_i, n_j)))  # 같은 비용으로 i,j포지션 을 push
                 else:
                     # 다음 칸이 검은 방
-                    new_cost = costs[i][j] + 1
-                    if costs[r][c] > new_cost:
-                        heapq.heappush(q, (new_cost, (r, c)))  # 0이라는 비용으로 i,j포지션 을 push
-                        costs[r][c] = new_cost
+                    heapq.heappush(q, (cost + 1, (n_i, n_j)))  # 1 더 큰 비용으로 i,j포지션 을 push
 
 n = int(input())
 
 graph = []
-costs = [[0] * n for _ in range(n)]
+visited = [[0] * n for _ in range(n)]
 for i in range(n):
     row = list(map(int, list(input().rstrip())))
     graph.append(row)
 
 dijkstra(0,0)
-print(costs[n-1][n-1])
