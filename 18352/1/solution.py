@@ -1,43 +1,44 @@
 #started at 2:33
-import sys
-from collections import deque
-input = sys.stdin.readline
+# https://steadily-worked.tistory.com/646
+# import sys
+# from collections import deque
+# input = sys.stdin.readline
 
-def BFS(v):
-    global K
-    answer = []
-    q = deque()
-    q.append(v)
-    visited[v] = True
-    distance[v] = K
+# def BFS(v):
+#     global K
+#     answer = []
+#     q = deque()
+#     q.append(v)
+#     visited[v] = True
+#     distance[v] = K
 
-    while q:
-        now = q.popleft()
+#     while q:
+#         now = q.popleft()
 
-        for i in graph[now]:
-            if not visited[i]:
-                visited[i] = True
-                q.append(i)
-                distance[i] = distance[now] - 1 # 이전 점을 기준으로 
-                if distance[i] == 0:
-                    answer.append(i)
-    if len(answer) == 0:
-        print(-1)
-    else:
-        answer.sort()
-        for i in answer:
-            print(i, end='\n')
+#         for i in graph[now]:
+#             if not visited[i]:
+#                 visited[i] = True
+#                 q.append(i)
+#                 distance[i] = distance[now] - 1 # 이전 점을 기준으로 
+#                 if distance[i] == 0:
+#                     answer.append(i)
+#     if len(answer) == 0:
+#         print(-1)
+#     else:
+#         answer.sort()
+#         for i in answer:
+#             print(i, end='\n')
 
-N,M,K,X = map(int, input().split())
-graph = [[] * M for _ in range(N+1)]
+# N,M,K,X = map(int, input().split())
+# graph = [[] * M for _ in range(N+1)]
 
-distance = [0] * (N+1)
-visited = [False] * (N+1)
-for _ in range(M):
-    a,b = map(int, input().split()) # a -> b 단방향 
-    graph[a].append(b)
+# distance = [0] * (N+1)
+# visited = [False] * (N+1)
+# for _ in range(M):
+#     a,b = map(int, input().split()) # a -> b 단방향 
+#     graph[a].append(b)
 
-BFS(X)
+# BFS(X)
 
 # if len(answer) == 0:
 #     print(-1)
@@ -49,3 +50,42 @@ BFS(X)
 
 
 ### 다익스트라 
+
+import sys, heapq
+f = sys.stdin.readline
+INF = 1e9
+
+N,M,K,X = map(int, f().split())
+graph = [[] for _ in range(N+1)]
+costs = [INF] * (N+1)  # 각 정점까지의 비용. 특정 점 탐색시에만 호출하는 듯? 
+
+for _ in range(M):
+    a, b = map(int, f().split())
+    graph[a].append((b,1))  
+
+def dijkstra(start):
+    q = []
+    heapq.heappush(q, (0, start)) # 최소힙에 비용과 도착지점 넣어줌. 가장 첫 점은 비용 없음
+    costs[start] = 0
+    while q:
+        cost, pos = heapq.heappop(q)
+
+        if costs[pos] < cost:
+            continue
+        for j in graph[pos]:
+            new_cost =  cost + j[1]
+            if new_cost < costs[j[0]]:
+                costs[j[0]] = new_cost
+                heapq.heappush(q,(new_cost,j[0]))
+
+dijkstra(X)
+answer = []
+for i in range(1, N+1):
+    if costs[i] == K:
+        answer.append(i)
+
+if len(answer) == 0:
+    print(-1)
+else:
+    print("\n".join(str(s) for s in answer))
+
