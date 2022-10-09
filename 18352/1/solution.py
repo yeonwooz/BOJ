@@ -1,53 +1,52 @@
 #started at 2:33
 # https://steadily-worked.tistory.com/646
-# import sys
-# from collections import deque
-# input = sys.stdin.readline
+import sys
+from collections import deque
+input = sys.stdin.readline
 
-# def BFS(v):
-#     global K
-#     answer = []
-#     q = deque()
-#     q.append(v)
-#     visited[v] = True
-#     distance[v] = K
+def BFS(v):
+    global K
+    answer = []
+    q = deque()
+    q.append(v)
+    visited[v] = True
+    distance[v] = K
 
-#     while q:
-#         now = q.popleft()
+    while q:
+        now = q.popleft()
 
-#         for i in graph[now]:
-#             if not visited[i]:
-#                 visited[i] = True
-#                 q.append(i)
-#                 distance[i] = distance[now] - 1 # 이전 점을 기준으로 
-#                 if distance[i] == 0:
-#                     answer.append(i)
-#     if len(answer) == 0:
-#         print(-1)
-#     else:
-#         answer.sort()
-#         for i in answer:
-#             print(i, end='\n')
+        for i in graph[now]:
+            if not visited[i]:
+                visited[i] = True
+                q.append(i)
+                distance[i] = distance[now] - 1 # 이전 점을 기준으로 
+                if distance[i] == 0:
+                    answer.append(i)
+    if len(answer) == 0:
+        print(-1)
+    else:
+        answer.sort()
+        for i in answer:
+            print(i, end='\n')
 
-# N,M,K,X = map(int, input().split())
-# graph = [[] * M for _ in range(N+1)]
+N,M,K,X = map(int, input().split())
+graph = [[] * M for _ in range(N+1)]
 
-# distance = [0] * (N+1)
-# visited = [False] * (N+1)
-# for _ in range(M):
-#     a,b = map(int, input().split()) # a -> b 단방향 
-#     graph[a].append(b)
+distance = [0] * (N+1)
+visited = [False] * (N+1)
+for _ in range(M):
+    a,b = map(int, input().split()) # a -> b 단방향 
+    graph[a].append(b)
 
-# BFS(X)
+BFS(X)
 
-# if len(answer) == 0:
-#     print(-1)
-# else:
-#     answer.sort()
-#     # print(">>>", answer)
-#     print("\n".join(str(s) for s in answer))
-# # finished at 2:59 => 틀림
-
+if len(answer) == 0:
+    print(-1)
+else:
+    answer.sort()
+    # print(">>>", answer)
+    print("\n".join(str(s) for s in answer))
+# finished at 2:59 => 틀림
 
 ### 다익스트라 
 
@@ -72,6 +71,7 @@ def dijkstra(start):
 
         if costs[pos] < cost:
             continue
+        
         for j in graph[pos]:
             new_cost =  cost + j[1]
             if new_cost < costs[j[0]]:
