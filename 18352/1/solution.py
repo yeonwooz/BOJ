@@ -4,11 +4,12 @@ from collections import deque
 input = sys.stdin.readline
 
 def BFS(v):
+    global K
     answer = []
     q = deque()
     q.append(v)
     visited[v] = True
-    distance[v] = 0
+    distance[v] = K
 
     while q:
         now = q.popleft()
@@ -17,8 +18,8 @@ def BFS(v):
             if not visited[i]:
                 visited[i] = True
                 q.append(i)
-                distance[i] = distance[now] + 1
-                if distance[i] == K:
+                distance[i] = distance[now] - 1 # 이전 점을 기준으로 
+                if distance[i] == 0:
                     answer.append(i)
     if len(answer) == 0:
         print(-1)
