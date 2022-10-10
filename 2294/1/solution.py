@@ -2,7 +2,6 @@
 #started at 7:30
 import sys,heapq
 input = sys.stdin.readline
-from collections import deque
 MAX = 100
 
 def BFS(v):
@@ -12,31 +11,33 @@ def BFS(v):
         min_cnt = 1
         return
 
-    q = deque()
-    q.append((v, 1, coins[v]))
+    q = set()
+    q.add((v, 1, coins[v]))
 
     while q:
-        popped, cnt, cur = q.popleft()
+        popped, cnt, cur = q.pop()
         if cur == k:
             found_combination = True
             min_cnt = min(min_cnt, cnt)
             return
 
-        for i in range(n):
-            q.append((i, cnt+1, cur + coins[i]))
+        for i in range(len(coins)):
+            q.add((i, cnt+1, cur + coins[i]))
 
     return -1
 
 n,k = map(int, input().split())
-coins = []
-for _ in range(n):
-    coins.append(int(input()))
+coins = set()
 
-coins.sort(reverse = True)
+for _ in range(n):
+    coins.add(input().rstrip())
+
+coins = sorted(coins, reverse = True)
+coins = list(map(int, coins))
 
 min_cnt = MAX
 found_combination  = False
-for i in range(n):
+for i in range(len(coins)):
     BFS(i)
     # print("found_combination", found_combination)
 
