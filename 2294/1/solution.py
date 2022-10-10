@@ -3,31 +3,35 @@
 import sys
 from collections import deque
 input = sys.stdin.readline
-MAX = 100
 
 def BFS():
-    global k, min_cnt, found_combination
+    global k, flag
     q =  deque()
-    for i in range(n):
-        if coins[i] <= k and check[coins[i]] == 0:
+    for i in range(len(coins)):
+        if coins[i] <= k:
             check[coins[i]] = 1
-            q.append((i, 1, coins[i]))
+            q.append((1, coins[i]))
 
     while q:
-        popped, cnt, cur = q.popleft()
+        cnt, cur = q.popleft()
         if cur == k:
-            return min(min_cnt, cnt)
+            print(cnt)
+            flag = False
+            break
 
-        for i in range(n):
+        for i in range(len(coins)):
             if cur + coins[i] <= k and check[cur+coins[i]] == 0:
                 check[cur+coins[i]] = 1
-                q.append((i, cnt+1, cur + coins[i]))
+                q.append((cnt+1, cur + coins[i]))
     
     return -1
 
 n, k = map(int, input().split())
-coins=list(set(int(input()) for _ in range(n)))
+coins = set(int(input()) for _ in range(n))
 check = [0] * (k+1)
+flag = True
 
-min_cnt = MAX
-print(BFS())
+BFS()
+
+if flag:
+    print(-1)
