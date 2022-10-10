@@ -7,50 +7,56 @@ def BFS():
     di = [-1,1,0,0]
     dj = [0,0,-1,1]
 
-    global time
     q = deque()
+
+    Dx, Dy = 0,0
     for r in range(R):
         for c in range(C):
-            if graph[r][c] == '*' or graph[r][c] == 'S':
-                q.append((time, r, c, graph[r][c]))
+            if graph[r][c] == 'S':
+                q.append((r, c, graph[r][c]))
+            elif graph[r][c] == 'D':
+                Dx, Dy = r,c
+
+# queue에 고슴도치 위치를 넣어준후에 물에 위치를 넣어줬다 고슴도치가 먼저 이동하고 물이 차도록 만듬
+
+# => 고슴도치가 이동했더라도 물이 이동할 위치라면 고슴도치를 덮어쓰기 때문
+# (https://wookcode.tistory.com/167)
+
+    for r in range(R):
+        for c in range(C):
+            if graph[r][c] == '*':
+                q.append((r, c, graph[r][c]))
 
     while q:
-        global found_D
-        time, i, j, who = q.popleft()
+        i, j, who = q.popleft()
         # print(i,j,who)
-        if graph[i][j] == 'D':
-            print(time)
-            found_D = True
-            return  
-        graph[i][j] = who
-        visited[i][j] = 1
+        if graph[Dx][Dy] == 'S':
+            return times[Dx][Dy]
         for idx in range(4):
             n_i = i + di[idx]        
             n_j = j + dj[idx]        
 
-            if 0 <= n_i < R and 0 <= n_j < C and visited[n_i][n_j] == 0:
+            if 0 <= n_i < R and 0 <= n_j < C:
                 if (graph[n_i][n_j] == '.' or graph[n_i][n_j] == 'D') and graph[i][j] == 'S':
                     #고슴이 이동 가능
-                    graph[i][j] = '.'
-                    # graph[n_i][n_j] = 'S'
-                    visited[n_i][n_j] = 1
-                    q.append((time+1, n_i, n_j, 'S'))
+                    graph[n_i][n_j] = 'S'
+                    times[n_i][n_j] = times[i][j] + 1
+                    q.append((n_i, n_j, 'S'))
                 elif (graph[n_i][n_j] == '.' or graph[n_i][n_j] == 'S') and graph[i][j] == '*':
                     # 물 이동 가능
                     # 고슴이가 있는 자리를 물로 덮어쓴다. 왜냐하면 고슴이는 다음턴에 물이 이동할 자리로 못가기 때문이다.
-                    # graph[n_i][n_j] = '*'
-                    visited[n_i][n_j] = 1
-                    q.append((time+1, n_i, n_j, '*'))
+                    graph[n_i][n_j] = '*'
+                    # visited[n_i][n_j] = 1
+                    q.append((n_i, n_j, '*'))
+    return "KAKTUS"
 
 graph = []
 R,C = map(int, input().split())
-visited = [[0] * C for _ in range(R)]
+times = [[0] * C for _ in range(R)]
 for _ in range(R):
     row = list(input().rstrip())
     graph.append(row)
 
-time = 0
-found_D = False
-BFS()
-if not found_D:
-    print("KAKTUS")
+# time = 0
+
+print(BFS())
