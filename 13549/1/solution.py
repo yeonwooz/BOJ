@@ -14,13 +14,13 @@ costs = [1e9] * (max(N,K) + 1)
 
 should_print = True
 def dijkstra(n):
+    global should_print
     q = [] #이동할 큐
     # q.append((n,0)) # 방문지점과 비용
     heapq.heappush(q,(0,n)) # 방문지점과 비용
 
     while q:
         cost, pos = heapq.heappop(q)
-        print("pos", pos)
         tele_pos = pos * dtel
 
         if pos == K or tele_pos == K:
@@ -45,6 +45,6 @@ def dijkstra(n):
                     heapq.heappush(q,(cost + 1, n_pos2)) 
 
 dijkstra(N)
-
 if should_print:
     print(costs[K])
+#finished at 3:45 => 틀림
