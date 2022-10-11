@@ -29,5 +29,12 @@ for _ in range(K):
     
     visited = [False] * (V+1)
     group_number = 1  # 1, -1
+
+    result = True
+    for i in range(1, V+1):  # 어느 점에서 시작하든지 이분그래프여야 함
+        if not visited[i]:
+            result = is_bigraph(i, group_number)
+            if not result:
+                break
     
-    print('YES' if is_bigraph(1, group_number) else 'NO')
+    print('YES' if result else 'NO')
