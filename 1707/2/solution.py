@@ -31,7 +31,7 @@ for _ in range(K):
     group_number = 1  # 1, -1
 
     result = True
-    for i in range(1, V+1):  # 어느 점에서 시작하든지 이분그래프여야 함
+    for i in range(1, V+1):  # 연결이 끊겼을 수도 있어서, for문으로 그 점에서 시작시켜주어야 한다
         if not visited[i]:
             result = is_bigraph(i, group_number)
             if not result:
