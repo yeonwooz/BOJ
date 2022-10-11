@@ -1,6 +1,7 @@
 #started at 5:11
 import sys
 input = sys.stdin.readline
+sys.setrecursionlimit(10**9)
 
 N = int(input())
 
