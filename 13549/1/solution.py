@@ -1,50 +1,29 @@
 #started at 3:12
+# https://pottatt0.tistory.com/entry/%EB%B0%B1%EC%A4%80-13549-python-%EC%88%A8%EB%B0%94%EA%BC%AD%EC%A7%88-3
 import sys, heapq
 input = sys.stdin.readline
-from collections import deque
-
-dwalk = [+1, -1] #1초 후
-dtel = 2 # 0초 후(즉시)
-
+INF = 2147000000
+MAX = 100001
 N,K = map(int, input().split())
 
-costs = [1e9] * (max(N,K) + 1)
+costs = [INF] * MAX
+costs[N] = 0
+# 음수면..?
 # for i in range(min(N,K), max(N,K) + 1):
 #     costs[i]
 
-should_print = True
 def dijkstra(n):
-    global should_print
     q = [] #이동할 큐
     # q.append((n,0)) # 방문지점과 비용
     heapq.heappush(q,(0,n)) # 방문지점과 비용
 
     while q:
         cost, pos = heapq.heappop(q)
-        tele_pos = pos * dtel
-
-        if pos == K or tele_pos == K:
-            print(cost)
-            should_print = False
-            break
         
-        range_s =  min(N,K)
-        range_e =  max(N,K)
-        for i in range(2):
-            n_pos1 = pos + dwalk[i] # 바로 갈 경우
-            n_pos2 = pos * 2 + dwalk[i] # 순간이동 후 이동
-
-            if range_s <= n_pos1 <= range_e:
-                if costs[n_pos1] > cost + 1:
-                    costs[n_pos1] = cost + 1
-                    heapq.heappush(q,(cost + 1, n_pos1)) 
-
-            if range_s <= n_pos2 <= range_e:
-                if costs[n_pos2] > cost + 1:
-                    costs[n_pos2] = cost + 1
-                    heapq.heappush(q,(cost + 1, n_pos2)) 
-
+        for c, p in [(1, pos + 1), (1, pos - 1),(0, pos * 2)]:
+            if 0 <= p < MAX and costs[p] > cost + c:
+                costs[p] = cost + c
+                heapq.heappush(q, (costs[p], p))
+    print(costs[K])    
 dijkstra(N)
-if should_print:
-    print(costs[K])
 #finished at 3:45 => 틀림
