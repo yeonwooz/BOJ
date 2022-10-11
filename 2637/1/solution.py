@@ -30,6 +30,7 @@ while q:
     v = q.popleft()
 
     for obj in graph[v]:
+        #cnt개의 v로 dest 만듦
         dest = obj['dest']
         cnt = obj['cnt']
 
@@ -37,8 +38,11 @@ while q:
             needs[dest][v] += cnt
         else:
             for i in range(1, N+1):
+                # i로 만들 수 있는 노드들을 탐색해보자 
                 needs[dest][i] += needs[v][i] * cnt
-        
+                #i로 dest를 만드는 것은 
+                #i로 v를 만들되,  cnt개가 필요하다.
+
         inDegree[dest] -= 1        
         if inDegree[dest] == 0:
             q.append(dest)
@@ -48,7 +52,11 @@ while q:
         # answer[v] += cnt  #v 부품은 cnt 개 만큼 사용되었다 
         # inDegree[dest] -= cnt
 
-for x in enumerate(needs[N]):
-    if x[1] > 0:
-        print(*x)
+# print(needs[N])
+for arr in enumerate(needs[N]):
+    # print(arr) # (인덱스 = 부품 번호,  개수 )
+    # N을 만들기 위한 수단들 배열
+    # print(arr)
+    if arr[1] > 0:
+        print(*arr)   # 부품개수 0보다 크면 부품 번호와 함께 출력
 # print(needs)
