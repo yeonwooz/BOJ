@@ -5,7 +5,7 @@ N = int(sys.stdin.readline())
 graph = [[] for _ in range(N+1)] # 인접행렬 그래프
 inDegree = [0] * (N+1)
 connections = [[] for _ in range(N+1)]  # 각 출발 노드에서 연결된 목적 노드들
-
+answer = [0] * (N+1)
 for i in range(1, N+1):
     row = list(map(int, list("0" + sys.stdin.readline().rstrip())))
     graph[i] = row
@@ -21,9 +21,10 @@ def top_sort():
         if inDegree[i] == 0:
             q.append(i)
 
+    order = 1
     while q:
         popped = q.popleft()
-        print(popped)   
+        answer[popped] = order
         '''
         1. 예를 들어 [[], [5], [4], [], [5], [3]] 이렇게 생긴 connections 기준으로, 진입차수가 0인 것은 1,2 (아무도 1,2를 안 가리킴)
        
@@ -43,9 +44,8 @@ def top_sort():
         for i in connections[popped]:
             inDegree[i] -= 1
             if inDegree[i] == 0:
-                print(i, "degree became 0")
                 q.append(i)
-
+        order += 1
 
 top_sort()
-
+print(answer)
