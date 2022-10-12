@@ -28,3 +28,4 @@ while q:
     if costs[ptr - 1] > cost + 1 :
         q.append((ptr - 1, cost + 1))
         costs[ptr - 1] = cost + 1
+print(costs)
