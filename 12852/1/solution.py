@@ -24,7 +24,7 @@ while q:
 
     if ptr % 2 == 0 and costs[int(ptr / 2)] > cost + 1 :
         q.append((int(ptr / 2), cost + 1,nums +[int(ptr/2)]))
-        costs[int(ptr / 1)] = cost + 1
+        costs[int(ptr / 2)] = cost + 1
     
     if costs[ptr - 1] > cost + 1 :
         q.append((ptr - 1, cost + 1,nums +[ptr-1]))
