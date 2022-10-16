@@ -1,29 +1,20 @@
 #started at 10:58
-import sys
-sys.setrecursionlimit(10**9)
 n = int(input())
 
-MIN = 50000
-dp = [MIN] * (n+5)
-dp[0] = 0
-dp[1] = 0
+dp = [0] * (n+1)
 
-answer = 0
-def change(n, cnt, money):
-    global answer
-    if money == n:
-        answer = dp[n]
-        return
-    if money > n:
-        answer = -1
-        return
-    
-    if money + 5 <= n:
-        dp[money+5] = min(cnt+1, dp[money+5])
-        change(n, cnt+1, money+5)
-    if money + 2 <= n:
-        dp[money+2] = min(cnt+1, dp[money+2])
-        change(n, cnt+1, money+2)
+if n >= 2:  
+    dp[2] = 1
+    # 2보다 큰 수는 최소한 1개의 동전을 사용할 수 있다 
 
-change(n, 0, 0)
-print(answer)
+for i in range(4, n+1):
+    # 3은 2나 5를 가지고 만들 수 없다
+    if i % 5 == 0:
+        # 5의 배수라면 5를 가지고 만들 수 있다
+        dp[i] = i//5
+    else:
+        # 2 작은 수에서 2원을 더 써서 만들 수 있다
+        dp[i] = dp[2] + dp[i-2]
+
+answer = dp[n]
+print(-1 if answer == 0 else answer)
