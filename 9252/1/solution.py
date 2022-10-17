@@ -30,10 +30,10 @@ while True:
             # 위쪽으로 가야 함
             i -= 1
 
-        elif dp[i-1][j] < dp[i][j-1]:
+        else:
             # 왼쪽으로 가야 함
             j -= 1
 
 print(LCS_len)
 print(LCS)
-# finished at 11:55 => 시간초과 
+#finished at 12:10 => 시간초과 해결 : 역추적 while문에서 조건문에 = 조건이 빠져있었다
