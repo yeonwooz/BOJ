@@ -1,4 +1,4 @@
-#started at 9:37
+#started at 10:30
 n = int(input())
 
 # 1: SK
