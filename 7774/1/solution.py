@@ -7,12 +7,25 @@ b_tabs = list(map(int, input().split()))
 a_tabs.sort(reverse=True) #가장 구멍이 많은 것부터 연결
 b_tabs.sort(reverse=True) # 각각의 소켓개수를 가진 b_tabs를 최대화. 가장 구멍이 많은 것부터 연결
 
-cnt = 0
-answer = 0
-for hole in range(a_tabs[0]):
-    if cnt == m:
+cur_atab_idx = 0
+cur_btab_idx = 0
+hole_cnts = 0
+max_hole_cnts = 0
+while True:
+    if cur_atab_idx == n or cur_btab_idx == m: 
         break
-    answer += b_tabs[cnt]
-    cnt += 1
+    
+    for _ in range(a_tabs[cur_atab_idx]):
+        #각 A타입 멀티탭의 구멍개수만큼
+        if cur_btab_idx >= m: 
+            continue
+        hole_cnts += b_tabs[cur_btab_idx]
+        max_hole_cnts = max(max_hole_cnts, hole_cnts)
+        cur_btab_idx += 1
 
-print(answer)
+    if hole_cnts > 0:
+        cur_atab_idx += 1
+        hole_cnts -= 1
+
+max_hole_cnts = max(max_hole_cnts, hole_cnts)
+print(max_hole_cnts)
