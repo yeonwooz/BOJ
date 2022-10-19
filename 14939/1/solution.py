@@ -25,7 +25,7 @@ def press(board, r, c):
         nr = r + dr[i]
         nc = c + dc[i]
         if 0 <= nr < 10 and 0 <= nc < 10:
-            board[nr][nc] == 1 - board[nr][nc]
+            board[nr][nc] = 1 - board[nr][nc]
             # board[nr][nc] = (board[nr][nc] + 1) % 2  
 
 for bulb in range(1 << 10):
