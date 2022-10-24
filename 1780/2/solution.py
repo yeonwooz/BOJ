@@ -22,12 +22,17 @@ def recur(start_i, start_j, len):
             one_cnt += 1  
         return
     cnt = 0
+    isPure = True
     for i in range(start_i, start_i + len):
         for j in range(start_j, start_j + len):
             if board[i][j] == type:
                 cnt += 1
             else:
+                isPure = False
                 break
+        if isPure == False:
+            break
+        # For문을 하나만 빠져나오고, 외부 for문은 끝까지 도는 것 주의하기    
 
     if cnt == len ** 2:
         if type == -1:
