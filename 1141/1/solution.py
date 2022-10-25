@@ -22,13 +22,11 @@ answer = 0
 for i in range(len(words)):
     flag = False
     for j in range(i+1, len(words)):
-        if is_prefix(words[i], words[j]):
+        if  words[j].startswith(words[i]):
             flag = True
             break
 # 끝에서부터 탐색해서 지워야할듯
-# for idx in removeset:
-#     print(idx)
-#     if words[]
+
     if not flag:
         answer += 1
 print(answer)
