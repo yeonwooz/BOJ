@@ -32,3 +32,5 @@ for i in range(len(words)):
     if not flag:
         answer += 1
 print(answer)
+# 같은 완전단어라면 둘이 서로의 접두사라서 카운트에서 빠질 것이고
+# 같은 접두사단어라면, 둘다 다른 단어의 접두사라서 카운트되어 빠질 것이다 
