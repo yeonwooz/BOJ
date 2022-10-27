@@ -10,14 +10,22 @@ def get_max_diff(arr):
     return diff
 
 def solve(trees):
-    perms = permutations(trees,len(trees))
-    answer = 100000
-    for p in perms:
-        answer = min(answer, get_max_diff(list(p)))
-    print(answer)
-
+    answer = []
+    i = 0
+    while trees: 
+        popped = trees.pop()
+        if i == 0:
+            answer.append(popped)
+        elif i % 2 > 0:
+            answer = [popped] + answer
+        elif i % 2 == 0:
+            answer.append(popped)
+        i += 1
+    df = get_max_diff(answer)
+    print(df)
 T = int(input())
 for _ in range(T):
     N = int(input())
     trees = list(map(int, input().split()))
+    trees.sort()
     solve(trees) 
