@@ -1,23 +1,19 @@
-A, B = input().rstrip().split()
+# 1120번 수연
+import sys
+input = sys.stdin.readline
 
+A, B = input().split()
 Alen = len(A)
 Blen = len(B)
+diffs = []
 
-min_diff = Alen
-idx = 0
+for i in range(Blen - Alen + 1):
+    diff = 0
+    for j in range(Alen):
+        # A의 j번째랑 B의 i+j번째랑 비교
+        if B[i + j] != A[j]:
+            diff += 1
+    
+    diffs.append(diff)
 
-for i in range(Blen):
-    for pos in range(Alen):
-        if A[pos] in B:
-            diff = Alen - 1
-            idx = pos + 1
-            # print('B[i]', B[i])
-            while idx < Alen and i+idx < Blen:
-                # print('B[i+idx]', B[i+idx])
-                # print("diff", diff)
-                if B[i+idx] == A[idx]:
-                    diff -= 1
-                idx += 1
-            min_diff = min(diff, min_diff)
-
-print(min_diff)
+print(min(diffs))
