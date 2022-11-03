@@ -12,6 +12,6 @@ for _ in range(10000):
     else:
         end = mid
 
-print("%.10f" %(end))
+print("%.15f" %(end))
 
 # https://sophuu.tistory.com/50
