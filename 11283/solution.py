@@ -1,0 +1,2 @@
+KO_UNICODE_START = 44031
+print(ord(input()) - KO_UNICODE_START)
