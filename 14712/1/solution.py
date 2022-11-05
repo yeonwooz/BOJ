@@ -4,24 +4,33 @@
 # idea :  '12345'  / '135' 각 열의 문자열 같은지 비교하기?
 
 from sys import stdin
-import itertools
 
 N,M = map(int, stdin.readline().split())
-arr = [[(i+1) for i in range(N)] for j in range(M)]
+arr = [[(0) for i in range(M+1)] for j in range(N+1)]
+cnt = 0
 
-for j in range(M):
-    for cnt in range(1, N):  # j열에 몇칸채우는지
-        # j열에서 cnt칸을 채울 것임
-        jc_cnt = itertools.combinations(arr[j], cnt)
-        print("j", j)
-        for comb in jc_cnt:
-            j_str = *list(comb)
-
-
-        
+def dfs(x,y):
+    global cnt;
+    nx = 0
+    ny = 0
+    if (x,y) == (1, N+1):
+        cnt += 1
+        return
+    
+    # 행이나 열 끝에 도달하면 다음 행 / 열로 교체
+    if x == M:
+        nx, ny = 1, y+1
+    else:
+        nx, ny = x+1, y
 
     
+    # x행 y열에 넴모를 넣는다.
+    dfs(nx, ny)
 
-
-
-        
+    if arr[y-1][x] == 0 or arr[y-1][x-1] == 0 or arr[y][x-1] == 0:
+        arr[y][x] = 1
+        dfs(nx, ny)
+        arr[y][x] = 0
+    
+dfs(1,1)
+print(cnt)
