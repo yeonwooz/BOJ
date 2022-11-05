@@ -8,10 +8,18 @@ for _ in range(M):
     packs.append(packprice)
     eaches.append(eachprice)
 
-min_pack_price = min(packs)
-min_each_price = min(eaches)
+pack_p = min(packs)
+each_p = min(eaches)
 
-cash = (N // 6 * min_pack_price) + (N % 6 * min_each_price)
-if (N % 6 != 0):
-    cash = min(cash,  (N // 6 + 1) * min_pack_price)
-print(cash)
+if pack_p <= each_p * 6:
+    # 팩으로 사는게 6개 낱개보다 저렴
+    if N % 6 == 0:
+        print(pack_p * (N // 6 ))
+    else:
+        print(pack_p * (N // 6 + 1))
+elif pack_p > each_p * 6:
+    # 팩 1개가 6개 낱개로 사는 것보다 비쌈
+    print(each_p * N)
+else:
+    # 나머지는 낱개로 사는게 팩보다 저렴               
+    print(pack_p * (N // 6) + each_p * (N % 6))
