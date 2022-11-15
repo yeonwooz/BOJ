@@ -7,28 +7,29 @@ def getinput():
 N, M = map(int, getinput().split())
 
 dots = list(map(int, getinput().split()))
-
-# lines = []
+dots.sort()
 for _ in range(M):
-    s, e = map(int, getinput().split())
+    left_idx = 0
+    right_idx = N - 1
+    x, y = map(int, getinput().split())
     # lines.append((s,e))
-    # s~e 이분탐색
-    cnt = 0
-    for dot in dots:
-        start = s
-        end = e
-        while (start <= end):
-            mid = (start+end) // 2
-            if mid == dot:
-                cnt += 1
-                break
-            elif mid < dot:
-                start = mid + 1
+    # x~y 이분탐색을 선분의 앞뒤점에 대해서 하고 범위 구하기
+    while (left_idx <= right_idx):
+            mid = (left_idx + right_idx) // 2
+            if dots[mid] < x:
+                left_idx = mid + 1
             else:
-                end = mid - 1
+                right_idx = mid - 1
 
-    print(cnt)
+    first_idx = left_idx
+    left_idx = 0
+    right_idx = N - 1
 
-# lines.sort(key=lambda line:line[0])
-
-# print(lines)
+    while (left_idx <= right_idx):
+            mid = (left_idx + right_idx) // 2
+            if dots[mid] > y:
+                right_idx = mid - 1
+            else:
+                left_idx = mid + 1
+    end_idx = right_idx + 1
+    print(end_idx-first_idx)
