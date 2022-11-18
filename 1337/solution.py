@@ -10,7 +10,7 @@ for i in range(N):
     cnt1=4
     cnt2=4
     for j in range(N):
-        if 0 < arr[j] - arr[i] < 5:
+        if 0 < arr[j] - arr[i] < 5:   # 1   7 =>
             #앞이 뒤보다 작고 차이가 5미만
             cnt1-=1
         elif 0 < arr[i] - arr[j] < 5:
