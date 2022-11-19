@@ -9,21 +9,14 @@ for i in range(n):
 
 def recur(sidelen, matrix):
     if sidelen == 1:
-        return
+        return matrix[0][0]
     
-    next_sidelen = 2
-    next_row_cnt = sidelen // 2
-    next_col_cnt = sidelen // 2
-    # newarr = [[] for _ in range(sidelen)]
+    newarr = [[] for _ in range(sidelen // 2)]
+    for i in range(0, sidelen, 2):
+        for j in range(0, sidelen, 2):
+            nums = [matrix[i][j], matrix[i][j+1], matrix[i+1][j], matrix[i+1][j+1]]
+            nums.sort()
+            newarr[i//2].append(nums[2])
+    return recur(sidelen // 2, newarr)
 
-    for i in range(next_row_cnt):
-        # 0 1 2 3
-        start_i = i * 2
-        # 0 2 4 6
-        for j in range(next_col_cnt):
-            start_j = j * 2
-
-            print(start_i,start_j)
-
-
-recur(n, arr)
+print(recur(n, arr))
