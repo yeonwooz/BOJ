@@ -20,11 +20,10 @@ def roll(dir):
 
 N,M,x,y,k = map(int, input().split())   # x,y = 시작점의 행,열
 
-arr = [[] * N for i in range(N)]
+arr = []
 
 for i in range(N):
-    nums = list(map(int, input().split()))
-    arr[i] = nums
+    arr.append(list(map(int, input().split())))
 
 dr = [0, 0, -1, 1]
 dc = [1, -1, 0, 0]
@@ -35,10 +34,15 @@ mvs = list(map(int, input().split()))
 nr = x
 nc = y
 for i in mvs:
+    nr += dr[i-1]
+    nc += dc[i-1]
+
+    if nr < 0 or nr >= N or nc < 0 or nc >= M:
+        nr -= dr[i-1]
+        nc -= dc[i-1]
+        continue
     if 0 <= nr < N and 0 <= nc < M:
         roll(i)
-        nr += dr[i-1]
-        nc += dc[i-1]
 
         #주사위를 굴렸을 때, 이동한 칸에 쓰여 있는 수가 0이면, 주사위의 바닥면에 쓰여 있는 수가 칸에 복사된다. 주사위 수 유지
         if arr[nr][nc] == 0:
