@@ -32,15 +32,18 @@ head_x = 0
 head_y = 0
 # tail_x = 0
 # tail_y = 0
-t = 0
 
 dr = [1, 0, -1, 0]
 dc = [0, 1, 0, -1]
 #     R  D  L  U
-i = 0
+
 
 tracks = deque()
+tracks.append((head_x, head_y))
+arr[head_x][head_y] = -1
 
+t = 0
+i = 0
 
 while True:
     t += 1
@@ -54,7 +57,6 @@ while True:
     if (arr[head_x][head_y] == -1):
         break
     
-
     if arr[head_x][head_y] == 1: # 사과 있는 칸
         arr[head_x][head_y] = -1
         tracks.append((head_x, head_y))
@@ -65,6 +67,7 @@ while True:
         tail_x, tail_y = tracks.popleft()
         arr[tail_x][tail_y] = 0
 
+    # 게임 시작 시간으로부터 X초가 끝난 '뒤에' 방향 전환! 
     if t in mvs:
         mv = mvs[t]
         if mv == 'L': # 왼쪽
