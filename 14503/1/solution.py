@@ -16,13 +16,10 @@ board = []
 for i in range(N):
     board.append(list(map(int, getInput())))
 
-cnt = 1
 board[r][c] = 2
+cnt = 1
 idx = d
 while True:
-    print(r,c, idx)
-    print(board)
-    print()
     moved = False
     for i in range(4):
         idx = (idx - 1) % 4
@@ -33,12 +30,10 @@ while True:
         if board[nr][nc] == 0:
             board[nr][nc] = 2    #청소완료
             cnt += 1
-            moved = True
             r = nr
             c = nc
+            moved = True
             break
-        else:
-            continue
 
     if moved == False:
         next_pos = (idx + 2) % 4
@@ -46,7 +41,6 @@ while True:
         nc = c + dc[next_pos]
         if board[nr][nc] == 1:
             break
-            
         else:
             r = nr
             c = nc
