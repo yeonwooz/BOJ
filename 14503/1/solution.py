@@ -9,8 +9,6 @@ dc = [0, 1, 0, -1]
 
 N,M = map(int, getInput())
 r,c,d = map(int, getInput())
-r -= 1
-c -= 1
 
 board = []
 for i in range(N):
