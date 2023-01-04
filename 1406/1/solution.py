@@ -4,58 +4,31 @@ from collections import deque
 def getInput():
     return sys.stdin.readline().strip()
 
-s = getInput()
+s =  list(getInput())   # 문장 캐릭터 스택
 N = len(s)   # N <= 100,000
 cursor = N    # cursor 위치 
-idx = N     # string의 idx까지 stack에 담겼을 때 idx값
 M = int(getInput())
 
-stack = deque()
+stack = deque()  # 커서의 궤적
 
-newchar = None
 for i in range(M):
     cmd = getInput()
-    print(stack)
-    print('idx', idx, 'cursor', cursor, 'newChar', newchar)
     if cmd[0] == 'L':
-        if idx == 0:
-            continue
-        if cursor <= idx:
-            if newchar:
-                stack.appendleft(newchar)
-                newchar = None
-            else:
-                stack.appendleft(s[cursor-1])
-            idx -= 1
-        cursor -= 1
+        if s:
+            curchar = s.pop()
+            stack.append(curchar)
     elif cmd[0] == 'D':
-        if idx >= N + 1:
-            continue
-        if cursor <= idx:
-            if newchar:
-                stack.appendleft(newchar)
-                newchar = None
-            else:
-                stack.appendleft(s[cursor-1])
-            idx -= 1
-        cursor += 1
+        if stack:
+            curchar = stack.pop()
+            s.append(curchar)
     elif cmd[0] == 'B':
-        if idx == 0:
-            continue
-        idx -= 1
-        cursor -= 1
+        if s:
+            s.pop()
     elif cmd[0] == 'P':
-
-        cursor += 1
-        idx += 1
         newchar = cmd[2]
-        stack.appendleft(newchar)
+        s.append(newchar)
 
+while stack:
+    s.append(stack.pop())
 
-
-# 나머지 담기
-while idx > 0:
-    stack.appendleft(s[idx-1])
-    idx -= 1
-
-print(stack)
+print(''.join(s))
