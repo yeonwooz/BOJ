@@ -13,6 +13,18 @@ for i in range(M):
     
 # 요소들을 모두 0으로 상쇄하기 위해 필요한 선의 개수 구하기
 
+def move():
+    for i in range(N):
+        cur = i
+        for h in range(H):
+            if matrix[h][cur]:  # 우측이동
+                cur += 1
+            elif cur > 0 and matrix[h][cur - 1]:  # 좌측이동
+                cur -= 1
+        if cur != i:
+            return False
+    return True
+
 
 def track():
     global cnt
