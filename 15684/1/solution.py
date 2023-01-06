@@ -3,7 +3,7 @@ N,M,H = map(int,sys.stdin.readline().split())
 
 matrix = []     # 교차점 행렬 
 for i in range(H):
-    matrix.append([0] * (N-1))  # 마지막 세로선에서 시작하는 가로선 없음
+    matrix.append([0] * (N))  # 마지막 세로선에서 시작하는 가로선 없음
 
 for i in range(M):
     a,b = map(int,sys.stdin.readline().split())
@@ -25,18 +25,27 @@ def move():
             return False
     return True
 
+def dfs(cnt, x, y):
+    global answer
+    if answer <= cnt:
+        return
+    if move():
+        answer = min(answer, cnt)
+        return
+    if cnt == 3:
+        return
+    for i in range(x, H):
+        k = 0
+        if i == x:
+            k = y
+        for j in range(k, N - 1):
+            if matrix[i][j]:
+                j += 1
+            else:
+                matrix[i][j] = 1
+                dfs(cnt + 1, i, j + 2)
+                matrix[i][j] = 0
 
-def track():
-    global cnt
-    for i in range(N):
-        cur = i
-        stack = []
-        for j in range(H+1):
-            if matrix[i][j] == 1:
-                stack.append((i,j))
-                
-
-
-cnt = 0
-track()
-print(cnt)
+answer = 4
+dfs(0, 0, 0)
+print(answer if answer < 4 else -1)
