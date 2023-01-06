@@ -11,4 +11,20 @@ for i in range(M):
     b -= 1
     matrix[a][b] = 1
     
-print(matrix)
+# 요소들을 모두 0으로 상쇄하기 위해 필요한 선의 개수 구하기
+
+
+def track():
+    global cnt
+    for i in range(N):
+        cur = i
+        stack = []
+        for j in range(H+1):
+            if matrix[i][j] == 1:
+                stack.append((i,j))
+                
+
+
+cnt = 0
+track()
+print(cnt)
