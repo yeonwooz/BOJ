@@ -1,61 +1,38 @@
-const events = require("events");
-const fs = require("fs");
-const readline = require("readline");
-const filepath =
-  process.platform === "linux" ? "/dev/stdin" : __dirname + "/input.txt";
-(async function processLineByLine() {
-  let inputOrder = 0;
-  let s, boom;
+main();
+function main() {
+  const [s, boom] = getInputs();
+  solve(s, boom);
+}
+function getInputs() {
+  const fs = require("fs");
+  const filepath = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
+  let [s, boom] = fs.readFileSync(filepath).toString().trim().split("\n");
 
-  try {
-    const rl = readline.createInterface({
-      input: fs.createReadStream(filepath),
-      crlfDelay: Infinity,
-    });
-    rl.on("line", (line) => {
-      inputOrder++;
-      if (inputOrder === 1) {
-        s = line;
-      } else if (inputOrder === 2) {
-        boom = line;
-        solve(s, boom);
+  return [s, boom];
+}
+
+function solve(str, str2) {
+  const stack = [];
+
+  for (let i = str.length - 1; i >= 0; i--) {
+    stack.push(str[i]);
+
+    if (stack.length >= str2.length && stack[stack.length - 1] === str2[0]) {
+      for (let j = 1; j < str2.length; j++) {
+        if (stack[stack.length - 1 - j] !== str2[j]) {
+          continue;
+        }
       }
-    });
-    await events.once(rl, "close");
-    //console.log("Reading file line by line with readline done.");
-    const used = process.memoryUsage().heapUsed / 1024 / 1024;
-    // console.log(`approximately ${Math.round(used * 100) / 100} MB`);
-  } catch (err) {
-    console.error(err);
-  }
-})();
 
-function solve(s, boom) {
-  while (true) {
-    const len = s.length;
-    if (!s || len == 0) {
-      console.log("FRULA");
-      return;
-    }
-
-    let boomIdx = 0;
-    let sIdx = 0;
-    for (let i = 0; i < len; ++i) {
-      if (s[i] === boom[boomIdx]) {
-        sIdx = i;
-        boomIdx++;
-        break;
+      for (let j = 0; j < str2.length; j++) {
+        stack.pop();
       }
     }
-    if (boomIdx === 0) break;
-
-    while (boomIdx < boom.lenth && sIdx < len) {
-      // if (!s.includes(boom)) break;
-      if (s[sIdx] !== boom[boomIdx]) break;
-      boomIdx++;
-      sIdx++;
-    }
-    s = s.replace(boom, "");
   }
-  console.log(s);
+
+  if (stack.length === 0) {
+    console.log("FRULA");
+  } else {
+    console.log(stack.reverse().join(""));
+  }
 }
