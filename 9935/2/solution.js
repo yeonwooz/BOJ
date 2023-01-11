@@ -32,11 +32,29 @@ const filepath =
 
 function solve(s, boom) {
   while (true) {
-    if (!s || s.length == 0) {
+    const len = s.length;
+    if (!s || len == 0) {
       console.log("FRULA");
       return;
     }
-    if (!s.includes(boom)) break;
+
+    let boomIdx = 0;
+    let sIdx = 0;
+    for (let i = 0; i < len; ++i) {
+      if (s[i] === boom[boomIdx]) {
+        sIdx = i;
+        boomIdx++;
+        break;
+      }
+    }
+    if (boomIdx === 0) break;
+
+    while (boomIdx < boom.lenth && sIdx < len) {
+      // if (!s.includes(boom)) break;
+      if (s[sIdx] !== boom[boomIdx]) break;
+      boomIdx++;
+      sIdx++;
+    }
     s = s.replace(boom, "");
   }
   console.log(s);
