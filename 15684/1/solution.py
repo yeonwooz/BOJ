@@ -27,12 +27,12 @@ def move():
 
 def dfs(cnt, x, y):
     global answer
-    if answer <= cnt:
+    if answer <= cnt:   # cnt가 answer보다 더 커질 수는 없다
         return
-    if move():
-        answer = min(answer, cnt)
+    if move():      #  promising한지 확인
+        answer = min(answer, cnt)   # 최소 anser 갱신
         return
-    if cnt == 3:
+    if cnt == 3:        # answer이 4인데 cnt가 3이라면
         return
     for i in range(x, H):
         k = 0
@@ -42,9 +42,9 @@ def dfs(cnt, x, y):
             if matrix[i][j]:
                 j += 1
             else:
-                matrix[i][j] = 1
+                matrix[i][j] = 1      # 가로선 추가해보기
                 dfs(cnt + 1, i, j + 2)
-                matrix[i][j] = 0
+                matrix[i][j] = 0    # 가로선 제거
 
 answer = 4
 dfs(0, 0, 0)
