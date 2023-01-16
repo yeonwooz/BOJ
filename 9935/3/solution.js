@@ -35,9 +35,10 @@ function solve(s, boom) {
     stk.push(curcha);
     if (curcha === boomLast && i >= boomlen - 1) {
       const stklen = stk.length;
+      if (stklen === 0) continue;
       let stkIdx = stklen - 1;
       let j;
-      for (j = boomlen - 1; j >= 0; --j) {
+      for (j = boomlen - 1; j >= 0; --j && stkIdx >= 0) {
         if (boom[j] != stk[stkIdx]) break;
         stkIdx--;
       }
@@ -46,5 +47,5 @@ function solve(s, boom) {
       }
     }
   }
-  console.log(stk.length === 0 ? "FRULA" : stk);
+  console.log(stk.length === 0 ? "FRULA" : stk.join(""));
 }
