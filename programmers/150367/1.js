@@ -1,50 +1,25 @@
 function solution(numbers) {
   let answer = [];
   for (let num of numbers) {
-    answer.push(check(num));
+    const binstr = num.toString(2);
+    answer.push(check(0, binstr.length - 1, binstr) ? 1 : 0);
   }
   return answer;
 }
 
-function check(num) {
-  const b1 = num.toString(2);
-  const b2 = "0" + b1;
+function check(start, end, str) {
+  if (start === end) return str[start];
 
-  const l1 = b1.length;
-  const l2 = l1 + 1;
+  const mid = parseInt((start + end) / 2);
+  if (mid === start || mid === end) return str[mid];
+  const left = check(start, mid - 1, str);
+  if (!left) return false;
+  if (str[mid] === "0" && left === "1") return false;
 
-  let binstr = null;
-  let len = 0;
-  if (!((l1 + 1) & l1)) {
-    binstr = b1;
-    len = l1;
-  }
+  const right = check(mid + 1, end, str);
+  if (!right) return false;
+  if (str[mid] === "0" && right === "1") return false;
 
-  if (!((l2 + 1) & l2)) {
-    binstr = b2;
-    len = l2;
-  }
-  if (binstr === null) return 0;
-
-  return recur(binstr);
-  // 재귀로 반씩 자르기
-}
-
-function recur(str) {
-  const len = str.length;
-  if (len === 1) {
-    return 1;
-  }
-  if (len === 3) {
-    if (str[1] === "0") return 0;
-    return 1;
-  }
-
-  const midIdx = Math.floor(len / 2);
-  if (str[midIdx] === "0") return 0;
-
-  let res1 = recur(str.slice(0, midIdx));
-  let res2 = recur(str.slice(midIdx + 1));
-
-  return res1 && res2;
+  if (str[mid] === "0" && left === "0" && right === "0") return "0";
+  return "1";
 }
