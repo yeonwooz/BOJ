@@ -10,20 +10,23 @@ function solution(s, skip, index) {
   for (let i = 0; i < s.length; ++i) {
     const curAscii = s[i].charCodeAt();
     let ptr = 1;
-    let cnt = 1;
-    let nextAlpha = s[i];
-    while (cnt <= index) {
+    let cnt = 0;
+    while (cnt < index) {
       let nextAscii = curAscii + ptr;
-      if (nextAscii > zCode)
+      while (nextAscii > zCode) {
         nextAscii = nextAscii - zCode + ("a".charCodeAt() - 1);
+      }
 
-      nextAlpha = String.fromCharCode(nextAscii);
+      const nextAlpha = String.fromCharCode(nextAscii);
+
       if (!skipmap.get(nextAlpha)) {
         cnt++;
       }
       ptr++;
+      if (cnt === index) {
+        s[i] = nextAlpha;
+      }
     }
-    s[i] = nextAlpha;
   }
   return s.join("");
 }
