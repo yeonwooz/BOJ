@@ -64,7 +64,7 @@ function solution(commands) {
         const value1 = cell1[cell1.length - 1];
         const value2 = cell2[cell2.length - 1];
 
-        if ((value1 && !value2) || (value1 && value2)) {
+        if (value1 && !value2) {
           table[r2][c2].push(value1);
 
           const curCell = r2 + "_" + c2;
@@ -82,6 +82,19 @@ function solution(commands) {
           } else {
             valuemap.get(value2).push(curCell);
           }
+        } else if (value1 && value2) {
+          table[r2][c2].push(value1);
+
+          const curCell = r2 + "_" + c2;
+          if (!valuemap.get(value1)) {
+            valuemap.set(value1, [curCell]);
+          } else {
+            valuemap.get(value1).push(curCell);
+          }
+
+          // value2 맵에서 curCell 제거
+          const index = valuemap.get(value2).indexOf(curCell);
+          valuemap.get(value2).splice(index, 1);
         }
 
         break;
@@ -102,7 +115,6 @@ function solution(commands) {
 
           const cellVal = table[x][y];
           table[x][y] = [""];
-
           valArr.splice(i, 1);
         }
 
