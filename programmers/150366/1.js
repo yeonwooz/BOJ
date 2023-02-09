@@ -1,7 +1,11 @@
 function solution(commands) {
   const valuemap = new Map(); // ex. value1, ["2_3", "3_4"] -> indexof, splice로 제거 / push로 삽입
 
-  const table = Array(51).fill(Array(51).fill([""]));
+  let table = Array(51);
+
+  for (var i = 0; i < 51; i++) {
+    table[i] = new Array(51).fill([""]);
+  }
 
   const answer = [];
 
