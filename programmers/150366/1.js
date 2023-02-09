@@ -37,7 +37,7 @@ function solution(commands) {
           const [cmd, value1, value2] = arr;
 
           const valArr = valuemap.get(value1);
-
+          if (!valArr) break;
           for (let i = valArr.length - 1; i >= 0; --i) {
             const val = valArr[i];
             const [r, c] = val.split("_").map((x) => parseInt(x));
@@ -89,17 +89,19 @@ function solution(commands) {
       case "UNMERGE":
         [cmd, r, c] = arr;
         const targetCellVal = table[r][c];
-
         if (targetCellVal.length === 0) break;
 
         const curVal = targetCellVal[targetCellVal.length - 1];
 
         const valArr = valuemap.get(curVal);
+        if (!valArr) break;
         for (let i = valArr.length - 1; i >= 0; --i) {
           const val = valArr[i];
           const [x, y] = val.split("_").map((s) => parseInt(s));
+          if (x === r && y === c) continue;
+
           const cellVal = table[x][y];
-          table[x][y] = [cellVal[0]];
+          table[x][y] = [""];
 
           valArr.splice(i, 1);
         }
