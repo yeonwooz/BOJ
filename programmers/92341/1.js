@@ -1,83 +1,41 @@
 function solution(fees, records) {
-  const [btime, bfee, ptime, pfee] = fees;
-  records = isort(records);
+  const [bTime, bFee, pTime, pFee] = fees;
+  const cars = {};
+  const maxTime = 23 * 60 + 59;
+  records.forEach((v) => {
+    let [time, car, type] = v.split(" ");
 
-  const answer = [];
-  let prevAt = null;
-  let prevCarNum = null;
-  let prevType = null;
-  let accumTime = 0;
+    const [hour, minute] = time.split(":");
+    time = hour * 60 + parseInt(minute);
 
-  const len = records.length;
-
-  for (let i = 0; i < len; ++i) {
-    let [at, carNum, type] = records[i].split(" ");
-    let [curT, curM] = at.split(":");
-    if (len === 1) {
-      accumTime += (23 - parseInt(curT)) * 60 + 59 - parseInt(curM);
-      break;
+    // 처음 조회된 차량
+    if (!cars[car]) {
+      cars[car] = { time: 0, car };
     }
 
-    if (i > 0) {
-      let [prevT, prevM] = prevAt.split(":");
+    cars[car].type = type;
 
-      if (prevType === "IN" && type === "IN") {
-        // 이전 차량에 대해 23:59로 계산해야 함
-        accumTime += (23 - parseInt(prevT)) * 60 + 59 - parseInt(prevM);
-      } else if (prevType === "IN" && type === "OUT") {
-        accumTime +=
-          (parseInt(curT) - parseInt(prevT)) * 60 +
-          parseInt(curM) -
-          parseInt(prevM);
-      }
-
-      if (i === len - 1 && type === "IN") {
-        accumTime += (23 - parseInt(curT)) * 60 + 59 - parseInt(curM);
-      }
-
-      if (prevCarNum != carNum) {
-        if (accumTime <= btime) {
-          answer.push(bfee);
-        } else {
-          const payment = bfee + Math.ceil((accumTime - btime) / ptime) * pfee;
-          answer.push(payment);
-        }
-        accumTime = 0;
-      }
+    if (type == "OUT") {
+      cars[car].time += time - cars[car].lastInTime;
+      return;
     }
 
-    prevAt = at;
-    prevCarNum = carNum;
-    prevType = type;
-  }
+    cars[car].lastInTime = time;
+  });
 
-  if (accumTime) {
-    if (accumTime <= btime) {
-      answer.push(bfee);
-    } else {
-      const payment = bfee + Math.ceil((accumTime - btime) / ptime) * pfee;
-      answer.push(payment);
-    }
-    accumTime = 0;
-  }
-  return answer;
-}
-
-function isort(records) {
-  // 삽입정렬
-  const len = records.length;
-
-  for (let i = 0; i < len - 1; ++i) {
-    let j = i;
-    while (j >= 0) {
-      if (
-        parseInt(records[j].split(" ")[1]) >
-        parseInt(records[j + 1].split(" ")[1])
-      ) {
-        [records[j], records[j + 1]] = [records[j + 1], records[j]];
+  return Object.values(cars)
+    .sort((a, b) => a.car - b.car)
+    .map((v) => {
+      // 차량이 최종적으로 나가지 않았을 때
+      if (v.type == "IN") {
+        v.time += maxTime - v.lastInTime;
       }
-      j--;
-    }
-  }
-  return records;
+
+      // 기본시간을 넘지 않았을 때
+      if (bTime > v.time) {
+        return bFee;
+      }
+
+      return bFee + Math.ceil((v.time - bTime) / pTime) * pFee;
+    });
 }
