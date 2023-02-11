@@ -1,28 +1,22 @@
 function solution(numbers) {
-  const answer = [-1];
   const len = numbers.length;
-
-  let curMaxIdx = len - 1;
-  let curMax = numbers[curMaxIdx]; // 이미 -1인 것보다 더 크면
-
-  for (let i = len - 2; i >= 0; --i) {
-    let found = false;
-    const left = numbers[i];
-    if (curMax < left) {
-      curMax = left;
-      curMaxIdx = i;
-      if (answer[curMaxIdx] === -1) continue;
+  const answer = Array(len).fill(0);
+  const stack = []; // 인덱스를 담는 스택
+  for (let i = 0; i < len; ++i) {
+    while (1) {
+      const stacklen = stack.length;
+      if (stacklen === 0) break;
+      // 스택이 비어있으면(비교할 원소가 없으면) break
+      if (numbers[stack[stacklen - 1]] >= numbers[i]) break;
+      // 스택안의 비교할 원소보다 현재원소가 작으면 break
+      answer[stack.pop()] = numbers[i];
+      // 현재원소가 더 크니까 기록하고, 해당 인덱스는 이미 기록했으니 스택에서 제거
     }
+    stack.push(i); // 현재인덱스도 나중에 기록해줘!
+  }
 
-    for (let j = i + 1; j < len; ++j) {
-      const right = numbers[j];
-      if (left < right) {
-        found = true;
-        answer.unshift(right);
-        break;
-      }
-    }
-    if (!found) answer.unshift(-1);
+  for (let idx of stack) {
+    answer[idx] = -1;
   }
   return answer;
 }
