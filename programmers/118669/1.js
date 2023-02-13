@@ -11,39 +11,59 @@ function solution(n, paths, gates, summits) {
     arr[j][i] = w;
   }
 
-  let histories = [];
+  let answerMaxIntensity = -1;
+  let answerSummit = -1;
+  let answerPath = [];
 
   // gates queue BFS
   for (let gate of gates) {
-    for (let i = 1; i <= n; ++i) {
-      const intensity = arr[gate][i];
-      if (intensity) {
-        const summit = summits.includes(i) ? i : -1;
-        DFS(gate, i, [gate, i], summit, intensity);
+    for (let next = 1; next <= n; ++next) {
+      const intensity = arr[gate][next];
+      if (gate != next && intensity) {
+        if (gates.includes(next) && next != gate) continue;
+        const summit = summits.includes(next) ? next : -1;
+        answerSummit = summit;
+        answerMaxIntensity = intensity;
+        DFS(gate, next, [gate, next], summit, intensity);
       }
     }
   }
+  console.log("answerPath", answerPath);
 
   // gates 각 점에 대해 DFS시작
   function DFS(start, cur, history, summit, maxIntensity) {
     if (start === cur) {
-      if (summit != -1 && maxIntensity != -1) {
-        histories.push(history);
+      if (summit !== -1 && maxIntensity !== -1) {
+        if (maxIntensity > answerMaxIntensity) {
+          answerPath = history;
+          answerMaxIntensity = maxIntensity;
+          answerSummit = summit;
+        } else if (
+          maxIntensity === answerMaxIntensity &&
+          summit < answerSummit
+        ) {
+          answerPath = history;
+          answerMaxIntensity = maxIntensity;
+          answerSummit = summit;
+        }
       }
       return;
     }
+    if (history.length >= 9) return;
 
     // 다음으로 진행
     for (let next = 1; next <= n; ++next) {
       const intensity = arr[cur][next];
-      if (intensity) {
+      if (cur != next && intensity) {
         const isSummit = summits.includes(next);
         if (summit !== -1 && isSummit) continue;
         if (gates.includes(next) && next != start) continue;
         if (isSummit) summit = next;
-        histories.push(next);
+        history.push(next);
+
         if (intensity > maxIntensity) maxIntensity = intensity;
-        DFS(start, next, histories, summit, maxIntensity);
+        DFS(start, next, history, summit, maxIntensity);
+        history.pop();
       }
     }
   }
