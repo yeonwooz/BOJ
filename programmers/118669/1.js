@@ -1,70 +1,50 @@
 function solution(n, paths, gates, summits) {
-  /*
-    연결된 노드들로, gates중 하나로 시작과 끝을 만들고 summits중 하나를 도중에 배치하여 만드는 경로중 최대 w가 최소인 것
-    */
-  const arr = Array(n + 1)
-    .fill(0)
-    .map((x) => Array(n + 1).fill(0));
-  for (let path of paths) {
-    const [i, j, w] = path;
-    arr[i][j] = w;
-    arr[j][i] = w;
+  // 다익스트라
+  const graph = new Array(n + 1).fill(null).map((_) => []);
+  for (let i = 0; i < paths.length; i++) {
+    const [a, b, w] = paths[i];
+    graph[a].push([w, b]);
+    graph[b].push([w, a]);
   }
 
-  let answerMaxIntensity = -1;
-  let answerSummit = -1;
-  let answerPath = [];
-
-  // gates queue BFS
-  for (let gate of gates) {
-    for (let next = 1; next <= n; ++next) {
-      const intensity = arr[gate][next];
-      if (gate != next && intensity) {
-        if (gates.includes(next) && next != gate) continue;
-        const summit = summits.includes(next) ? next : -1;
-        answerSummit = summit;
-        answerMaxIntensity = intensity;
-        DFS(gate, next, [gate, next], summit, intensity);
-      }
-    }
+  // 산봉우리에서 나가는 간선 제거
+  for (let summit of summits) {
+    graph[summit] = [];
   }
-  console.log("answerPath", answerPath);
 
-  // gates 각 점에 대해 DFS시작
-  function DFS(start, cur, history, summit, maxIntensity) {
-    if (start === cur) {
-      if (summit !== -1 && maxIntensity !== -1) {
-        if (maxIntensity > answerMaxIntensity) {
-          answerPath = history;
-          answerMaxIntensity = maxIntensity;
-          answerSummit = summit;
-        } else if (
-          maxIntensity === answerMaxIntensity &&
-          summit < answerSummit
-        ) {
-          answerPath = history;
-          answerMaxIntensity = maxIntensity;
-          answerSummit = summit;
+  let q = gates;
+
+  // 각 노드까지 도달하는 누적 intensity
+  const dp = new Array(n + 1).fill(10000001);
+
+  // 시작 위치 초기화
+  gates.forEach((v) => (dp[v] = -1));
+
+  // bfs
+  while (q.length > 0) {
+    let set = new Set(); // 중복없게
+    while (q.length > 0) {
+      const qv = q.pop();
+      for (let [w, v] of graph[qv]) {
+        const maxV = Math.max(dp[qv], w);
+        if (dp[v] > maxV) {
+          dp[v] = maxV;
+          set.add(v);
         }
       }
-      return;
     }
-    if (history.length >= 9) return;
-
-    // 다음으로 진행
-    for (let next = 1; next <= n; ++next) {
-      const intensity = arr[cur][next];
-      if (cur != next && intensity) {
-        const isSummit = summits.includes(next);
-        if (summit !== -1 && isSummit) continue;
-        if (gates.includes(next) && next != start) continue;
-        if (isSummit) summit = next;
-        history.push(next);
-
-        if (intensity > maxIntensity) maxIntensity = intensity;
-        DFS(start, next, history, summit, maxIntensity);
-        history.pop();
-      }
-    }
+    q = [...set];
   }
+
+  // 정렬해서 배열의 첫번째 값 가져오기
+  const answers = summits
+    .map((v) => [v, dp[v]])
+    .sort((a, b) => {
+      if (a[1] === b[1]) {
+        return a[0] - b[0];
+      }
+      return a[1] - b[1];
+    });
+
+  return answers[0];
 }
