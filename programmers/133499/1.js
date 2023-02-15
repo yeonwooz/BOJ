@@ -1,36 +1,22 @@
 function solution(babbling) {
-  for (let bab of babbling) {
-    console.log("bab", bab);
-    const dict = new Set();
-    dict.add("aya");
-    dict.add("ye");
-    dict.add("woo");
-    dict.add("ma");
-    let cnt = 0;
-    let flag = true;
-    let prev = "";
-    while (bab) {
-      for (let word of dict.keys()) {
-        if (!bab) break;
-        // bab이 이 단어를 포함하는가
-        const splitted = bab.split(word);
-        const splitLen = splitted.length;
-        if (splitLen === 2) {
-          cnt++;
-          bab = splitted.join("");
-          if (prev === word || (bab.length === 1 && !dict.has(bab))) {
-            flag = false;
-            break;
-          }
-          prev = word;
-        }
-        if (splitLen === 3) {
-          flag = false;
-          break;
-        }
+  const can = ["aya", "ye", "woo", "ma"];
+  let cnt = 0;
+
+  for (let i = 0; i < babbling.length; i++) {
+    let bab = babbling[i];
+
+    for (let j = 0; j < can.length; j++) {
+      if (bab.includes(can[j].repeat(2))) {
+        break;
       }
-      if (!flag) break;
+
+      bab = bab.split(can[j]).join(" ");
     }
-    return cnt;
+
+    if (bab.split(" ").join("").length === 0) {
+      cnt += 1;
+    }
   }
+
+  return cnt;
 }
