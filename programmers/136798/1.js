@@ -14,13 +14,13 @@ function solution(number, limit, power) {
 
 function getDivisorCnt(num) {
   if (num === 1) return 1;
-  let cnt = 1;
+  let cnt = 2;
   let i = 2;
   while (i * i < num) {
-    if (num % i === 0) cnt++;
+    if (num % i === 0) cnt += 2;
     i++;
   }
-  cnt *= 2;
+
   if (i * i === num) cnt++;
   return cnt;
 }
