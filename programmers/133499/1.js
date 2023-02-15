@@ -8,7 +8,7 @@ function solution(babbling) {
     dict.add("ma");
     let cnt = 0;
     let flag = true;
-
+    let prev = "";
     while (bab) {
       for (let word of dict.keys()) {
         if (!bab) break;
@@ -18,11 +18,11 @@ function solution(babbling) {
         if (splitLen === 2) {
           cnt++;
           bab = splitted.join("");
-          if (bab.length === 1 && !dict.has(bab)) {
+          if (prev === word || (bab.length === 1 && !dict.has(bab))) {
             flag = false;
             break;
           }
-          dict.delete(word);
+          prev = word;
         }
         if (splitLen === 3) {
           flag = false;
