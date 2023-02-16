@@ -1,21 +1,30 @@
 function solution(a, b) {
-  let charsArray1 = Array(10).fill(0); // 해당 인덱스에 해당하는 수가 몇개인가
+  const map = new Map();
   for (let i = 0; i < a.length; ++i) {
-    charsArray1[+a[i]]++;
+    if (!map.get(a[i])) {
+      map.set(a[i], 1);
+    } else {
+      map.set(a[i], map.get(a[i]) + 1);
+    }
   }
-  let charsArray2 = Array(10).fill(0); // 해당 인덱스에 해당하는 수가 몇개인가
+  let charsArray = Array(10).fill(0); // 해당 인덱스에 해당하는 수가 몇개인가
   for (let i = 0; i < b.length; ++i) {
-    charsArray2[+b[i]]++;
+    if (map.get(b[i])) {
+      const num = parseInt(b[i]);
+      charsArray[num]++;
+      map.set(b[i], map.get(b[i]) - 1);
+    }
   }
-
   let answer = "";
-  for (let i = 9; i >= 1; --i) {
-    const num = Math.min(charsArray1[i], charsArray2[i]);
+
+  for (let i = 9; i >= 0; --i) {
+    const num = charsArray[i];
     if (num) {
       answer += String(i).repeat(num);
     }
   }
-  if (charsArray1[0] && charsArray2[0]) answer += "0";
+
+  if (parseInt(answer) === 0) return "0";
 
   return answer || "-1";
 }
