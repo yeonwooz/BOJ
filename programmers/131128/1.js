@@ -1,7 +1,4 @@
-function solution(X, Y) {
-  const a = X.toString();
-  const b = Y.toString();
-
+function solution(a, b) {
   const map = new Map();
   for (let i = 0; i < a.length; ++i) {
     if (!map.get(a[i])) {
