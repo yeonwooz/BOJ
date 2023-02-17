@@ -34,24 +34,17 @@ class Queue {
 }
 
 function solution(priorities, location) {
-  let cnt = 1;
+  let cnt = 0;
   const q = new Queue();
   let len = priorities.length;
   for (let i = 0; i < len; ++i) {
     q.enqueue([priorities[i], i]);
   }
+  priorities.sort((a, b) => b - a);
 
   while (q.peek()) {
     const popped = q.dequeue();
-    let foundBigger = false;
-    while (q.head) {
-      if (q.head.value > popped[0]) {
-        foundBigger = true;
-        break;
-      }
-      q.head = q.head.next;
-    }
-    if (foundBigger) {
+    if (popped[0] < priorities[cnt]) {
       q.enqueue(popped);
     } else {
       // 출력
@@ -62,5 +55,5 @@ function solution(priorities, location) {
     }
   }
 
-  return cnt;
+  return cnt + 1;
 }
