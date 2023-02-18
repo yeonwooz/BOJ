@@ -78,6 +78,10 @@ class MaxHeap {
 }
 
 function solution(n, works) {
+  if (works.reduce((a, b) => a + b) <= n) {
+    return 0;
+  }
+
   let t = 0;
   const len = works.length;
   const heap = new MaxHeap();
@@ -86,11 +90,12 @@ function solution(n, works) {
   }
 
   while (t < n) {
-    const popped = heap.pop();
+    let popped = heap.pop();
     heap.push(popped - 1);
     t++;
   }
 
+  console.log(heap);
   let answer = 0;
   while (true) {
     const popped = heap.pop();
