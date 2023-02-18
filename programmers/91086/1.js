@@ -1,16 +1,14 @@
 class MaxHeap {
   constructor() {
     this.heap = [null]; // 0번째 인덱스 안 씀
-    this.root = 1;
-    this.tail = 1;
   }
 
   push(value) {
-    let curIdx = this.tail;
-    this.heap[curIdx] = value;
+    this.heap.push(value);
+    let curIdx = this.heap.length - 1;
     let parentIdx = Math.floor(curIdx / 2);
 
-    while (curIdx > this.root) {
+    while (curIdx > 1) {
       // 부모보다 자식이 크면 교체
       if (this.heap[curIdx] > this.heap[parentIdx]) {
         [this.heap[curIdx], this.heap[parentIdx]] = [
@@ -22,24 +20,24 @@ class MaxHeap {
       }
       curIdx = parentIdx;
     }
-    this.tail++;
   }
 
   pop() {
-    if (this.tail === 1) return null;
-    const popped = this.heap[this.root];
-    this.heap[1] = this.heap[this.tail];
-    delete this.heap[this.tail];
+    if (this.heap.length <= 1) return null;
+    if (this.heap.length === 2) {
+      return this.heap.pop();
+    }
+    const popped = this.heap[1];
+    this.heap[1] = this.heap.pop();
     this.heapify();
-    this.root++;
     return popped;
   }
 
   heapify() {
     // 루트부터 끝까지 재정렬
-    let rootIdx = this.root;
+    let rootIdx = 1;
 
-    while (rootIdx <= this.tail) {
+    while (rootIdx <= this.heap.length - 1) {
       let leftIdx = rootIdx * 2;
       let rightIdx = leftIdx + 1;
       let maxNodeIdx = rootIdx;
@@ -93,15 +91,11 @@ function solution(n, works) {
     t++;
   }
 
-  const start = Math.max(heap.length - len, 0);
-
-  let s = heap.root;
-  let e = heap.tail;
   let answer = 0;
-  while (s < e) {
+  while (true) {
     const popped = heap.pop();
+    if (!popped) break;
     answer += popped ** 2;
-    ++s;
   }
   return answer;
 }
