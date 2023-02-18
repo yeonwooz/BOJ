@@ -90,11 +90,5 @@ function solution(n, works) {
     heap.push(heap.pop() - 1);
   }
 
-  let answer = 0;
-  while (true) {
-    const popped = heap.pop();
-    if (!popped) break;
-    answer += popped ** 2;
-  }
-  return answer;
+  return heap.heap.reduce((a, b) => a + b ** 2, 0);
 }
