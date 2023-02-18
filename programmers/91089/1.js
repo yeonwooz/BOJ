@@ -20,50 +20,30 @@ class Trie {
     }
   }
 
-  has(str) {
-    const curNode = this.root;
-
-    for (let char of str) {
-      if (!curNode.children.has(char)) return false;
-      curNode = curNode.children.get(char);
-    }
-    return true;
-  }
-
-  getChildrenCnt(str) {
-    let cnt = 0;
+  has(str, arr) {
     let curNode = this.root;
-    for (let i = 0; i < str.length; ++i) {
-      const char = str[i];
-      if (curNode.children.entries().length)
-        if (!curNode.children.has(char)) {
-          curNode.children.set(char, new Node(curNode.value + char));
-        }
-      if (i === str.length - 1) {
-        return curNode.children.entries().length;
-      }
-      curNode = curNode.children.get(char);
+    let newArr = [...arr];
+    for (let char of str) {
+      const children = curNode.children;
+      newArr.push(children.get(char).children.size);
+      if (!children.has(char, newArr)) return null;
+      curNode = children.get(char);
     }
+    return newArr;
   }
 }
 
 function solution(words) {
   const trie = new Trie();
-  for (let char of words) {
-    trie.insert(char);
+  for (let word of words) {
+    trie.insert(word);
   }
 
   let answer = 0;
   for (let word of words) {
-    let prev = "";
-    let cnt = 0;
-    for (let i = 0; i < word.length; ++i) {
-      prev += word[i];
-      cnt++;
-      if (trie.getChildrenCnt(prev) === 1) break;
-    }
-    answer += cnt;
+    console.log("==>", word);
+    const arr = trie.has(word, []);
+    console.log(arr);
   }
-
   return answer;
 }
