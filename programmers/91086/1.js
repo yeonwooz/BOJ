@@ -19,6 +19,7 @@ class MaxHeap {
         break;
       }
       curIdx = parentIdx;
+      parentIdx = Math.floor(curIdx / 2);
     }
   }
 
@@ -89,13 +90,10 @@ function solution(n, works) {
     heap.push(works[i]);
   }
 
-  while (t < n) {
-    let popped = heap.pop();
-    heap.push(popped - 1);
-    t++;
+  for (let i = 0; i < n; i += 1) {
+    heap.push(heap.pop() - 1);
   }
 
-  console.log(heap);
   let answer = 0;
   while (true) {
     const popped = heap.pop();
