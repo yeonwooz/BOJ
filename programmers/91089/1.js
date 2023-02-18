@@ -14,9 +14,14 @@ class Trie {
     let curNode = this.root;
     for (let char of str) {
       if (!curNode.children.has(char)) {
-        curNode.children.set(char, new Node(curNode.value + char));
+        curNode.children.set(char, {
+          node: new Node(curNode.value + char),
+          cnt: 1,
+        });
+      } else {
+        curNode.children.get(char).cnt++;
       }
-      curNode = curNode.children.get(char);
+      curNode = curNode.children.get(char).node;
     }
   }
 
@@ -25,9 +30,9 @@ class Trie {
     let newArr = [...arr];
     for (let char of str) {
       const children = curNode.children;
-      newArr.push(children.get(char).children.size);
+      newArr.push(children.get(char).cnt);
       if (!children.has(char, newArr)) return null;
-      curNode = children.get(char);
+      curNode = children.get(char).node;
     }
     return newArr;
   }
@@ -41,9 +46,14 @@ function solution(words) {
 
   let answer = 0;
   for (let word of words) {
-    console.log("==>", word);
     const arr = trie.has(word, []);
-    console.log(arr);
+    for (let cnt of arr) {
+      if (cnt > 1) answer++;
+      if (cnt === 1) {
+        answer++;
+        break;
+      }
+    }
   }
   return answer;
 }
