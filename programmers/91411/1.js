@@ -24,20 +24,19 @@ function solution(N, road, K) {
   function dijkstra(v) {
     // console.log(costs)
     visited[v] = 1;
-
     const currentQue = [];
-    const curCosts = Array(N + 1).fill(Infinity);
+
     for (let next = 1; next <= N; ++next) {
       // next에 방문한 적 없고 popped -> next 서로 연결되어 있으면
       // 정점과 연결된 점들 모두 탐색하며 우선순위큐 생성
       if (!q.includes(next) && !visited[next] && board[v][next]) {
-        curCosts[next] = board[v][next];
+        costs[next] = Math.min(costs[next], costs[v] + board[v][next]);
         currentQue.push(next);
       }
     }
     // 이동비용 낮은 순으로 우선순위큐 정렬
     currentQue.sort((a, b) => {
-      if (curCosts[a] < curCosts[b]) return -1;
+      if (costs[a] < costs[b]) return -1;
       return 1;
     });
 
@@ -45,7 +44,6 @@ function solution(N, road, K) {
 
     if (q.length) {
       const popped = q.shift();
-      costs[popped] = Math.min(costs[popped], costs[v] + board[v][popped]);
       dijkstra(popped);
     }
   }
