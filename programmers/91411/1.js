@@ -1,3 +1,19 @@
+/*
+  긴 로직 작성할 때 정확도와 집중력이 떨어진다
+  하나라도 제대로 풀기 위해서, 시간이 충분하다고 생각하고 긴 로직을 끝까지 작성하는 연습을 하자
+  MinHeap 구현하기
+*/
+
+class MinHeap {
+  constructor() {
+    this.heap = [];
+  }
+
+  insert(value) {}
+
+  pop() {}
+}
+
 function solution(N, road, K) {
   // 인접행렬
   const board = Array.from(Array(N + 1), () => Array(N + 1).fill(0));
@@ -24,26 +40,27 @@ function solution(N, road, K) {
   function dijkstra(v) {
     // console.log(costs)
     visited[v] = 1;
-    const currentQue = [];
+    const minheap = new MinHeap();
 
     for (let next = 1; next <= N; ++next) {
       // next에 방문한 적 없고 popped -> next 서로 연결되어 있으면
       // 정점과 연결된 점들 모두 탐색하며 우선순위큐 생성
       if (!q.includes(next) && !visited[next] && board[v][next]) {
         costs[next] = Math.min(costs[next], costs[v] + board[v][next]);
-        currentQue.push(next);
+        minheap.insert({
+          nodeNum: next,
+          cost: costs[next],
+        });
       }
     }
-    // 이동비용 낮은 순으로 우선순위큐 정렬
-    currentQue.sort((a, b) => {
-      if (costs[a] < costs[b]) return -1;
-      return 1;
-    });
 
-    q = [...q, ...currentQue];
+    while (minheap.heap.length) {
+      q.push(minheap.pop());
+    }
 
     if (q.length) {
       const popped = q.shift();
+      costs[popped] = Math.min(costs[popped], costs[v] + board[v][popped]);
       dijkstra(popped);
     }
   }
