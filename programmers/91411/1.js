@@ -41,10 +41,10 @@ class MinHeap {
     let rightIdx = 3;
 
     while (
-      this.heap[curIdx]?.cost < this.heap[leftIdx]?.cost ||
-      this.heap[curIdx]?.cost < this.heap[rightIdx]?.cost
+      this.heap[curIdx]?.cost > this.heap[leftIdx]?.cost ||
+      this.heap[curIdx]?.cost > this.heap[rightIdx]?.cost
     ) {
-      if (this.heap[curIdx] < this.heap[rightIdx]) {
+      if (this.heap[leftIdx]?.cost > this.heap[rightIdx]?.cost) {
         [this.heap[curIdx], this.heap[rightIdx]] = [
           this.heap[rightIdx],
           this.heap[curIdx],
@@ -63,7 +63,6 @@ class MinHeap {
     }
   }
 }
-
 function solution(N, road, K) {
   // 인접행렬
   const board = Array.from(Array(N + 1), () => Array(N + 1).fill(0));
