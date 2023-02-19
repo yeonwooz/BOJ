@@ -14,25 +14,32 @@ function solution(N, road, K) {
 
   // 방문배열
   const visited = Array(N + 1).fill(0);
+
+  // 큐
+  const q = [];
   dijkstra(1);
+
   return costs.filter((x) => x <= K).length;
 
   function dijkstra(v) {
-    const q = [];
-    q.push(v);
-    visited[1] = 1;
+    visited[v] = 1;
 
-    while (q.length) {
-      const popped = q.shift();
-      for (let next = 1; next <= N; ++next) {
-        const nextCost = board[popped][next];
-        if (!visited[next] && nextCost) {
-          // next에 방문한 적 없고 popped -> next 서로 연결되어 있으면
-          visited[next] = 1;
-          costs[next] = Math.min(costs[next], costs[popped] + nextCost);
-          q.push(next);
-        }
+    for (let next = 1; next <= N; ++next) {
+      // next에 방문한 적 없고 popped -> next 서로 연결되어 있으면
+      // 정점과 연결된 점들 모두 탐색하며 우선순위큐 생성
+      if (!visited[next] && board[v][next]) {
+        q.push(next);
       }
+    }
+    if (q.length) {
+      // 비용 높은 순으로 우선순위큐 정렬
+      q.sort((a, b) => {
+        if (costs[a] < costs[b]) return 1;
+        return -1;
+      });
+      const popped = q.pop();
+      costs[popped] = Math.min(costs[popped], costs[v] + board[v][popped]);
+      dijkstra(popped);
     }
   }
 }
