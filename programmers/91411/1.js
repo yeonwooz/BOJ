@@ -9,7 +9,7 @@ class MinHeap {
     this.heap = [null]; // 최소힙이므로 부모가 자식보다 작아야 함
   }
 
-  insert(value) {
+  push(value) {
     this.heap.push(value);
     let childIdx = this.heap.length - 1;
     let parentIdx = Math.floor(childIdx / 2);
@@ -65,51 +65,38 @@ class MinHeap {
 }
 
 function solution(N, road, K) {
-  // 인접행렬
-  const board = Array.from(Array(N + 1), () => Array(N + 1).fill(0));
-  for (let [a, b, c] of road) {
-    if (board[a][b]) board[a][b] = Math.min(board[a][b], c);
-    else board[a][b] = c;
+  const dist = dijkstra(road, N);
+  return dist.filter((x) => x <= K).length;
+}
 
-    if (board[b][a]) board[b][a] = Math.min(board[b][a], c);
-    else board[b][a] = c;
-  }
-  // 비용배열
-  const costs = Array(N + 1).fill(Infinity);
-  costs[1] = 0;
+function dijkstra(road, N) {
+  const heap = new MinHeap(); // 우선순위 큐(힙)
+  heap.push({ node: 1, cost: 0 }); // 1번 마을부터 시작
 
-  // 방문배열
-  const visited = Array(N + 1).fill(0);
+  const dist = [...Array(N + 1)].map(() => Infinity); // 계산하기 편하도록 N+1 길이만큼 리스트 생성
+  dist[1] = 0; // 1번 마을은 무조건 거리가 0
 
-  dijkstra(1);
+  while (heap.heap.length > 1) {
+    // heap이 비어있지 않다면
+    // cost가 가장 낮은 정점을 뽑는다.
+    const { node: current, cost: currentCost } = heap.pop();
 
-  return costs.filter((x) => x <= K).length;
+    for (const [src, dest, cost] of road) {
+      // 루프를 돌며 시작점, 도착점, 비용을 꺼낸다
+      const nextCost = cost + currentCost; // 비용
 
-  function dijkstra(start) {
-    const minheap = new MinHeap();
-    minheap.insert({
-      nodeNum: start,
-      cost: 0,
-    });
-    visited[start] = 1;
-
-    while (minheap.heap.length > 1) {
-      const popped = minheap.pop().nodeNum;
-      for (let next = 1; next <= N; ++next) {
-        // next에 방문한 적 없고 popped -> next 서로 연결되어 있으면
-        // 정점과 연결된 점들 모두 탐색하며 우선순위큐 생성
-        if (!visited[next] && board[popped][next]) {
-          visited[next] = 1;
-          costs[next] = Math.min(
-            costs[next],
-            costs[popped] + board[popped][next]
-          );
-          minheap.insert({
-            nodeNum: next,
-            cost: costs[next],
-          });
-        }
+      // 양방향을 고려하여 작성
+      if (src === current && nextCost < dist[dest]) {
+        // src가 현재 선택된 정점이면서 목적지까지 더 저렴할 경우
+        dist[dest] = nextCost; // 거리를 갱신한다.
+        heap.push({ node: dest, cost: nextCost }); // push
+      } else if (dest == current && nextCost < dist[src]) {
+        // dest가 현재 선택된 정점이면서 목적지까지 더 저렴할 경우
+        dist[src] = nextCost; // 거리를 갱신한다.
+        heap.push({ node: src, cost: nextCost }); // push
       }
     }
   }
+
+  return dist; // 1번 마을부터 각 마을까지의 최단 거리
 }
