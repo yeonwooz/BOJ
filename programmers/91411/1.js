@@ -6,12 +6,62 @@
 
 class MinHeap {
   constructor() {
-    this.heap = [];
+    this.heap = [null]; // 최소힙이므로 부모가 자식보다 작아야 함
   }
 
-  insert(value) {}
+  insert(value) {
+    this.heap.push(value);
+    let childIdx = this.heap.length - 1;
+    let parentIdx = Math.floor(childIdx / 2);
+    while (childIdx > 1) {
+      if (this.heap[parentIdx].cost > this.heap[childIdx].cost) {
+        [this.heap[parentIdx], this.heap[childIdx]] = [
+          this.heap[childIdx],
+          this.heap[parentIdx],
+        ];
+      }
+      childIdx = parentIdx;
+      parentIdx = Math.floor(childIdx / 2);
+    }
+  }
 
-  pop() {}
+  pop() {
+    if (this.heap.length <= 1) return null;
+    if (this.heap.length === 2) return this.heap.pop();
+    const topValue = this.heap[1];
+    this.heap[1] = this.heap.pop();
+    this.heapify();
+    return topValue;
+  }
+
+  heapify() {
+    // 부모가 자식보다 작도록 전체 재정렬
+    let curIdx = 1;
+    let leftIdx = 2;
+    let rightIdx = 3;
+
+    while (
+      this.heap[curIdx]?.cost < this.heap[leftIdx]?.cost ||
+      this.heap[curIdx]?.cost < this.heap[rightIdx]?.cost
+    ) {
+      if (this.heap[curIdx] < this.heap[rightIdx]) {
+        [this.heap[curIdx], this.heap[rightIdx]] = [
+          this.heap[rightIdx],
+          this.heap[curIdx],
+        ];
+        curIdx = rightIdx;
+      } else {
+        [this.heap[curIdx], this.heap[leftIdx]] = [
+          this.heap[leftIdx],
+          this.heap[curIdx],
+        ];
+        curIdx = leftIdx;
+      }
+
+      leftIdx = curIdx * 2;
+      rightIdx = leftIdx + 1;
+    }
+  }
 }
 
 function solution(N, road, K) {
@@ -55,13 +105,12 @@ function solution(N, road, K) {
     }
 
     while (minheap.heap.length) {
-      q.push(minheap.pop());
+      q.push(minheap.pop()?.nodeNum);
     }
 
     if (q.length) {
       const popped = q.shift();
-      costs[popped] = Math.min(costs[popped], costs[v] + board[v][popped]);
-      dijkstra(popped);
+      dijkstra(popped.nodeNum);
     }
   }
 }
