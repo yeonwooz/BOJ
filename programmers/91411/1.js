@@ -63,6 +63,7 @@ class MinHeap {
     }
   }
 }
+
 function solution(N, road, K) {
   // 인접행렬
   const board = Array.from(Array(N + 1), () => Array(N + 1).fill(0));
@@ -87,7 +88,6 @@ function solution(N, road, K) {
   return costs.filter((x) => x <= K).length;
 
   function dijkstra(v) {
-    // console.log(costs)
     visited[v] = 1;
     const minheap = new MinHeap();
 
@@ -103,13 +103,13 @@ function solution(N, road, K) {
       }
     }
 
-    while (minheap.heap.length) {
+    while (minheap.heap.length > 1) {
       q.push(minheap.pop()?.nodeNum);
     }
 
     if (q.length) {
       const popped = q.shift();
-      dijkstra(popped.nodeNum);
+      dijkstra(popped);
     }
   }
 }
