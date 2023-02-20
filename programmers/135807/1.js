@@ -15,11 +15,10 @@ function getGcd(targetArr, counterArr) {
   // targetArr의 gcd가 counterArr 중 하나라도 나눌 수 있으면 0
   // return gcd
   const gcdFunc = (a, b) => (a % b === 0 ? b : gcdFunc(b, a % b));
-  let gcd = 1;
-  for (let i = 0; i < targetArr.length - 1; ++i) {
-    const max = Math.max(targetArr[i], targetArr[i + 1]);
-    const min = Math.min(targetArr[i], targetArr[i + 1]);
-    gcd = Math.max(gcd, gcdFunc(max, min));
+
+  let gcd = 0;
+  for (let i = 0; i < targetArr.length; ++i) {
+    gcd = gcdFunc(gcd, targetArr[i]);
   }
   if (gcd === 1) return 0;
   for (let i = 0; i < counterArr.length; ++i) {
