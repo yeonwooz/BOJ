@@ -1,38 +1,28 @@
 function solution(numbers) {
   let answer = 0;
   for (let cnt = 1; cnt <= numbers.length; ++cnt) {
-    let combs = combination(numbers.split(""), cnt);
-    combs = combs
-      .map((v, i) => {
-        const splitted = v.split("0");
-        let s = "";
-        for (i of splitted) {
-          s += i;
-        }
-        return s;
-      })
-      .filter((v, i) => combs.indexOf(v) === i);
+    let combs = permutaion(numbers.split(""), cnt);
+    combs = combs.filter((v, i) => combs.indexOf(v) === i);
     for (let comb of combs) {
+      if (!comb) continue;
       const strnum = comb;
       if (isPrime(parseInt(strnum))) answer++;
-      if (comb.length > 1) {
-        const reversed = comb.split("").reverse().join("");
-        if (isPrime(parseInt(reversed))) answer++;
-      }
     }
   }
   return answer;
 }
 
-function combination(arr, cnt) {
+function permutaion(arr, cnt) {
   let result = [];
-  if (cnt === 1) return arr.map((v) => v);
+  if (cnt === 1) return arr.map((v) => (v > 0 ? v : ""));
   arr.forEach((value, idx, arr) => {
     const fixed = value;
-    const restArr = arr.slice(idx + 1);
-    const restCombs = combination(restArr, cnt - 1);
-    const combined = restCombs.map((v) => [fixed, ...v]);
-    result.push(...combined);
+    let restArr = arr.filter((_, i) => i != idx);
+    const restCombs = permutaion(restArr, cnt - 1);
+    let combined = restCombs.map((v) => [...v, fixed]);
+    for (let comb of combined) {
+      if (comb.length === cnt) result.push(comb);
+    }
   });
   return result.map((v) => v.join(""));
 }
