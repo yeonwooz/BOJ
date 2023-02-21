@@ -38,6 +38,7 @@ class MinHeap {
   }
 
   heapify() {
+    // 오른쪽 먼저 비교해야 undefined오류 방어 쉬움
     let curIdx = 1;
     let left = 2;
     let right = 3;
@@ -46,18 +47,18 @@ class MinHeap {
       this.heap[curIdx]?.cost > this.heap[left]?.cost ||
       this.heap[curIdx]?.cost > this.heap[right]?.cost
     ) {
-      if (this.heap[curIdx] > this.heap[left]) {
-        [this.heap[curIdx], this.heap[left]] = [
-          this.heap[left],
-          this.heap[curIdx],
-        ];
-        curIdx = left;
-      } else {
+      if (this.heap[curIdx] > this.heap[right]) {
         [this.heap[curIdx], this.heap[right]] = [
           this.heap[right],
           this.heap[curIdx],
         ];
         curIdx = right;
+      } else {
+        [this.heap[curIdx], this.heap[left]] = [
+          this.heap[left],
+          this.heap[curIdx],
+        ];
+        curIdx = left;
       }
       left = curIdx * 2;
       right = left + 1;
@@ -66,12 +67,12 @@ class MinHeap {
 }
 
 function solution(N, road, K) {
-  const costs = dijkstra(N, road, K);
+  const costs = dijkstra(N, road);
   return costs.filter((x) => x <= K).length;
 }
 
-function dijkstra(N, road, K) {
-  road.sort((a, b) => a[2] - b[2]);
+function dijkstra(N, road) {
+  // road.sort((a,b) => a[2] - b[2]) // 불필요
   const heap = new MinHeap();
   const costs = Array(N + 1).fill(Infinity);
   costs[1] = 0;
@@ -84,17 +85,22 @@ function dijkstra(N, road, K) {
     const { node, cost } = heap.pop();
 
     for (const [start, dest, time] of road) {
+      const newCost = cost + time;
       // 이번 경로가 costs[node] 와 연결되어있는지 확인
-      if (start == node) {
+      if (start == node && newCost < costs[dest]) {
         // 현재 노드에서 출발하는 최소시간 갱신
-        costs[dest] = Math.min(costs[dest], cost + time);
-      } else if (dest == node) {
+        costs[dest] = newCost;
+        heap.insert({
+          node: dest,
+          cost: newCost,
+        });
+      } else if (dest == node && newCost < costs[start]) {
         // 현재 노드에 도착하는 최소시간 갱신
-        costs[start] = Math.min(costs[start], cost + time);
-      } else {
-        // 노드간 연결관계 파악 후 각 노드에 도착하는 최소시간 갱신
-        costs[dest] = Math.min(costs[dest], costs[start] + time);
-        costs[start] = Math.min(costs[start], costs[dest] + time);
+        costs[start] = newCost;
+        heap.insert({
+          node: start,
+          cost: newCost,
+        });
       }
     }
   }
