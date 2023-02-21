@@ -1,24 +1,27 @@
 function solution(gems) {
   // gems length 10만 -> O(N), O(NlogN) 탐색 허용
-  const typeCnt = [...new Set(gems)].length;
+  const cnt = new Set(gems).size;
+  const box = new Map();
+  box.set(gems[0], 1);
   const answers = []; //i,j
   let i = 0;
   let j = 0;
+
   while (0 <= i && i <= j && j < gems.length) {
-    const sliced = gems.slice(i, j + 1);
-    const curCnt = [...new Set(sliced)].length;
-    if (curCnt === typeCnt) {
+    if (box.size === cnt) {
       answers.push([i + 1, j + 1]);
+      if (box.get(gems[i]) > 1) {
+        box.set(gems[i], box.get(gems[i]) - 1);
+      } else {
+        box.delete(gems[i]);
+      }
+      i++;
     }
-    if (i + 1 < j && gems[i] === gems[i + 1]) {
-      i++;
-    } else if (i < j && gems[i] === gems[j]) {
-      i++;
-    } else {
+    if (box.size < cnt) {
       j++;
+      box.set(gems[j], box.get(gems[j]) ? box.get(gems[j]) + 1 : 1);
     }
   }
-  console.log(answers);
   answers.sort((a, b) =>
     a[1] - a[0] < b[1] - b[0]
       ? -1
