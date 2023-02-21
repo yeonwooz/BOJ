@@ -88,6 +88,7 @@ function solution(maps) {
 
   function BFS(v, dest, time, visited) {
     const heap = new MinHeap();
+    visited[v[0]][v[1]] = 1;
     heap.push({
       node: v, // 레버의 [i,j]
       cost: time,
@@ -96,7 +97,6 @@ function solution(maps) {
     while (!heap.isEmpty()) {
       const { node, cost } = heap.pop();
       const [i, j] = node;
-      visited[i][j] = 1;
       if (dest === "s") {
         if (i === S[0] && j === S[1]) {
           startToLeverTime = Math.min(startToLeverTime, cost);
@@ -120,6 +120,7 @@ function solution(maps) {
           !visited[nx][ny] &&
           maps[nx][ny] !== "X"
         ) {
+          visited[nx][ny] = 1;
           heap.push({
             node: [nx, ny],
             cost: cost + 1,
@@ -131,7 +132,6 @@ function solution(maps) {
 
   BFS(L, "s", 0, visited1);
   if (startToLeverTime === 10001) return -1;
-  console.log("=========");
   BFS(L, "e", 0, visited2);
   if (leverToExitTime === 10001) return -1;
   return startToLeverTime + leverToExitTime;
