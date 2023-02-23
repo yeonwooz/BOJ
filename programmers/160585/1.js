@@ -40,7 +40,12 @@ function solution(board) {
       }
       return;
     }
-    if (checkDiagonal(i, j) || checkRowDone(i, j) || checkColDone(i, j)) {
+    if (
+      checkLeftDiagonal(i, j) ||
+      checkRightDiagonal(i, j) ||
+      checkRowDone(i, j) ||
+      checkColDone(i, j)
+    ) {
       if (check()) {
         if (cnt !== shapeCnt) {
           error = true;
@@ -67,22 +72,39 @@ function solution(board) {
       }
     }
   }
-
-  function checkDiagonal(i, j) {
+  function checkRightDiagonal(i, j) {
     const shape = board2[i][j];
     if (shape === ".") return false;
-
-    const dr = [-1, -1, 1, 1];
-    const dc = [-1, 1, 1, -1];
-    for (let idx = 0; idx < 4; ++idx) {
+    let cnt = 0;
+    const dr = [-1, 1];
+    const dc = [1, -1];
+    for (let idx = 0; idx < 2; ++idx) {
       const nr = i + dr[idx];
       const nc = j + dc[idx];
       if (0 <= nr && nr < 3 && 0 <= nc && nc < 3) {
         if (board2[nr][nc] !== shape) return false;
+        cnt++;
+      }
+    }
+    return cnt === 3;
+  }
+
+  function checkLeftDiagonal(i, j) {
+    const shape = board2[i][j];
+    if (shape === ".") return false;
+    let cnt = 0;
+    const dr = [-1, 1];
+    const dc = [-1, 1];
+    for (let idx = 0; idx < 2; ++idx) {
+      const nr = i + dr[idx];
+      const nc = j + dc[idx];
+      if (0 <= nr && nr < 3 && 0 <= nc && nc < 3) {
+        if (board2[nr][nc] !== shape) return false;
+        cnt++;
       }
     }
 
-    return true;
+    return cnt === 3;
   }
 
   function checkRowDone(i, j) {
