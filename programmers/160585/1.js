@@ -1,31 +1,61 @@
 function solution(board) {
   board = board.map((row) => row.split(""));
+  let shapeCnt = 0;
+  for (let i = 0; i < 3; ++i) {
+    for (let j = 0; j < 3; ++j) {
+      if (board[i][j] !== ".") shapeCnt++;
+    }
+  }
+  // console.log(shapeCnt, board)
+  // console.log()
   const visited = Array.from(Array(3), () => [0, 0, 0]); //
   const board2 = Array.from(Array(3), () => [".", ".", "."]); //
   if (check()) return 1;
-  let answer = 0;
+  let isSame = false;
+  let error = false;
   for (let i = 0; i < 3; ++i) {
     for (let j = 0; j < 3; ++j) {
-      if (!answer && board[i][j] === "O") {
+      if (!error && !isSame && board[i][j] === "O") {
         visited[i][j] = 1;
         board2[i][j] = "O";
-        DFS(i, j, 0, "O");
+        DFS(i, j, 1, "O");
         visited[i][j] = 0;
         board2[i][j] = ".";
       }
     }
   }
-  return answer;
+  return error ? 0 : isSame ? 1 : 0;
 
   function DFS(i, j, cnt, shape) {
+    // console.log(cnt, board2)
     if (check()) {
-      answer = 1;
+      if (cnt !== shapeCnt) {
+        error = true;
+      } else {
+        isSame = true;
+      }
       return;
     }
-
-    if (cnt === 9) return;
-    if (checkRowDone(i, j)) return;
-    if (checkColDone(i, j)) return;
+    if (cnt === 9) {
+      if (check()) {
+        if (cnt !== shapeCnt) {
+          error = true;
+        } else {
+          isSame = true;
+        }
+      }
+      return;
+    }
+    if (checkRowDone(i, j) || checkColDone(i, j)) {
+      if (check()) {
+        if (cnt !== shapeCnt) {
+          error = true;
+        } else {
+          isSame = true;
+        }
+      }
+      return;
+    }
 
     for (let nr = 0; nr < 3; ++nr) {
       for (let nc = 0; nc < 3; ++nc) {
