@@ -1,11 +1,15 @@
 function solution(board) {
   board = board.map((row) => row.split(""));
   let shapeCnt = 0;
+  let stack = 0;
   for (let i = 0; i < 3; ++i) {
     for (let j = 0; j < 3; ++j) {
       if (board[i][j] !== ".") shapeCnt++;
+      if (board[i][j] === "O") stack++;
+      else if (board[i][j] === "X") stack--;
     }
   }
+  if (stack >= 2 || stack < 0) return 0;
   // console.log(shapeCnt, board)
   // console.log()
   const visited = Array.from(Array(3), () => [0, 0, 0]); //
