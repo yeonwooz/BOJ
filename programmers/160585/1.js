@@ -1,0 +1,73 @@
+function solution(board) {
+  board = board.map((row) => row.split(""));
+  const visited = Array.from(Array(3), () => [0, 0, 0]); //
+  const board2 = Array.from(Array(3), () => [".", ".", "."]); //
+  if (check()) return 1;
+  let answer = 0;
+  for (let i = 0; i < 3; ++i) {
+    for (let j = 0; j < 3; ++j) {
+      if (!answer && board[i][j] === "O") {
+        visited[i][j] = 1;
+        board2[i][j] = "O";
+        DFS(i, j, 0, "O");
+        visited[i][j] = 0;
+        board2[i][j] = ".";
+      }
+    }
+  }
+  return answer;
+
+  function DFS(i, j, cnt, shape) {
+    if (check()) {
+      answer = 1;
+      return;
+    }
+
+    if (cnt === 9) return;
+    if (checkRowDone(i, j)) return;
+    if (checkColDone(i, j)) return;
+
+    for (let nr = 0; nr < 3; ++nr) {
+      for (let nc = 0; nc < 3; ++nc) {
+        if (!visited[nr][nc]) {
+          const nextShape = shape === "O" ? "X" : "O";
+          // console.log('nr,nc',board[nr][nc],nextShape )
+          if (board[nr][nc] === nextShape) {
+            board2[nr][nc] = nextShape;
+            visited[nr][nc] = 1;
+            DFS(nr, nc, cnt + 1, nextShape);
+            visited[nr][nc] = 0;
+            board2[nr][nc] = ".";
+          }
+        }
+      }
+    }
+  }
+
+  function checkRowDone(i, j) {
+    const shape = board2[i][j];
+    if (shape === ".") return false;
+    for (let r = 0; r < 3; ++r) {
+      if (board2[r][j] !== shape) return false;
+    }
+    return true;
+  }
+
+  function checkColDone(i, j) {
+    const shape = board2[i][j];
+    if (shape === ".") return false;
+    for (let c = 0; c < 3; ++c) {
+      if (board2[i][c] !== shape) return false;
+    }
+    return true;
+  }
+
+  function check() {
+    for (let i = 0; i < 3; ++i) {
+      for (let j = 0; j < 3; ++j) {
+        if (board[i][j] !== board2[i][j]) return false;
+      }
+    }
+    return true;
+  }
+}
