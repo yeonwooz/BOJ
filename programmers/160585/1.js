@@ -15,7 +15,7 @@ function solution(board) {
   let error = false;
   for (let i = 0; i < 3; ++i) {
     for (let j = 0; j < 3; ++j) {
-      if (!error && !isSame && board[i][j] === "O") {
+      if (!error && board[i][j] === "O") {
         visited[i][j] = 1;
         board2[i][j] = "O";
         DFS(i, j, 1, "O");
@@ -29,24 +29,18 @@ function solution(board) {
   function DFS(i, j, cnt, shape) {
     // console.log(cnt, board2)
     if (check()) {
-      if (cnt !== shapeCnt) {
-        error = true;
-      } else {
+      if (cnt === shapeCnt) {
         isSame = true;
       }
       return;
     }
     if (cnt === 9) {
-      if (check()) {
-        if (cnt !== shapeCnt) {
-          error = true;
-        } else {
-          isSame = true;
-        }
+      if (check() && cnt === shapeCnt) {
+        isSame = true;
       }
       return;
     }
-    if (checkRowDone(i, j) || checkColDone(i, j)) {
+    if (checkDiagonal(i, j) || checkRowDone(i, j) || checkColDone(i, j)) {
       if (check()) {
         if (cnt !== shapeCnt) {
           error = true;
@@ -72,6 +66,23 @@ function solution(board) {
         }
       }
     }
+  }
+
+  function checkDiagonal(i, j) {
+    const shape = board2[i][j];
+    if (shape === ".") return false;
+
+    const dr = [-1, -1, 1, 1];
+    const dc = [-1, 1, 1, -1];
+    for (let idx = 0; idx < 4; ++idx) {
+      const nr = i + dr[idx];
+      const nc = j + dc[idx];
+      if (0 <= nr && nr < 3 && 0 <= nc && nc < 3) {
+        if (board2[nr][nc] !== shape) return false;
+      }
+    }
+
+    return true;
   }
 
   function checkRowDone(i, j) {
