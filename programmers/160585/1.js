@@ -1,25 +1,24 @@
 function solution(board) {
   board = board.map((row) => row.split(""));
-  let shapeCnt = 0;
-  let stack = 0;
+  let ocnt = 0;
+  let xcnt = 0;
   for (let i = 0; i < 3; ++i) {
     for (let j = 0; j < 3; ++j) {
-      if (board[i][j] !== ".") shapeCnt++;
-      if (board[i][j] === "O") stack++;
-      else if (board[i][j] === "X") stack--;
+      if (board[i][j] === "O") ocnt++;
+      else if (board[i][j] === "X") xcnt++;
     }
   }
-  if (stack >= 2 || stack < 0) return 0;
-  // console.log(shapeCnt, board)
-  // console.log()
+  if (xcnt > ocnt || ocnt > xcnt + 1) return 0;
+  if (ocnt === xcnt && !ocnt) return 1;
+
   const visited = Array.from(Array(3), () => [0, 0, 0]); //
   const board2 = Array.from(Array(3), () => [".", ".", "."]); //
-  if (check()) return 1;
+
   let isSame = false;
   let error = false;
   for (let i = 0; i < 3; ++i) {
     for (let j = 0; j < 3; ++j) {
-      if (!error && board[i][j] === "O") {
+      if (board[i][j] === "O") {
         visited[i][j] = 1;
         board2[i][j] = "O";
         DFS(i, j, 1, "O");
@@ -31,31 +30,22 @@ function solution(board) {
   return error ? 0 : isSame ? 1 : 0;
 
   function DFS(i, j, cnt, shape) {
-    // console.log(cnt, board2)
     if (check()) {
-      if (cnt === shapeCnt) {
+      if (cnt === xcnt + ocnt) {
         isSame = true;
       }
-      return;
     }
-    if (cnt === 9) {
-      if (check() && cnt === shapeCnt) {
-        isSame = true;
-      }
-      return;
-    }
+    // console.log(error, isSame, cnt, board2)
+    if (cnt === 9) return;
+
     if (
       checkLeftDiagonal(i, j) ||
       checkRightDiagonal(i, j) ||
       checkRowDone(i, j) ||
       checkColDone(i, j)
     ) {
-      if (check()) {
-        if (cnt !== shapeCnt) {
-          error = true;
-        } else {
-          isSame = true;
-        }
+      if (cnt !== xcnt + ocnt) {
+        error = true;
       }
       return;
     }
@@ -64,10 +54,9 @@ function solution(board) {
       for (let nc = 0; nc < 3; ++nc) {
         if (!visited[nr][nc]) {
           const nextShape = shape === "O" ? "X" : "O";
-          // console.log('nr,nc',board[nr][nc],nextShape )
           if (board[nr][nc] === nextShape) {
-            board2[nr][nc] = nextShape;
             visited[nr][nc] = 1;
+            board2[nr][nc] = nextShape;
             DFS(nr, nc, cnt + 1, nextShape);
             visited[nr][nc] = 0;
             board2[nr][nc] = ".";
@@ -76,39 +65,27 @@ function solution(board) {
       }
     }
   }
+
   function checkRightDiagonal(i, j) {
     const shape = board2[i][j];
     if (shape === ".") return false;
-    let cnt = 0;
-    const dr = [-1, 1];
-    const dc = [1, -1];
-    for (let idx = 0; idx < 2; ++idx) {
-      const nr = i + dr[idx];
-      const nc = j + dc[idx];
-      if (0 <= nr && nr < 3 && 0 <= nc && nc < 3) {
-        if (board2[nr][nc] !== shape) return false;
-        cnt++;
-      }
+    if ((i === 0 && j === 2) || (i === 1 && j === 1) || (i === 2 && j === 0)) {
+      if (board2[0][2] !== shape) return false;
+      if (board2[1][1] !== shape) return false;
+      if (board2[2][0] !== shape) return false;
+      return true;
     }
-    return cnt === 3;
+    return false;
   }
 
   function checkLeftDiagonal(i, j) {
     const shape = board2[i][j];
     if (shape === ".") return false;
-    let cnt = 0;
-    const dr = [-1, 1];
-    const dc = [-1, 1];
-    for (let idx = 0; idx < 2; ++idx) {
-      const nr = i + dr[idx];
-      const nc = j + dc[idx];
-      if (0 <= nr && nr < 3 && 0 <= nc && nc < 3) {
-        if (board2[nr][nc] !== shape) return false;
-        cnt++;
-      }
+    if (i !== j) return false;
+    for (let idx = 0; idx < 3; ++idx) {
+      if (board2[idx][idx] !== shape) return false;
     }
-
-    return cnt === 3;
+    return true;
   }
 
   function checkRowDone(i, j) {
