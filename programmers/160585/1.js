@@ -10,7 +10,8 @@ function solution(board) {
   }
   if (xcnt > ocnt || ocnt > xcnt + 1) return 0;
   if (ocnt === xcnt && !ocnt) return 1;
-
+  // console.log(xcnt+ocnt, board)
+  // console.log()
   const visited = Array.from(Array(3), () => [0, 0, 0]); //
   const board2 = Array.from(Array(3), () => [".", ".", "."]); //
 
@@ -33,10 +34,15 @@ function solution(board) {
     if (check()) {
       if (cnt === xcnt + ocnt) {
         isSame = true;
+        error = false;
       }
     }
-    // console.log(error, isSame, cnt, board2)
-    if (cnt === 9) return;
+    // if (cnt<6) console.log(error, isSame, cnt, board2)
+    if (cnt === 9) {
+      // console.log(error, isSame, cnt, board2)
+      if (isSame) error = false;
+      return;
+    }
 
     if (
       checkLeftDiagonal(i, j) ||
