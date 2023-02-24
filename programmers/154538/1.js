@@ -1,16 +1,13 @@
 function solution(x, y, n) {
-  let minCnt = Infinity;
-  recur(y, 0);
-  return minCnt === Infinity ? -1 : minCnt;
-
-  function recur(num, cnt) {
-    if (num < x) return;
-    if (num === x) {
-      if (cnt < minCnt) minCnt = cnt;
-      return;
-    }
-    recur(num - n, cnt + 1);
-    if (num % 2 === 0) recur(num / 2, cnt + 1);
-    if (num % 3 === 0) recur(num / 3, cnt + 1);
+  const dp = Array(3000001).fill(Infinity);
+  dp[y] = 0;
+  for (let i = y; i >= x; --i) {
+    const case1 = dp[i + n] + 1;
+    const case2 = dp[i * 2] + 1;
+    const case3 = dp[i * 3] + 1;
+    const minCase = Math.min(case1, case2, case3);
+    if (minCase !== Infinity) dp[i] = minCase;
   }
+
+  return dp[x] === Infinity ? -1 : dp[x];
 }
