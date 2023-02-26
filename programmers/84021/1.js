@@ -111,11 +111,41 @@ function solution(game_board, table) {
       puzzleDirection = 2; // bottom
     else if (puzzleDiff[0] === 0 && puzzleDiff[1] < 0) puzzleDirection = 3; // left
 
-    if (routeDirection !== puzzleDirection) {
-      for (let idx = 1; idx < puzzleLen; ++idx) {
-        // puzzle[idx] = []
+    let rotateCnt = puzzleDirection - routeDirection;
+
+    if (rotateCnt < 0) {
+      rotateCnt += 4;
+    }
+
+    for (let idx = 1; idx < puzzleLen; ++idx) {
+      const [prevI, prevJ] = puzzle[idx - 1];
+      const [curI, curJ] = puzzle[idx];
+
+      const diff = [curI - prevI, curJ - prevJ];
+
+      let dir = 0;
+      if (diff[0] < 0 && diff[1] === 0) dir = 0; // top
+      else if (diff[0] === 0 && diff[1] > 0) dir = 1; // right
+      else if (diff[0] > 0 && diff[1] === 0) dir = 2; // bottom
+      else if (diff[0] === 0 && diff[1] < 0) dir = 3; // left
+
+      console.log("변환전", puzzle[idx], dir);
+      dir = (dir + rotateCnt) % 4;
+      puzzle[idx][0] = dr[dir] + puzzle[idx - 1][0];
+      puzzle[idx][1] = dc[dir] + puzzle[idx - 1][1];
+
+      console.log("변환후", puzzle[idx], dir);
+
+      if (
+        route[idx][0] - route[idx - 1][0] !==
+          puzzle[idx][0] - puzzle[idx - 1][0] ||
+        route[idx][1] - route[idx - 1][1] !==
+          puzzle[idx][1] - puzzle[idx - 1][1]
+      ) {
+        return false;
       }
     }
+
     return true;
   }
 }
