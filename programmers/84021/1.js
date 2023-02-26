@@ -22,12 +22,13 @@ function solution(game_board, table) {
     }
   }
   console.log(puzzles);
-
   let answer = 0;
   for (const route of boardRoutes) {
     // 이 루트를 채울 수 있는 puzzle이 있다면 루트 길이만큼 보드를 채우고 해당 퍼즐조각은 제거
     for (let idx = 0; idx < puzzles.size; ++idx) {
+      console.log("checked:", idx);
       if (checkAllDirections(route, puzzles.get(idx))) {
+        console.log("===check DONE===");
         answer += route.length;
         puzzles.set(idx, null);
         break;
@@ -83,69 +84,50 @@ function solution(game_board, table) {
     const puzzleLen = puzzle.length;
     if (routeLen !== puzzleLen) return false;
     if (routeLen === 1) return true;
-    console.log("check:");
+
     console.log(route);
     console.log(puzzle);
 
-    // 보드경로 시작방향 찾기
-    const [headI, headJ] = route[0];
-    const [nextI, nextJ] = route[1];
-    const diff = [nextI - headI, nextJ - headJ];
+    let foundSame = false;
+    for (let rotateCnt = 0; rotateCnt < 4; ++rotateCnt) {
+      // 이번 회전카운트에 대하여
 
-    let routeDirection = 0;
-    if (diff[0] < 0 && diff[1] === 0) routeDirection = 0; // top
-    else if (diff[0] === 0 && diff[1] > 0) routeDirection = 1; // right
-    else if (diff[0] > 0 && diff[1] === 0) routeDirection = 2; // bottom
-    else if (diff[0] === 0 && diff[1] < 0) routeDirection = 3; // left
+      let isSame = true;
+      for (let idx = 1; idx < puzzleLen; ++idx) {
+        const [prevI, prevJ] = puzzle[idx - 1];
+        const [curI, curJ] = puzzle[idx];
 
-    // 퍼즐 시작방향 찾기
-    const [puzzleHeadI, puzzleHeadJ] = puzzle[0];
-    const [puzzleNextI, puzzleNextJ] = puzzle[1];
-    const puzzleDiff = [puzzleNextI - puzzleHeadI, puzzleNextJ - puzzleHeadJ];
+        const diff = [curI - prevI, curJ - prevJ];
 
-    let puzzleDirection = 0;
-    if (puzzleDiff[0] < 0 && puzzleDiff[1] === 0) puzzleDirection = 0; // top
-    else if (puzzleDiff[0] === 0 && puzzleDiff[1] > 0)
-      puzzleDirection = 1; // right
-    else if (puzzleDiff[0] > 0 && puzzleDiff[1] === 0)
-      puzzleDirection = 2; // bottom
-    else if (puzzleDiff[0] === 0 && puzzleDiff[1] < 0) puzzleDirection = 3; // left
+        let dir = 0;
+        if (diff[0] < 0 && diff[1] === 0) dir = 0; // top
+        else if (diff[0] === 0 && diff[1] > 0) dir = 1; // right
+        else if (diff[0] > 0 && diff[1] === 0) dir = 2; // bottom
+        else if (diff[0] === 0 && diff[1] < 0) dir = 3; // left
 
-    let rotateCnt = puzzleDirection - routeDirection;
+        console.log("변환전", puzzle[idx], dir);
+        dir = (dir + rotateCnt) % 4;
+        puzzle[idx][0] = dr[dir] + puzzle[idx - 1][0];
+        puzzle[idx][1] = dc[dir] + puzzle[idx - 1][1];
 
-    if (rotateCnt < 0) {
-      rotateCnt += 4;
-    }
+        console.log("변환후", puzzle[idx], dir);
 
-    for (let idx = 1; idx < puzzleLen; ++idx) {
-      const [prevI, prevJ] = puzzle[idx - 1];
-      const [curI, curJ] = puzzle[idx];
-
-      const diff = [curI - prevI, curJ - prevJ];
-
-      let dir = 0;
-      if (diff[0] < 0 && diff[1] === 0) dir = 0; // top
-      else if (diff[0] === 0 && diff[1] > 0) dir = 1; // right
-      else if (diff[0] > 0 && diff[1] === 0) dir = 2; // bottom
-      else if (diff[0] === 0 && diff[1] < 0) dir = 3; // left
-
-      console.log("변환전", puzzle[idx], dir);
-      dir = (dir + rotateCnt) % 4;
-      puzzle[idx][0] = dr[dir] + puzzle[idx - 1][0];
-      puzzle[idx][1] = dc[dir] + puzzle[idx - 1][1];
-
-      console.log("변환후", puzzle[idx], dir);
-
-      if (
-        route[idx][0] - route[idx - 1][0] !==
-          puzzle[idx][0] - puzzle[idx - 1][0] ||
-        route[idx][1] - route[idx - 1][1] !==
-          puzzle[idx][1] - puzzle[idx - 1][1]
-      ) {
-        return false;
+        if (
+          route[idx][0] - route[idx - 1][0] !==
+            puzzle[idx][0] - puzzle[idx - 1][0] ||
+          route[idx][1] - route[idx - 1][1] !==
+            puzzle[idx][1] - puzzle[idx - 1][1]
+        ) {
+          isSame = false;
+          break;
+        }
+      }
+      if (isSame) {
+        foundSame = true;
+        break;
       }
     }
 
-    return true;
+    return foundSame;
   }
 }
