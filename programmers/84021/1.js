@@ -21,6 +21,7 @@ function solution(game_board, table) {
       puzzles.set(puzzles.size, tableDFS(i, j, []));
     }
   }
+  console.log(puzzles);
 
   let answer = 0;
   for (const route of boardRoutes) {
@@ -28,7 +29,7 @@ function solution(game_board, table) {
     for (let idx = 0; idx < puzzles.size; ++idx) {
       if (checkAllDirections(route, puzzles.get(idx))) {
         answer += route.length;
-        puzzles.delete(idx);
+        puzzles.set(idx, null);
         break;
       }
     }
