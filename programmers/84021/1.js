@@ -131,3 +131,22 @@ function solution(game_board, table) {
     return foundSame;
   }
 }
+
+function getRotatedTable(table) {
+    // 90도 회전
+    const arr = new Array(table[0].length).fill(0).map(_ = [])
+
+    for (let i = table.length -1; i >= 0; --i ) {
+        for (let j = 0; j < table[0].length; ++j) {
+            arr[j].push(table[i][j])
+        } 
+    }
+    
+    return arr
+}
+
+function isMatch(spot, puzzle) {
+    for (let i = 1; i < spot.length; ++i) {
+        
+    }
+}
