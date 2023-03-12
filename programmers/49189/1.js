@@ -4,8 +4,18 @@ function solution(n, edge) {
   visited[1] = 1;
   dists[1] = 0;
   BFS();
-  dists = dists.filter((v) => v !== Infinity);
-  return dists.filter((v) => v === Math.max(...dists)).length;
+  let cnt = 0;
+  let max = 0;
+  for (let i = 0; i < dists.length; ++i) {
+    if (dists[i] === Infinity) continue;
+    if (dists[i] > max) {
+      max = dists[i];
+      cnt = 1;
+    } else if (dists[i] === max) {
+      cnt++;
+    }
+  }
+  return cnt;
 
   function BFS() {
     const q = [];
