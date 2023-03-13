@@ -1,33 +1,35 @@
 function solution(board, skill) {
-  const destroyed = new Set();
+  const tmp = Array.from(Array(board.length + 1), () =>
+    Array(board[0].length + 1).fill(0)
+  );
+
   for (const [type, r1, c1, r2, c2, degree] of skill) {
-    if (type === 1) {
-      attack(r1, c1, r2, c2, degree);
-    } else {
-      heal(r1, c1, r2, c2, degree);
-    }
-  }
-  return board.length * board[0].length - destroyed.size;
+    const d = type === 2 ? degree : -1 * degree;
 
-  function attack(r1, c1, r2, c2, degree) {
-    for (let i = r1; i <= r2; ++i) {
-      for (let j = c1; j <= c2; ++j) {
-        board[i][j] -= degree;
-        if (board[i][j] < 1) {
-          destroyed.add(i.toString() + "-" + j.toString());
-        }
-      }
+    tmp[r1][c1] += d;
+    tmp[r1][c2 + 1] -= d;
+    tmp[r2 + 1][c1] -= d;
+    tmp[r2 + 1][c2 + 1] += d;
+  }
+
+  for (let j = 0; j < tmp[0].length; ++j) {
+    for (let i = 1; i < tmp.length; ++i) {
+      tmp[i][j] += tmp[i - 1][j];
     }
   }
 
-  function heal(r1, c1, r2, c2, degree) {
-    for (let i = r1; i <= r2; ++i) {
-      for (let j = c1; j <= c2; ++j) {
-        board[i][j] += degree;
-        if (board[i][j] >= 1) {
-          destroyed.delete(i.toString() + "-" + j.toString());
-        }
-      }
+  for (let i = 0; i < tmp.length; ++i) {
+    for (let j = 1; j < tmp[0].length; ++j) {
+      tmp[i][j] += tmp[i][j - 1];
     }
   }
+
+  let cnt = 0;
+  for (let i = 0; i < board.length; ++i) {
+    for (let j = 0; j < board[0].length; ++j) {
+      if (board[i][j] + tmp[i][j] > 0) cnt++;
+    }
+  }
+
+  return cnt;
 }
