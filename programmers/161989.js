@@ -1,14 +1,10 @@
 function solution(n, m, section) {
-  let first = section[0];
-  let last = section[section.length - 1];
-  let cur = first;
-  let cnt = 0;
-  while (cur <= n) {
-    if (cur > last) {
-      break;
+    let cnt = 0
+    let max = 0
+    for (let i = 0; i < section.length; ++i) {
+        if (section[i] < max) continue
+        cnt++   
+        max = section[i] + m
     }
-    cur += m;
-    cnt++;
-  }
-  return cnt;
-}
+    return cnt
+} 
