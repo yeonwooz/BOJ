@@ -37,7 +37,7 @@ function solution(board) {
       cnt++;
       const popped = q.shift();
       const { i, j, cost } = popped;
-
+      console.log(i, j, cost);
       if (i === end[0] && j === end[1] && cost < answer) {
         answer = cost;
       }
@@ -46,9 +46,10 @@ function solution(board) {
         const n_r = i + dr[idx];
         const n_c = j + dc[idx];
 
-        let slide = 1;
+        let slide = 0;
 
         while (
+          slide++ &&
           0 <= n_r + slide * dr[idx] &&
           n_r + slide * dr[idx] < n &&
           0 <= n_c + slide * dc[idx] &&
@@ -57,14 +58,21 @@ function solution(board) {
           !visited[n_r + slide * dr[idx]][n_c + slide * dc[idx]]
         ) {
           visited[n_r + slide * dr[idx]][n_c + slide * dc[idx]] = 1;
-          slide++;
         }
 
-        q.push({
-          i: n_r + [slide - 1] * dr[idx],
-          j: n_c + [slide - 1] * dc[idx],
-          cost: cost + 1,
-        });
+        if (
+          0 <= n_r + slide * dr[idx] &&
+          n_r + slide * dr[idx] < n &&
+          0 <= n_c + slide * dc[idx] &&
+          n_c + slide * dc[idx] < m &&
+          board[n_r + slide * dr[idx]][n_c + slide * dc[idx]] !== "D"
+        ) {
+          q.push({
+            i: n_r + slide * dr[idx],
+            j: n_c + slide * dc[idx],
+            cost: cost + 1,
+          });
+        }
       }
     }
   }
