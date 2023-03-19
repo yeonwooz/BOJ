@@ -1,75 +1,67 @@
+// https://comdoc.tistory.com/entry/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-%EB%A6%AC%EC%BD%94%EC%B3%87-%EB%A1%9C%EB%B4%87
 function solution(board) {
-    const n = board.length;
-    const m = board[0].length;
-    let start = [];
-    let end = [];
-    for (let i = 0; i < n; ++i) {
-        for (let j = 0; j < m; ++j) {
-            if (board[i][j] === "R") {
-                start = [i, j];
-            } else if (board[i][j] === "G") {
-                end = [i, j];
-            }
+  const n = board.length;
+  const m = board[0].length;
+  const q = [];
+  for (let i = 0; i < n; ++i) {
+    for (let j = 0; j < m; ++j) {
+      if (board[i][j] === "R") {
+        q.push([i, j, 0]);
+      }
+    }
+  }
+
+  // const dr = [-1, 1, 0, 0];  // 상하좌우
+  // const dc = [0, 0, -1, 1];
+  const visited = new Set();
+  let answer = Infinity;
+
+  return BFS();
+
+  return answer === Infinity ? -1 : answer;
+
+  function BFS() {
+    while (q.length) {
+      const [i, j, cnt] = q.shift();
+      const element = i.toString() + "-" + j.toString();
+      if (visited.has(element)) continue;
+      if (board[i][j] === "G") {
+        return cnt;
+      }
+      visited.add(element);
+
+      for (const [diff_x, diff_y] of [
+        [0, 1],
+        [0, -1],
+        [1, 0],
+        [-1, 0],
+      ]) {
+        let cur_i = i;
+        let cur_j = j;
+        let n_i = cur_i;
+        let n_j = cur_j;
+
+        while (1) {
+          n_i = cur_i + diff_x;
+          n_j = cur_j + diff_y;
+
+          if (
+            0 <= n_i &&
+            n_i < n &&
+            0 <= n_j &&
+            n_j < m &&
+            board[n_i][n_j] !== "D"
+          ) {
+            cur_i = n_i;
+            cur_j = n_j;
+            continue;
+          }
+          q.push([cur_i, cur_j, cnt + 1]);
+          break;
         }
+      }
     }
 
-    const dr = [-1, 1, 0, 0];  // 상하좌우
-    const dc = [0, 0, -1, 1];
-    // const visitedCorner = Array.from(Array(n), () => Array(m).fill(0));
-    let answer = Infinity;
-    DFS(start[0], start[1], 0, Array.from(Array(n), () => Array(m).fill(0)))
-    
-
-    
-    return answer === Infinity ? -1 : answer
-    
-    function DFS(cur_r, cur_c, moveCnt, visitedCorner) {
-        if (board[cur_r][cur_c] === 'G' && moveCnt < answer) {
-            answer = moveCnt
-            return 
-        }          
-        
-        for (let idx = 0; idx < 4; ++idx) {
-            const [moved, pos_r, pos_c] = move(cur_r, cur_c, idx)
-            if (visitedCorner[pos_r][pos_c] === 1) continue
-            if (moved) {
-                visitedCorner[pos_r][pos_c] = 1
-                DFS(pos_r, pos_c, moveCnt+1, visitedCorner)
-                visitedCorner[pos_r][pos_c] = 0
-            }
-        }        
-    }
-    
-    function move(cur_i, cur_j, idx) {
-        let pos_r = cur_i
-        let pos_c = cur_j
-        
-        const n_r = cur_i + dr[idx];
-        const n_c = cur_j + dc[idx];
-
-        let slide = -1;
-        let moved = false
-        while (
-          0 <= n_r + slide * dr[idx] &&
-          n_r + slide * dr[idx] < n &&
-          0 <= n_c + slide * dc[idx] &&
-          n_c + slide * dc[idx] < m &&
-          board[n_r + slide * dr[idx]][n_c + slide * dc[idx]] !== "D" 
-        ) {
-            moved = true
-            slide++
-        }        
-        
-        if (moved) {
-            slide--
-            pos_r = n_r + slide * dr[idx]
-            pos_c = n_c + slide * dc[idx]       
-        }
-        
-        return [moved, pos_r, pos_c]
-    }    
-    
+    return -1;
+  }
 }
-
-
-
