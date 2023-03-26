@@ -1,3 +1,5 @@
+// https://school.programmers.co.kr/questions/46214?referer=collection-of-questions 참고
+
 function solution(picks, minerals) {
   const table = {
     dia: {
@@ -16,50 +18,30 @@ function solution(picks, minerals) {
       stone: 1,
     },
   };
+  const tools = ["dia", "iron", "stone"];
+  const result = [];
 
-  let answer = Infinity;
+  function recur(picks, arr, count) {
+    if (picks.every(el => el === 0)) return result.push(count); // 곡괭이 개수 0이면 리턴
 
-  for (const perm of permutation(["dia", "iron", "stone"], 3)) {
-    let cnt = 0;
-    const tools = perm;
-    let lastIdx = 0;
-    for (let i = 0; i < 3; ++i) {
-      const tool = tools[i];
-      let toolCnt = picks[i];
-      let mineralCnt = 0;
-      for (let j = lastIdx; j < minerals.length; ++j) {
-        if (mineralCnt === 5) {
-          toolCnt--;
-          mineralCnt = 0;
+    for (let i = 0; i < picks.length; ++i) {
+      if (picks[i]) {
+        const tempPick = [...picks];
+        const tempMinerals = [...arr];
+        let tempCnt = count;
+
+        let cnt = 0;
+        while (cnt < 5 && tempMinerals.length) {
+          const target = tempMinerals.shift();
+          tempCnt += table[tools[i]][target];
+          cnt++;
         }
-        if (toolCnt === 0) {
-          lastIdx = j;
-          break;
-        }
-        const curMineral = minerals[j];
-        cnt += table[tool][curMineral];
-        mineralCnt++;
-        if (j + 1 === minerals.length) {
-          lastIdx = j + 1;
-        }
+        if (tempMinerals.length === 0) return result.push(tempCnt);
+        tempPick[i]--;
+        recur(tempPick, tempMinerals, tempCnt);
       }
     }
-    answer = Math.min(cnt, answer);
   }
-
-  return answer;
-}
-
-function permutation(arr, selectNum) {
-  let result = [];
-  if (selectNum === 1) return arr.map(v => [v]);
-
-  arr.forEach((v, idx, arr) => {
-    const fixer = v;
-    const restArr = arr.filter((_, index) => index !== idx);
-    const permuationArr = permutation(restArr, selectNum - 1);
-    const combineFixer = permuationArr.map(v => [fixer, ...v]);
-    result.push(...combineFixer);
-  });
-  return result;
+  recur(picks, minerals, 0);
+  return Math.min(...result);
 }
