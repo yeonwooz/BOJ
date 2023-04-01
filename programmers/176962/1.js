@@ -1,40 +1,43 @@
+// https://school.programmers.co.kr/questions/46626
 function solution(plans) {
-    for (let i = 0; i < plans.length; ++i) {
-        const [name, start, playtime] = plans[i]
-        const end = getEndTime(start, playtime)
-        plans[i].push(end)
+  const answer = [];
+  const hashMap = new Map();
+
+  plans.forEach(plan => {
+    plan[1] = getMin(plan[1]);
+    plan[2] = +plan[2];
+    hashMap.set(plan[1], [plan[2], plan[0]]);
+  });
+  plans.sort((a, b) => a[1] - b[1]);
+
+  let start = plans[0][1];
+  let stack = []; // 진행중인 과제들
+
+  const totalCnt = plans.length;
+  let cnt = 0;
+  while (cnt < totalCnt) {
+    if (stack.length) {
+      // 진행중인 과제가 있는 경우
+      const len = stack.length;
+      stack[len - 1][0]--; // 가장 최근에 시작한 과제를 수행
+      if (stack[len - 1][0] === 0) {
+        answer.push(stack[len - 1][1]);
+        stack.pop();
+        cnt++;
+      }
     }
-    
-    plans.sort((a,b) => {
-        if (a[3] > b[3]) return 1
-        if (a[3] < b[3]) return -1
-        if (a[3] === b[3]) {
-            if (a[1] > b[1]) return 1
-        }
-        return -1
-    })
-    const answer = []
-    for (let i = 0; i < plans.length-1; ++i) {
-        for (let j = i+1; j < plans.length; ++j) {
-            if ()   
-        }
+
+    const nextTask = hashMap.get(start);
+    if (nextTask) {
+      stack.push(nextTask);
     }
-    
-    
-    return answer
+    start++;
+  }
+
+  return answer;
 }
 
-function getEndTime(start, playtime) {
-    const [hh,mm] = start.split(":").map(n => +n)
-    playtime = Number(playtime)
-    let hour = hh
-    let min = mm + playtime
-    hour += parseInt(min / 60)
-    hour = hour.toString()
-    min %= 60
-    min = min.toString()
-    
-    if (hour.length === 1) hour = '0' + hour
-    if (min.length === 1) min = '0' + min
-    return hour + ":" + min
+function getMin(time) {
+  const [hh, mm] = time.split(":").map(n => +n);
+  return hh * 60 + mm;
 }
