@@ -52,30 +52,35 @@ class MaxHeap {
 }
 
 function solution(n, k, enemy) {
-  let totalRoundCnt = enemy.length;
-  const heap = new MaxHeap();
-  for (let i = 0; i < totalRoundCnt; ++i) {
-    heap.push(enemy[i]);
-  }
-
-  let roundCnt = 0;
-  while (n > 0) {
-    const curEnemyCnt = heap.pop();
-    if (k > 0) {
-      k--;
-      roundCnt++;
-      continue;
+  let s = 0;
+  let e = enemy.length;
+  let mid = parseInt(s + e); // 몇번째 라운드에서 끝날까?
+  let answer = 0;
+  while (s < e) {
+    // mid번째 라운드에서 끝나는 것이 가능할까?
+    const heap = new MaxHeap();
+    for (let i = 0; i <= mid; ++i) {
+      heap.push(enemy[i]);
     }
-    if (n >= curEnemyCnt) {
-      n -= curEnemyCnt;
-      roundCnt++;
+    while (!heap.isEmpty() && n > 0) {
+      const popped = heap.pop();
+      if (k > 0) {
+        k--;
+        continue;
+      }
+      n -= popped;
+    }
+
+    if (n <= 0) {
+      // 더 진행해볼수도? -> mid 올려보기
+      answer = Math.max(answer, mid);
+      s = mid + 1;
     } else {
-      heap.push(curEnemyCnt);
-      break;
+      // mid 낮춰야 함
+      e = mid;
     }
+    mid = parseInt(s + e);
   }
-  if (n === 0) return totalRoundCnt;
-  return roundCnt;
-}
 
-// 모든 라운드를 통과한다는 보장이 없음
+  return answer;
+}
