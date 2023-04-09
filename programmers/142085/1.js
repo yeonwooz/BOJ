@@ -1,86 +1,31 @@
-class MaxHeap {
-  constructor() {
-    this.heap = [null];
-  }
-
-  push(v) {
-    this.heap.push(v);
-    let curIdx = this.heap.length - 1;
-    let parentIdx = parseInt(curIdx / 2);
-
-    while (curIdx > 1) {
-      if (this.heap[parentIdx] < this.heap[curIdx]) {
-        [this.heap[parentIdx], this.heap[curIdx]] = [
-          this.heap[curIdx],
-          this.heap[parentIdx],
-        ];
-        curIdx = parentIdx;
-        parentIdx = parseInt(curIdx / 2);
-      } else break;
-    }
-  }
-
-  pop() {
-    if (this.heap.length === 0) return null;
-    let head = this.heap[1];
-    this.heap[1] = this.heap.pop();
-    this.heapify();
-    return head;
-  }
-
-  heapify() {
-    let cur = 1;
-    let l = 2;
-    let r = 3;
-
-    while (this.heap[cur] < this.heap[l] || this.heap[cur] < this.heap[r]) {
-      if (this.heap[l] < this.heap[r]) {
-        [this.heap[cur], this.heap[r]] = [this.heap[r], this.heap[cur]];
-        cur = l;
-      } else {
-        [this.heap[cur], this.heap[l]] = [this.heap[l], this.heap[cur]];
-        cur = r;
-      }
-      l = cur * 2;
-      r = l + 1;
-    }
-  }
-
-  isEmpty() {
-    return this.heap.length === 1;
-  }
-}
-
+// https://velog.io/@kwb020312/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-%EB%94%94%ED%8E%9C%EC%8A%A4-%EA%B2%8C%EC%9E%84
 function solution(n, k, enemy) {
-  let s = 0;
-  let e = enemy.length;
-  let mid = parseInt(s + e); // 몇번째 라운드에서 끝날까?
-  let answer = 0;
-  while (s < e) {
-    // mid번째 라운드에서 끝나는 것이 가능할까?
-    const heap = new MaxHeap();
-    for (let i = 0; i <= mid; ++i) {
-      heap.push(enemy[i]);
-    }
-    while (!heap.isEmpty() && n > 0) {
-      const popped = heap.pop();
-      if (k > 0) {
-        k--;
-        continue;
-      }
-      n -= popped;
-    }
+    const soldiers =  n
+    const superpass = k
+    const enemyLen = enemy.length
+    let s = 0
+    let e = enemyLen
+    let mid = parseInt((s + e)/2)  // 몇번째 라운드에서 끝날까?
 
-    if (n <= 0) {
-      // 더 진행해볼수도? -> mid 올려보기
-      answer = Math.max(answer, mid);
-      s = mid + 1;
-    } else {
-      // mid 낮춰야 함
-      e = mid;
+    while (s <= e) {
+        // mid번째 라운드에서 끝나는 것이 가능할까?
+        const curSlice = enemy.slice(0,mid).sort((a,b) => b-a)
+        let k = superpass
+        const aliveEnemy = curSlice.reduce((acc,cur) => {
+            if (k > 0) {
+                k--
+                return acc
+            }
+            return acc+cur
+        }, 0)
+        if (soldiers-aliveEnemy >= 0 && k >= 0) {
+            s = mid + 1
+        } else {
+            e = mid - 1
+        }
+        mid = parseInt((s + e)/2) 
+        
     }
-    mid = parseInt(s + e);
-  }
-
-  return answer;
+    
+    return s-1
 }
