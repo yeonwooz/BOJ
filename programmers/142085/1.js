@@ -77,3 +77,5 @@ function solution(n, k, enemy) {
   if (n === 0) return totalRoundCnt;
   return roundCnt;
 }
+
+// 모든 라운드를 통과한다는 보장이 없음
