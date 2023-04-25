@@ -1,18 +1,32 @@
 function solution(topping) {
-    const n = topping.length
-    const set = new Set(topping)
-    let answer = 0
-    
-    // 가짓수 캐싱하기
-    const leftdp = [0]    // idx를 기준으로 자를때 왼쪽 가짓수
-    const rightdp = [set.size]    // idx를 기준으로 자를때 오른쪽 가짓수
-    
-    const left = Array(n+1).fill(0)
-    const right = Array(n+1).fill(0)
-    
-    for (let cut = 1; cut <= topping.length; ++cut) {
-        left[topping[cut]]++
-        right[topping[cut]]--
+  const map1 = new Map();
+  const map2 = new Map();
+  topping.forEach(num => {
+    if (map2.has(num)) {
+      map2.set(num, map2.get(num) + 1);
+    } else {
+      map2.set(num, 1);
     }
-    return answer
+  });
+
+  let cnt = 0;
+
+  for (let cut = 1; cut <= topping.length; ++cut) {
+    const num = topping[cut - 1];
+    if (map1.has(num)) {
+      map1.set(num, map1.get(num) + 1);
+    } else {
+      map1.set(num, 1);
+    }
+
+    if (map2.has(num)) {
+      if (map2.get(num) > 1) {
+        map2.set(num, map2.get(num) - 1);
+      } else {
+        map2.delete(num);
+      }
+    }
+    if (map1.size === map2.size) cnt++;
+  }
+  return cnt;
 }
