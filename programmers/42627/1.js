@@ -20,44 +20,43 @@ class MinHeap {
   }
 
   pop() {
-    if (this.heap.length <= 1) return null;
-    if (this.heap.length === 2) return this.heap.pop();
-    const topValue = this.heap[1];
-    this.heap[1] = this.heap.pop();
-    this.heapify();
-    return topValue;
-  }
+    const min = this.heap[1];
+    if (this.heap.length <= 2) this.heap = [null];
+    else this.heap[1] = this.heap.pop();
 
-  heapify() {
     let curIdx = 1;
-    let left = 2;
-    let right = 3;
+    let leftIdx = curIdx * 2;
+    let rightIdx = curIdx * 2 + 1;
+
+    if (!this.heap[leftIdx]) return min;
+    if (!this.heap[rightIdx]) {
+      if (this.heap[leftIdx][1] < this.heap[curIdx][1]) {
+        [this.heap[leftIdx], this.heap[curIdx]] = [
+          this.heap[curIdx],
+          this.heap[leftIdx],
+        ];
+      }
+      return min;
+    }
 
     while (
-      (this.heap[curIdx] &&
-        this.heap[curIdx][1] > this.heap[right] &&
-        this.heap[right][1]) ||
-      (this.heap[curIdx] &&
-        this.heap[curIdx][1] > this.heap[left] &&
-        this.heap[left][1])
+      this.heap[leftIdx][1] < this.heap[curIdx][1] ||
+      this.heap[rightIdx][1] < this.heap[curIdx][1]
     ) {
-      if (this.heap[left][1] > this.heap[right][1]) {
-        [this.heap[curIdx], this.heap[right]] = [
-          this.heap[right],
-          this.heap[curIdx],
-        ];
-        curIdx = right;
-      } else {
-        [this.heap[curIdx], this.heap[left]] = [
-          this.heap[left],
-          this.heap[curIdx],
-        ];
-        curIdx = left;
-      }
+      const minIdx =
+        this.heap[leftIdx][1] > this.heap[rightIdx][1] ? rightIdx : leftIdx;
+      [this.heap[minIdx], this.heap[curIdx]] = [
+        this.heap[curIdx],
+        this.heap[minIdx],
+      ];
+      curIdx = minIdx;
+      leftIdx = curIdx * 2;
+      rightIdx = curIdx * 2 + 1;
 
-      left = curIdx * 2;
-      right = left + 1;
+      if (leftIdx >= this.size()) break;
     }
+
+    return min;
   }
 
   size() {
